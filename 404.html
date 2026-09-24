@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>حجز موعد | Medica</title>
+<style>
+:root{--b:#0e9384;--ink:#13222a;--muted:#70808a;--line:#e4ebee}*{box-sizing:border-box}body{margin:0;background:#f4f7f8;color:var(--ink);font-family:Segoe UI,Tahoma,Arial,sans-serif;min-height:100vh}.shell{width:min(720px,calc(100% - 24px));margin:24px auto 46px}.card{background:#fff;border:1px solid var(--line);border-radius:26px;overflow:hidden;box-shadow:0 22px 60px rgba(15,35,43,.08)}.hero{padding:30px;background:linear-gradient(145deg,#0d191d,#17383e);color:#fff}.hero h1{margin:0 0 6px;font-size:24px}.hero p{margin:0;color:#bdd0d5}.doctor{margin-top:18px;font-weight:800}.badge{display:inline-flex;margin-top:16px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.08);color:#d4e4e7;font-size:11px}.body{padding:28px}.body h2{margin:0 0 7px;font-size:22px}.lead{margin:0 0 22px;color:var(--muted);line-height:1.8;font-size:13px}.field{display:grid;gap:8px;margin-bottom:17px}.field span{font-size:12px;font-weight:800;color:#4f606b}.field input,.field textarea{width:100%;border:1px solid #d8e2e6;border-radius:14px;padding:13px 14px;font:inherit;outline:none}.field input:focus,.field textarea:focus{border-color:var(--b);box-shadow:0 0 0 4px rgba(14,147,132,.08)}.slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:4px 0 20px}.slot{border:1px solid #dce6e9;background:#fff;border-radius:12px;padding:10px 7px;font:inherit;font-size:13px;font-weight:800;cursor:pointer;color:#42525c}.slot.active{background:var(--b);border-color:var(--b);color:#fff}.empty{padding:20px;border:1px dashed #d7e2e7;border-radius:15px;text-align:center;color:var(--muted);background:#fafcfc;margin-bottom:18px;font-size:13px}.btn{width:100%;border:0;border-radius:15px;background:var(--b);color:#fff;padding:14px 18px;font:inherit;font-weight:900;cursor:pointer}.btn:disabled{opacity:.6}.notice{display:none;padding:14px 16px;border-radius:14px;margin-top:16px;font-size:13px;line-height:1.7}.notice.show{display:block}.ok{background:#edf9f4;color:#176649;border:1px solid #ceeadd}.bad{background:#fff2f2;color:#963939;border:1px solid #f1d2d2}.hp{position:absolute;left:-9999px;opacity:0}.foot{text-align:center;color:#8a979f;font-size:11px;margin-top:15px}.fatal{padding:38px;text-align:center;color:#963939}@media(max-width:600px){.body{padding:22px 18px}.hero{padding:24px 20px}.slots{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="shell"><div class="card" id="card"><header class="hero"><h1 id="clinicName">Medica</h1><p id="subtitle">حجز موعد</p><div id="doctor" class="doctor"></div><div class="badge">الحجز الإلكتروني</div></header><main class="body"><h2>احجز موعدك</h2><p class="lead">اختر اليوم والوقت المناسب ثم أرسل الطلب وسيقوم الاستقبال بتأكيد الموعد</p><form id="f"><label class="field"><span>اليوم</span><input id="date" type="date" required></label><div id="slots" class="empty">اختر اليوم حتى تظهر الأوقات المتاحة</div><input id="time" type="hidden"><label class="field"><span>اسم المريض</span><input id="name" maxlength="120" required></label><label class="field"><span>رقم الهاتف</span><input id="phone" inputmode="tel" placeholder="07xx xxx xxxx" required></label><label class="field"><span>ملاحظة <small>اختياري</small></span><textarea id="note" rows="3" maxlength="500"></textarea></label><label class="hp"><input id="website" tabindex="-1" autocomplete="off"></label><button id="send" class="btn" type="submit">إرسال طلب الحجز</button><div id="notice" class="notice"></div></form></main></div><div class="foot">Medica</div></div>
+<script>
+const API='https://kpnlechlpdpoivrafehl.supabase.co/functions/v1/booking/';
+const p=new URLSearchParams(location.search);const slug=(p.get('clinic')||'').trim();
+const card=document.getElementById('card'),date=document.getElementById('date'),slots=document.getElementById('slots'),time=document.getElementById('time'),notice=document.getElementById('notice'),send=document.getElementById('send');
+const endpoint=()=>API+encodeURIComponent(slug);
+const pad=n=>String(n).padStart(2,'0');const localDate=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+function msg(t,k){notice.textContent=t;notice.className='notice show '+k}
+function ft(t){const a=t.split(':').map(Number),h=a[0],m=a[1],hh=(h%12)||12;return hh+':'+String(m).padStart(2,'0')+' '+(h>=12?'م':'ص')}
+function fatal(t){card.innerHTML='<div class="fatal">'+t+'</div>'}
+async function init(){
+ if(!slug)return fatal('رابط الحجز غير صحيح');
+ try{
+  const r=await fetch(endpoint()+'?api=context',{cache:'no-store'}),j=await r.json();if(!r.ok)throw new Error(j.error||'رابط الحجز غير متاح');
+  const c=j.clinic||{};document.getElementById('clinicName').textContent=c.name||'Medica';document.title='حجز موعد | '+(c.name||'Medica');
+  document.getElementById('subtitle').textContent=c.specialty||c.tagline||'حجز موعد';document.getElementById('doctor').textContent=c.doctor_name?'د '+c.doctor_name:'';
+  if(/^#[0-9a-f]{6}$/i.test(c.brand_color||''))document.documentElement.style.setProperty('--b',c.brand_color);
+  const now=new Date();date.min=localDate(now);const mx=new Date(now);mx.setDate(mx.getDate()+Number(j.booking?.window_days||30));date.max=localDate(mx);
+ }catch(e){fatal(e.message||'تعذر فتح رابط الحجز')}
+}
+async function load(){
+ time.value='';if(!date.value)return;slots.className='empty';slots.textContent='جاري تحميل الأوقات';
+ try{const r=await fetch(endpoint()+'?api=slots&date='+encodeURIComponent(date.value),{cache:'no-store'}),j=await r.json();if(!r.ok)throw new Error(j.error);
+  if(!j.slots?.length){slots.className='empty';slots.textContent='لا توجد أوقات متاحة بهذا اليوم';return}
+  slots.className='slots';slots.innerHTML=j.slots.map(t=>'<button type="button" class="slot" data-t="'+t+'">'+ft(t)+'</button>').join('');
+  slots.querySelectorAll('.slot').forEach(b=>b.onclick=()=>{slots.querySelectorAll('.slot').forEach(x=>x.classList.remove('active'));b.classList.add('active');time.value=b.dataset.t})
+ }catch(e){slots.className='empty';slots.textContent=e.message||'تعذر تحميل الأوقات حاول مرة أخرى'}
+}
+date.onchange=load;
+document.getElementById('f').onsubmit=async e=>{e.preventDefault();notice.className='notice';if(!time.value)return msg('اختر وقتاً من الأوقات المتاحة','bad');send.disabled=true;send.textContent='جاري إرسال الطلب';
+ try{const body={date:date.value,time:time.value,name:document.getElementById('name').value.trim(),phone:document.getElementById('phone').value.trim(),note:document.getElementById('note').value.trim(),website:document.getElementById('website').value};
+  const r=await fetch(endpoint(),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}),j=await r.json();if(!r.ok)throw new Error(j.error);
+  msg('تم إرسال طلب الحجز إلى العيادة وسيتم تأكيده بعد مراجعة الاستقبال','ok');e.target.reset();time.value='';slots.className='empty';slots.textContent='اختر اليوم حتى تظهر الأوقات المتاحة'
+ }catch(err){msg(err.message||'تعذر إرسال طلب الحجز','bad')}finally{send.disabled=false;send.textContent='إرسال طلب الحجز'}};
+init();
+</script>
+</body></html>
