@@ -13,15 +13,16 @@
   --danger:#b54747;--success:#187452;--shadow:0 24px 70px rgba(18,42,51,.10)
 }
 *{box-sizing:border-box}
-html{background:var(--page)}
-body{margin:0;min-height:100vh;background:
+html{background:var(--page);max-width:100%;overflow-x:hidden;overscroll-behavior-x:none}
+body{margin:0;min-height:100vh;max-width:100%;overflow-x:hidden;overflow-x:clip;background:
  radial-gradient(circle at 8% 5%,color-mix(in srgb,var(--brand) 10%,transparent),transparent 28%),
  linear-gradient(180deg,#f7f9fa 0%,#eef3f4 100%);
  color:var(--ink);font-family:"Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased}
 button,input,textarea{font:inherit}
 button{ -webkit-tap-highlight-color:transparent }
 button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--brand) 22%,transparent);outline-offset:2px}
-.app{width:min(1240px,calc(100% - 32px));margin:22px auto 40px}
+.app{width:min(1240px,calc(100% - 32px));max-width:100%;margin:22px auto 40px;min-width:0}
+.app,.hero,.booking-layout,.main-panel,.schedule-grid,.section,.side,.panel{min-width:0}
 .hero{position:relative;overflow:hidden;border-radius:30px;padding:30px 32px;background:
  radial-gradient(circle at 14% 25%,color-mix(in srgb,var(--brand) 34%,transparent),transparent 32%),
  linear-gradient(135deg,#0b171b 0%,#112b31 62%,#15363d 100%);
@@ -138,9 +139,26 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .fatal{max-width:620px;margin:80px auto;background:#fff;border:1px solid var(--line);border-radius:24px;padding:40px;text-align:center;box-shadow:var(--shadow)}
 .fatal-mark{width:58px;height:58px;border-radius:18px;background:#fff0f0;color:#a84545;display:grid;place-items:center;margin:0 auto 16px;font-weight:900;font-size:22px}
 .fatal h2{margin:0 0 8px;font-size:20px}.fatal p{margin:0;color:var(--muted);font-size:12px;line-height:1.8}
-.hp{position:absolute!important;left:-9999px!important;opacity:0!important;pointer-events:none!important}
+.hp{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:0!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important;opacity:0!important;pointer-events:none!important}
 .footer{text-align:center;color:#91a0a7;font-size:10px;margin-top:18px}
 .footer strong{color:#53656e}
+
+/* Mobile booking experience */
+.mobile-flow,.mobile-picked{display:none}
+@media(max-width:620px){
+  body{background:#f3f6f7}
+  .mobile-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 10px 0;padding:7px;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:0 8px 24px rgba(18,42,51,.06)}
+  .mobile-flow span{min-width:0;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:10px;color:#89969d;font-size:9.5px;font-weight:850;transition:.18s ease}
+  .mobile-flow span b{width:20px;height:20px;border-radius:7px;display:grid;place-items:center;background:#eef2f3;color:#77868d;font-size:9px}
+  .mobile-flow span.done{color:var(--brand);background:var(--brand-soft)}
+  .mobile-flow span.done b,.mobile-flow span.active b{background:var(--brand);color:#fff}
+  .mobile-flow span.active{color:var(--ink);background:#f7fafa}
+
+  .mobile-picked{display:grid;grid-template-columns:1fr 92px;gap:8px;margin:0 0 10px;padding:10px;border:1px solid var(--brand-line);background:linear-gradient(135deg,var(--brand-soft),#fff);border-radius:14px}
+  .mobile-picked div{min-width:0}.mobile-picked span{display:block;color:var(--muted);font-size:8.5px;margin-bottom:3px}.mobile-picked strong{display:block;color:var(--ink);font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mobile-picked .time{text-align:center;border-right:1px solid var(--brand-line);padding-right:8px}
+}
+
 @media(max-width:1080px){
   .app{width:min(940px,calc(100% - 24px));margin-top:16px}
   .booking-layout{grid-template-columns:1fr}
@@ -158,29 +176,51 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
   .side .panel:last-child{grid-column:1/-1}
 }
 @media(max-width:620px){
-  .app{width:100%;margin:0;padding-bottom:max(22px,env(safe-area-inset-bottom))}
-  .hero{border-radius:0 0 24px 24px;padding:18px 16px 20px}
-  .hero-top{align-items:flex-start;gap:12px}.clinic-brand{gap:11px}.logo-shell{width:52px;height:52px;border-radius:15px}.live-chip{padding:6px 8px;font-size:9px}
-  .hero-copy .kicker{font-size:9px}.hero-copy h1{font-size:20px}.hero-copy p{font-size:10.5px;margin-top:4px}.doctor-name{font-size:11.5px;margin-top:6px}
-  .hero-note{align-items:flex-start;flex-direction:column;gap:5px;margin-top:14px;padding-top:13px;font-size:10px}
-  .booking-layout{margin:10px 10px 0;gap:10px}.main-panel{padding:12px;border-radius:19px}
-  .schedule-grid{gap:10px}.schedule-grid .section{padding:12px;border-radius:15px}
-  .section{padding-bottom:16px}.section+.section{padding-top:17px}
-  .section-head{align-items:center;gap:8px;margin-bottom:12px}.section-title{gap:8px}.section-copy h2{font-size:14px}.section-copy p{font-size:9.5px}.step{width:26px;height:26px;border-radius:9px;font-size:10px}
-  .selected-pill{padding:5px 7px;font-size:8.5px;max-width:42%;overflow:hidden;text-overflow:ellipsis}
-  .calendar{max-width:390px;padding:8px;border-radius:15px}.calendar-head{grid-template-columns:32px 1fr 32px;margin-bottom:6px}.month-nav{height:31px;font-size:17px}.month-title strong{font-size:13px}.month-title small{font-size:8px}
-  .weekdays,.days{gap:3px}.weekdays span{font-size:7.5px}.day{min-height:32px;border-radius:9px;font-size:10.5px}.calendar-foot{font-size:8px}
-  .slots{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.slot{min-height:39px;border-radius:10px;font-size:10.5px}.slots-loading{grid-template-columns:repeat(3,1fr)}
-  .form-grid{grid-template-columns:1fr;gap:10px}.field.full{grid-column:auto}.field input,.field textarea{font-size:12px;padding:11px 12px}
-  .submit-row{align-items:stretch;flex-direction:column;gap:8px}.submit{width:100%;min-width:0}.submit-note{text-align:center}
-  .side{grid-template-columns:1fr;gap:9px}.side .panel{padding:15px}.side .panel:last-child{display:none}
-  .footer{margin:14px 0 0}
+  .app{width:100%;max-width:100%;margin:0;padding:0 0 max(20px,env(safe-area-inset-bottom))}
+  .hero{border-radius:0;padding:calc(14px + env(safe-area-inset-top)) 14px 18px;box-shadow:none;background:linear-gradient(155deg,#0b171b 0%,#102a30 72%,#12343b 100%)}
+  .hero:after{width:190px;height:190px;right:-85px;bottom:-105px;box-shadow:0 0 0 28px rgba(255,255,255,.022),0 0 0 56px rgba(255,255,255,.014)}
+  .hero-top{align-items:center;gap:10px}
+  .clinic-brand{gap:10px;flex:1}.logo-shell{width:48px;height:48px;border-radius:14px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+  .hero-copy .kicker{font-size:8px;margin-bottom:3px;color:#9db9bf}.hero-copy h1{font-size:18px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px}.hero-copy p{font-size:9.5px;margin-top:3px;color:#b8cdd1}.doctor-name{font-size:10.5px;margin-top:4px}
+  .live-chip{flex:0 0 auto;padding:0;width:32px;height:32px;justify-content:center;border-radius:11px;font-size:0;background:rgba(255,255,255,.07)}.live-chip i{width:8px;height:8px}
+  .hero-note{margin-top:13px;padding-top:11px;border-top-color:rgba(255,255,255,.08);display:block;font-size:9.5px;line-height:1.65}.hero-note span:last-child{display:none}.hero-note strong{font-weight:850}
+
+  .booking-layout{display:block;margin:9px 9px 0}
+  .main-panel{padding:0;border:0;background:transparent;box-shadow:none;border-radius:0}
+  .schedule-grid{display:grid;grid-template-columns:1fr;gap:9px}
+  .schedule-grid .section,.main-panel>#bookingFlow>.section{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px;box-shadow:0 8px 24px rgba(18,42,51,.055)}
+  .schedule-grid .section+.section,.main-panel>#bookingFlow>.section{border-top:1px solid var(--line);padding-top:13px}
+  .section{padding-bottom:0}
+  .section-head{align-items:flex-start;gap:8px;margin-bottom:11px}.section-title{gap:8px;min-width:0}.section-copy{min-width:0}.section-copy h2{font-size:14px}.section-copy p{font-size:9px;line-height:1.55;margin-top:3px}
+  .step{width:28px;height:28px;border-radius:9px;font-size:10px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}
+  .selected-pill{display:none!important}
+
+  .calendar{max-width:none;width:100%;padding:8px;border-radius:14px;background:#f8fafb}
+  .calendar-head{grid-template-columns:34px 1fr 34px;gap:6px;margin-bottom:6px}.month-nav{height:32px;border-radius:9px;font-size:17px}.month-title strong{font-size:13px}.month-title small{font-size:7.5px}
+  .weekdays,.days{gap:3px}.weekdays span{font-size:7px;padding:3px 0}.day{min-height:33px;border-radius:9px;font-size:10.5px}.day.today:after{bottom:3px}.calendar-foot{font-size:7.5px;margin-top:6px}
+  .slots-wrap{min-height:78px;max-height:none;overflow:visible;padding:0}.slots-empty{padding:18px 12px;border-radius:13px;font-size:10.5px}
+  .slot-group+.slot-group{margin-top:12px}.slot-group-title{margin-bottom:6px}.slot-group-title strong{font-size:10px}.slot-group-title span{font-size:8.5px}
+  .slots{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.slot{min-height:42px;border-radius:11px;font-size:10.5px;background:#fbfcfc}.slot.active{box-shadow:0 7px 16px color-mix(in srgb,var(--brand) 18%,transparent)}
+  .slots-loading{grid-template-columns:repeat(3,1fr);gap:6px}.slot-skeleton{height:42px;border-radius:11px}
+
+  .mobile-picked{margin-top:9px}
+  .main-panel>#bookingFlow>.section{margin-top:9px}
+  .form-grid{grid-template-columns:1fr;gap:8px}.field.full{grid-column:auto}.field{gap:5px}.field label{font-size:10px}
+  .field input,.field textarea{font-size:12px;padding:12px 12px;border-radius:12px;background:#f9fbfb}.field input{min-height:46px}.field textarea{min-height:82px}
+  .field-error{min-height:12px;font-size:8.5px}
+  .submit-row{position:sticky;bottom:0;z-index:8;margin:10px -13px -13px;padding:10px 13px calc(10px + env(safe-area-inset-bottom));align-items:stretch;flex-direction:column;gap:5px;background:linear-gradient(180deg,rgba(255,255,255,.80),#fff 30%);backdrop-filter:blur(12px);border-radius:0 0 18px 18px}
+  .submit{width:100%;min-width:0;min-height:48px;border-radius:13px;font-size:12px}.submit-note{text-align:center;font-size:8.5px}
+  .notice{font-size:10px;border-radius:11px}
+
+  .side{display:none}
+  .success-view{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px 16px;box-shadow:0 8px 24px rgba(18,42,51,.055)}
+  .success-mark{width:62px;height:62px;border-radius:20px;font-size:26px}.success-view h2{font-size:18px}
+  .footer{margin:13px 0 0;font-size:8.5px}
 }
 @media(max-width:390px){
-  .booking-layout{margin-inline:8px}.main-panel{padding:10px}
-  .hero{padding-inline:14px}.live-chip{font-size:0;width:30px;height:30px;padding:0;justify-content:center}.live-chip i{width:7px;height:7px}
-  .calendar{padding:7px}.day{min-height:30px;font-size:10px}.weekdays span{font-size:7px}.calendar-head{grid-template-columns:30px 1fr 30px}.month-nav{height:29px}
-  .slots{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero-copy h1{max-width:170px;font-size:17px}.booking-layout{margin-inline:7px}.mobile-flow{margin-inline:7px}
+  .calendar{padding:7px}.day{min-height:30px;font-size:10px}.weekdays span{font-size:6.7px}.calendar-head{grid-template-columns:30px 1fr 30px}.month-nav{height:29px}
+  .slots{grid-template-columns:repeat(2,minmax(0,1fr))}.mobile-picked{grid-template-columns:1fr 82px}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 </style>
@@ -205,6 +245,12 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
       <span>التأكيد النهائي يتم من استقبال العيادة.</span>
     </div>
   </header>
+
+  <div class="mobile-flow" aria-label="خطوات الحجز">
+    <span id="mobileStep1" class="active"><b>1</b> اليوم</span>
+    <span id="mobileStep2"><b>2</b> الوقت</span>
+    <span id="mobileStep3"><b>3</b> البيانات</span>
+  </div>
 
   <div class="booking-layout">
     <main class="panel main-panel">
@@ -234,6 +280,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
           </div>
           <div id="slotsWrap" class="slots-wrap"><div class="slots-empty">اختر يوماً من التقويم حتى تظهر الأوقات المتاحة.</div></div>
         </section>
+        </div>
+
+        <div class="mobile-picked">
+          <div><span>اليوم المختار</span><strong id="mobileSummaryDate">لم يتم الاختيار</strong></div>
+          <div class="time"><span>الوقت</span><strong id="mobileSummaryTime">—</strong></div>
         </div>
 
         <section class="section">
@@ -431,6 +482,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
     var dateText=state.selectedDate?fmtDate(state.selectedDate):'لم يتم الاختيار';
     var timeText=state.selectedTime?fmtTime(state.selectedTime):'لم يتم الاختيار';
     $('summaryDate').textContent=dateText;$('summaryTime').textContent=timeText;
+    if($('mobileSummaryDate'))$('mobileSummaryDate').textContent=dateText;
+    if($('mobileSummaryTime'))$('mobileSummaryTime').textContent=state.selectedTime?timeText:'—';
+    if($('mobileStep1'))$('mobileStep1').className=state.selectedDate?'done':'active';
+    if($('mobileStep2'))$('mobileStep2').className=state.selectedTime?'done':(state.selectedDate?'active':'');
+    if($('mobileStep3'))$('mobileStep3').className=state.selectedTime?'active':'';
     $('selectedDatePill').textContent=state.selectedDate?dateText:'';
     $('selectedDatePill').classList.toggle('show',!!state.selectedDate);
     $('selectedTimePill').textContent=state.selectedTime?timeText:'';
