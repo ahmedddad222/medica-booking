@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>ربط واتساب العيادة • Medica</title>
+  <style>
+    :root{--ink:#10282e;--muted:#6f7f86;--line:#e2eaec;--soft:#eef8f5;--brand:#0e9384;--brand2:#0c776d;--bad:#a54444}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Tahoma,Arial,sans-serif;background:#f4f7f8;color:var(--ink)}
+    body{display:grid;place-items:center;padding:20px}
+    .card{width:min(560px,100%);background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 24px 60px rgba(17,43,50,.10);overflow:hidden}
+    .hero{padding:26px 26px 23px;background:linear-gradient(145deg,#0b1c20,#13343a);color:#fff;position:relative;overflow:hidden}
+    .hero:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;inset:-110px -90px auto auto;background:rgba(14,147,132,.20)}
+    .brand{position:relative;z-index:1;display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.4px}.mark{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:#fff;color:var(--brand);font-size:17px}
+    h1{position:relative;z-index:1;margin:24px 0 8px;font-size:24px}.hero p{position:relative;z-index:1;margin:0;color:#bbced2;line-height:1.8;font-size:13px}
+    .body{padding:24px 26px 27px}.status{display:flex;gap:11px;align-items:flex-start;padding:13px 14px;border:1px solid var(--line);background:#fbfcfd;border-radius:15px;margin-bottom:15px}.dot{width:10px;height:10px;margin-top:4px;border-radius:50%;background:#a5b0b5;box-shadow:0 0 0 5px #eef1f2;flex:0 0 auto}.status.ok .dot{background:#27a879;box-shadow:0 0 0 5px #e5f5ee}.status.bad .dot{background:#cb5757;box-shadow:0 0 0 5px #faeaea}.status strong{display:block;font-size:13px}.status span{display:block;margin-top:4px;color:var(--muted);font-size:11px;line-height:1.65}
+    .btn{width:100%;min-height:50px;border:0;border-radius:14px;background:var(--brand);color:#fff;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 12px 26px rgba(14,147,132,.20)}.btn:hover{background:var(--brand2)}.btn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+    .steps{display:grid;gap:10px;margin:18px 0}.step{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}.step b{width:30px;height:30px;border-radius:10px;background:var(--soft);color:var(--brand);display:grid;place-items:center;font-size:11px}.step strong{display:block;font-size:12px}.step span{display:block;margin-top:3px;color:var(--muted);font-size:10.5px;line-height:1.55}
+    .foot{margin-top:16px;text-align:center;color:#91a0a6;font-size:10px}.hidden{display:none!important}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <section class="hero">
+      <div class="brand"><span class="mark">M</span><span>MEDICA</span></div>
+      <h1>ربط واتساب العيادة</h1>
+      <p>اربط رقم WhatsApp Business الخاص بالعيادة حتى يقدر Medica يرسل تأكيدات الحجز من رقم العيادة نفسه.</p>
+    </section>
+    <section class="body">
+      <div id="status" class="status">
+        <i class="dot"></i>
+        <div><strong id="statusTitle">جاري تجهيز الربط...</strong><span id="statusText">لحظات ويتم التحقق من إعدادات Meta.</span></div>
+      </div>
+
+      <div class="steps">
+        <div class="step"><b>1</b><div><strong>سجّل دخولك إلى Meta</strong><span>استخدم الحساب الذي يدير نشاط العيادة.</span></div></div>
+        <div class="step"><b>2</b><div><strong>اختر حساب ورقم واتساب</strong><span>يمكن اختيار رقم موجود أو إكمال إعداد رقم جديد حسب خيارات Meta.</span></div></div>
+        <div class="step"><b>3</b><div><strong>وافق على الربط</strong><span>بعدها يرجع الربط إلى Medica ويحفظ للعيادة فقط.</span></div></div>
+      </div>
+
+      <button id="connectBtn" class="btn" type="button" disabled>ربط واتساب الرسمي</button>
+      <div id="success" class="status ok hidden" style="margin-top:14px">
+        <i class="dot"></i><div><strong>تم ربط واتساب بنجاح</strong><span>تقدر ترجع إلى Medica. حالة الربط راح تتحدث تلقائياً.</span></div>
+      </div>
+      <div class="foot">Medica لا يعرض رمز الوصول للعيادة ولا يخزنه داخل التطبيق.</div>
+    </section>
+  </main>
+
+  <script>
+  (function(){
+    'use strict';
+    var API='https://kpnlechlpdpoivrafehl.supabase.co/functions/v1/whatsapp-connect';
+    var state=new URLSearchParams(location.search).get('state')||'';
+    var cfg=null,authCode='',sessionInfo=null,finishing=false;
+    var statusEl=document.getElementById('status'),titleEl=document.getElementById('statusTitle'),textEl=document.getElementById('statusText'),btn=document.getElementById('connectBtn');
+
+    function setStatus(title,text,type){
+      titleEl.textContent=title;textEl.textContent=text||'';
+      statusEl.className='status'+(type?' '+type:'');
+    }
+    function fail(message){
+      setStatus('تعذر إكمال الربط',message||'حاول مرة ثانية.','bad');
+      btn.disabled=false;
+    }
+
+    function loadSdk(){
+      return new Promise(function(resolve,reject){
+        if(window.FB)return resolve();
+        window.fbAsyncInit=function(){
+          try{
+            FB.init({appId:cfg.app_id,autoLogAppEvents:true,xfbml:true,version:cfg.graph_version||'v25.0'});
+            resolve();
+          }catch(e){reject(e)}
+        };
+        var s=document.createElement('script');
+        s.async=true;s.defer=true;s.crossOrigin='anonymous';
+        s.src='https://connect.facebook.net/en_US/sdk.js';
+        s.onerror=function(){reject(new Error('تعذر تحميل خدمة Meta'))};
+        document.head.appendChild(s);
+      });
+    }
+
+    async function completeIfReady(){
+      if(finishing||!authCode||!sessionInfo||!sessionInfo.waba_id)return;
+      finishing=true;btn.disabled=true;
+      setStatus('جاري إكمال الربط','يتم حفظ اتصال واتساب للعيادة بشكل آمن.');
+      try{
+        var r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({
+          action:'complete',state:state,code:authCode,waba_id:sessionInfo.waba_id,phone_number_id:sessionInfo.phone_number_id||null
+        })});
+        var j=await r.json();
+        if(!r.ok)throw new Error(j.error||'تعذر إكمال الربط');
+        statusEl.classList.add('hidden');
+        document.getElementById('success').classList.remove('hidden');
+        btn.classList.add('hidden');
+      }catch(e){
+        finishing=false;
+        fail(e.message||'تعذر إكمال الربط');
+      }
+    }
+
+    window.addEventListener('message',function(event){
+      if(event.origin!=='https://www.facebook.com'&&event.origin!=='https://web.facebook.com')return;
+      var data=event.data;
+      try{if(typeof data==='string')data=JSON.parse(data)}catch{return}
+      if(!data||data.type!=='WA_EMBEDDED_SIGNUP')return;
+      var eventName=String(data.event||'').toUpperCase();
+      if(data.data&&data.data.waba_id){
+        sessionInfo={waba_id:String(data.data.waba_id),phone_number_id:data.data.phone_number_id?String(data.data.phone_number_id):null};
+        completeIfReady();
+      }
+      if(eventName==='CANCEL')setStatus('تم إلغاء الربط','لم يتم تغيير إعدادات واتساب العيادة.');
+      if(eventName==='ERROR')fail('Meta أرجع خطأ أثناء الربط. حاول مرة ثانية من الحساب الصحيح.');
+    });
+
+    btn.addEventListener('click',function(){
+      if(!cfg||!window.FB)return fail('خدمة Meta غير جاهزة حالياً.');
+      btn.disabled=true;
+      setStatus('تم فتح Meta','أكمل خطوات الربط في النافذة المنبثقة.');
+      FB.login(function(response){
+        if(response&&response.authResponse&&response.authResponse.code){
+          authCode=response.authResponse.code;
+          completeIfReady();
+          return;
+        }
+        btn.disabled=false;
+        setStatus('لم يكتمل الربط','إذا أغلقت نافذة Meta، اضغط الزر وحاول مرة ثانية.');
+      },{
+        config_id:cfg.config_id,
+        response_type:'code',
+        override_default_response_type:true,
+        extras:{setup:{},featureType:'whatsapp_business_app_onboarding'}
+      });
+    });
+
+    (async function init(){
+      if(!state)return fail('رابط الربط غير صالح أو منتهي.');
+      try{
+        var r=await fetch(API+'?api=config&state='+encodeURIComponent(state),{cache:'no-store'});
+        var j=await r.json();
+        if(!r.ok)throw new Error(j.error||'تعذر التحقق من الرابط');
+        if(!j.configured)return fail('تكامل Meta غير مفعّل بعد من إدارة Medica.');
+        cfg=j;
+        await loadSdk();
+        btn.disabled=false;
+        setStatus('جاهز للربط','اضغط الزر وأكمل الخطوات الرسمية داخل Meta.','ok');
+      }catch(e){fail(e.message||'تعذر تجهيز الربط')}
+    })();
+  })();
+  </script>
+</body>
+</html>
