@@ -173,6 +173,67 @@ a{text-decoration:none;color:inherit}
   color:var(--muted);font-size:10.5px;text-align:center
 }
 
+
+/* Compact time picker */
+.time-select-shell{display:grid;gap:8px}
+.time-select-trigger{
+  width:100%;min-height:64px;padding:10px 12px;border:1px solid #dfe7ea;border-radius:15px;background:#fff;
+  color:var(--ink);display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:11px;
+  text-align:right;cursor:pointer;transition:.16s ease
+}
+.time-select-trigger:hover{border-color:var(--brand-line);background:#fbfdfd}
+.time-select-icon{
+  width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+  color:var(--brand);background:var(--brand-soft);border:1px solid var(--brand-line)
+}
+.time-select-icon svg{width:20px;height:20px;display:block}
+.time-select-copy{min-width:0}
+.time-select-copy span{display:block;color:var(--muted);font-size:9px;margin-bottom:3px}
+.time-select-copy strong{display:block;font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.time-select-meta{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;color:var(--brand);font-size:9.5px;font-weight:900}
+.time-select-meta svg{width:15px;height:15px}
+.time-select-note{color:var(--muted);font-size:9px;line-height:1.5;padding-inline:2px}
+.time-select-trigger.has-value{border-color:var(--brand-line);background:linear-gradient(135deg,var(--brand-soft),#fff)}
+.time-select-trigger.has-value .time-select-icon{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+.time-picker-backdrop{
+  position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;
+  background:rgba(7,21,26,.46);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)
+}
+.time-picker-backdrop[hidden]{display:none!important}
+.time-picker-sheet{
+  width:min(520px,100%);max-height:min(680px,88vh);overflow:auto;padding:19px;border-radius:22px;
+  background:#fff;border:1px solid #dfe7ea;box-shadow:0 28px 70px rgba(8,25,31,.25)
+}
+.time-picker-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.time-picker-head>div>span{display:block;color:var(--brand);font-size:9px;font-weight:900;margin-bottom:4px}
+.time-picker-head h3{margin:0;color:var(--ink);font-size:18px}
+.time-picker-head small{display:block;margin-top:5px;color:var(--muted);font-size:10px}
+.time-picker-close{
+  width:38px;height:38px;flex:0 0 38px;border:1px solid var(--line);border-radius:12px;background:#f8fafb;
+  color:#556870;display:grid;place-items:center;cursor:pointer
+}
+.time-picker-close svg{width:18px;height:18px}
+.time-picker-legend{display:flex;align-items:center;gap:14px;padding:12px 1px 10px;color:#718088;font-size:9.5px}
+.time-picker-legend span{display:inline-flex;align-items:center;gap:6px}
+.time-picker-legend i{width:8px;height:8px;border-radius:50%}
+.time-picker-legend i.available{background:var(--brand)}
+.time-picker-legend i.booked{background:#c7cfd3}
+.time-picker-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.time-option{
+  min-height:54px;padding:7px;border:1px solid #dfe7ea;border-radius:13px;background:#fff;color:#42565f;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:inherit;cursor:pointer
+}
+.time-option strong{font-size:11.5px}
+.time-option small{font-size:8px;color:#8a989f}
+.time-option.available:hover{border-color:var(--brand-line);color:var(--brand)}
+.time-option.active{background:var(--brand);border-color:var(--brand);color:#fff}
+.time-option.active small{color:rgba(255,255,255,.8)}
+.time-option.booked{background:#f5f7f8;color:#a2adb2;border-color:#e6ebed;cursor:not-allowed}
+.time-option.booked strong{text-decoration:line-through;text-decoration-thickness:1px}
+.time-picker-empty{grid-column:1/-1;padding:18px;border:1px dashed #d8e2e5;border-radius:13px;background:#fafcfc;color:var(--muted);font-size:10.5px;text-align:center;line-height:1.7}
+body.time-picker-open{overflow:hidden}
+
 .slots-placeholder{
   padding:20px;border-radius:15px;background:#f8fafb;border:1px dashed #d9e2e5;
   color:var(--muted);font-size:10.5px;text-align:center;line-height:1.7
@@ -504,7 +565,7 @@ a{text-decoration:none;color:inherit}
     line-height:1.7;
   }
   .selection-chip{
-    display:block;
+    display:none;
     width:100%;
     min-width:0;
     margin-top:13px;
@@ -650,6 +711,38 @@ a{text-decoration:none;color:inherit}
     height:48px;
     border-radius:13px;
   }
+
+
+  .time-select-trigger{
+    min-height:58px;
+    padding:9px 10px;
+    grid-template-columns:40px minmax(0,1fr) auto;
+    border-radius:14px;
+    background:#f9fbfb;
+  }
+  .time-select-icon{width:40px;height:40px;border-radius:12px}
+  .time-select-copy span{font-size:9px}
+  .time-select-copy strong{font-size:12px}
+  .time-select-meta{font-size:9px}
+  .time-select-note{display:none}
+
+  .time-picker-backdrop{
+    align-items:end;
+    padding:0;
+  }
+  .time-picker-sheet{
+    width:100%;
+    max-height:76vh;
+    padding:18px 14px max(18px,env(safe-area-inset-bottom));
+    border-radius:24px 24px 0 0;
+    border-inline:0;
+    border-bottom:0;
+    box-shadow:0 -18px 55px rgba(8,25,31,.18)
+  }
+  .time-picker-head h3{font-size:17px}
+  .time-picker-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .time-option{min-height:52px;border-radius:12px}
+  .time-option strong{font-size:11px}
 
   /* ===== Patient form ===== */
   .form-grid{
@@ -885,7 +978,7 @@ a{text-decoration:none;color:inherit}
 
         <section class="booking-step">
           <div class="step-head">
-            <div class="step-title"><span class="step-number">2</span><div class="step-copy"><h3>اختيار الوقت</h3><p>الأوقات الممتلئة لا تظهر ضمن القائمة.</p></div></div>
+            <div class="step-title"><span class="step-number">2</span><div class="step-copy"><h3>اختيار الوقت</h3><p>اضغط على الوقت واختر الموعد المناسب؛ المحجوز يظهر بوضوح داخل القائمة.</p></div></div>
           </div>
           <div id="slotsWrap"><div class="slots-placeholder">اختَر يوماً حتى تظهر الأوقات المتاحة.</div></div>
         </section>
@@ -972,6 +1065,26 @@ a{text-decoration:none;color:inherit}
     </aside>
   </div>
 
+  <div id="timePickerBackdrop" class="time-picker-backdrop" hidden>
+    <div class="time-picker-sheet" role="dialog" aria-modal="true" aria-labelledby="timePickerTitle">
+      <div class="time-picker-head">
+        <div>
+          <span>الوقت المناسب</span>
+          <h3 id="timePickerTitle">اختيار وقت الموعد</h3>
+          <small id="timePickerDate">—</small>
+        </div>
+        <button id="closeTimePickerBtn" class="time-picker-close" type="button" aria-label="إغلاق">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="time-picker-legend">
+        <span><i class="available"></i> متاح</span>
+        <span><i class="booked"></i> محجوز</span>
+      </div>
+      <div id="timePickerSlots" class="time-picker-grid"></div>
+    </div>
+  </div>
+
   <div class="footer">الحجز الإلكتروني بإدارة <strong>Medica</strong></div>
 </div>
 
@@ -986,7 +1099,7 @@ a{text-decoration:none;color:inherit}
 
   var state={
     ctx:null,minDate:null,maxDate:null,months:[],activeMonth:'',
-    selectedDate:'',selectedTime:'',slots:[]
+    selectedDate:'',selectedTime:'',slots:[],slotItems:[]
   };
 
   var weekdays=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
@@ -1187,6 +1300,7 @@ a{text-decoration:none;color:inherit}
     state.selectedDate=key;
     state.selectedTime='';
     state.slots=[];
+    state.slotItems=[];
     state.activeMonth=monthKey(parseDate(key));
     renderMonths();
     syncSelection();
@@ -1206,10 +1320,7 @@ a{text-decoration:none;color:inherit}
   }
 
   function loadingSlots(){
-    $('slotsWrap').innerHTML='<div class="slots-loading">'+
-      '<span class="skeleton"></span><span class="skeleton"></span><span class="skeleton"></span><span class="skeleton"></span>'+
-      '<span class="skeleton"></span><span class="skeleton"></span><span class="skeleton"></span><span class="skeleton"></span>'+
-    '</div>'
+    $('slotsWrap').innerHTML='<div class="time-select-shell"><div class="time-select-trigger" style="pointer-events:none"><span class="time-select-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span><span class="time-select-copy"><span>وقت الموعد</span><strong>جاري تحميل الأوقات...</strong></span><span class="time-select-meta">لحظات</span></div></div>'
   }
 
   async function loadSlots(){
@@ -1219,52 +1330,101 @@ a{text-decoration:none;color:inherit}
       var r=await fetch(endpoint()+'?api=slots&date='+encodeURIComponent(state.selectedDate),{cache:'no-store'});
       var j=await r.json();
       if(!r.ok)throw new Error(j.error||'تعذر تحميل الأوقات');
-      state.slots=(j.slots||[]).map(function(t){return String(t).slice(0,5)});
-      renderSlots()
+
+      state.slotItems=(j.all_slots||[]).map(function(x){
+        return {
+          time:String((x&&x.time)||'').slice(0,5),
+          status:x&&x.status==='booked'?'booked':'available'
+        }
+      }).filter(function(x){return /^\d{2}:\d{2}$/.test(x.time)});
+
+      if(!state.slotItems.length){
+        state.slotItems=(j.slots||[]).map(function(t){
+          return {time:String(t).slice(0,5),status:'available'}
+        })
+      }
+
+      state.slots=state.slotItems.filter(function(x){return x.status==='available'}).map(function(x){return x.time});
+      if(state.selectedTime&&!state.slots.includes(state.selectedTime))state.selectedTime='';
+      renderSlots();
+      syncSelection()
     }catch(e){
+      state.slots=[];
+      state.slotItems=[];
       $('slotsWrap').innerHTML='<div class="slots-placeholder">'+escapeHtml(e.message||'تعذر تحميل الأوقات، حاول مرة ثانية.')+'</div>'
     }
   }
 
-  function renderSlots(){
-    if(!state.slots.length){
-      $('slotsWrap').innerHTML='<div class="slots-placeholder">هذا اليوم ما بيه أوقات متاحة حالياً. اختَر يوم ثاني.</div>';
+  function renderTimePickerSheet(){
+    var wrap=$('timePickerSlots');
+    if(!wrap)return;
+    $('timePickerDate').textContent=state.selectedDate?fmtDate(state.selectedDate):'—';
+
+    if(!state.slotItems.length){
+      wrap.innerHTML='<div class="time-picker-empty">لا توجد أوقات ضمن دوام هذا اليوم.</div>';
       return
     }
 
-    var groups=[
-      {name:'صباحاً',from:0,to:12,list:[]},
-      {name:'ظهراً',from:12,to:17,list:[]},
-      {name:'مساءً',from:17,to:24,list:[]}
-    ];
+    wrap.innerHTML=state.slotItems.map(function(item){
+      var booked=item.status==='booked';
+      var active=!booked&&state.selectedTime===item.time;
+      return '<button type="button" class="time-option '+(booked?'booked':'available')+(active?' active':'')+'" data-time="'+item.time+'" '+(booked?'disabled aria-disabled="true"':'')+'>'+
+        '<strong>'+fmtTime(item.time)+'</strong>'+
+        '<small>'+(booked?'محجوز':(active?'مختار':'متاح'))+'</small>'+
+      '</button>'
+    }).join('');
 
-    state.slots.forEach(function(t){
-      var h=Number(t.slice(0,2));
-      var g=groups.find(function(x){return h>=x.from&&h<x.to});
-      if(g)g.list.push(t)
-    });
-
-    var html='';
-    groups.forEach(function(g){
-      if(!g.list.length)return;
-      html+='<div class="slot-group"><div class="slot-group-head"><strong>'+g.name+'</strong><span>'+g.list.length+' وقت متاح</span></div><div class="slots">';
-      g.list.forEach(function(t){
-        html+='<button type="button" class="slot'+(state.selectedTime===t?' active':'')+'" data-time="'+t+'">'+fmtTime(t)+'</button>'
-      });
-      html+='</div></div>'
-    });
-
-    $('slotsWrap').innerHTML=html;
-    $('slotsWrap').querySelectorAll('[data-time]').forEach(function(btn){
+    wrap.querySelectorAll('.time-option.available').forEach(function(btn){
       btn.onclick=function(){
         state.selectedTime=btn.dataset.time;
-        renderSlots();
         syncSelection();
+        renderSlots();
+        closeTimePicker();
         if(innerWidth<=680){
-          setTimeout(function(){$('bookingForm').scrollIntoView({behavior:'smooth',block:'start'})},80)
+          setTimeout(function(){document.querySelector('.booking-step:nth-of-type(3)')?.scrollIntoView({behavior:'smooth',block:'start'})},100)
         }
       }
     })
+  }
+
+  function openTimePicker(){
+    if(!state.selectedDate)return;
+    var backdrop=$('timePickerBackdrop');
+    if(!backdrop)return;
+    renderTimePickerSheet();
+    backdrop.hidden=false;
+    document.body.classList.add('time-picker-open')
+  }
+
+  function closeTimePicker(){
+    var backdrop=$('timePickerBackdrop');
+    if(backdrop)backdrop.hidden=true;
+    document.body.classList.remove('time-picker-open')
+  }
+
+  function renderSlots(){
+    var availableCount=state.slotItems.filter(function(x){return x.status==='available'}).length;
+    var bookedCount=state.slotItems.filter(function(x){return x.status==='booked'}).length;
+
+    if(!state.slotItems.length){
+      $('slotsWrap').innerHTML='<div class="slots-placeholder">هذا اليوم ما بيه أوقات للحجز حالياً. اختَر يوم ثاني.</div>';
+      return
+    }
+
+    var selected=state.selectedTime?fmtTime(state.selectedTime):'اضغط لاختيار الوقت';
+    var meta=state.selectedTime?'تم الاختيار':(availableCount?availableCount+' وقت متاح':'كل الأوقات محجوزة');
+    var note=bookedCount?'الأوقات المحجوزة تبين داخل القائمة حتى يكون الاختيار أوضح.':'اختر الوقت المناسب من القائمة المختصرة.';
+
+    $('slotsWrap').innerHTML='<div class="time-select-shell">'+
+      '<button id="openTimePickerBtn" type="button" class="time-select-trigger'+(state.selectedTime?' has-value':'')+'">'+
+        '<span class="time-select-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span>'+
+        '<span class="time-select-copy"><span>وقت الموعد</span><strong>'+selected+'</strong></span>'+
+        '<span class="time-select-meta">'+meta+' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>'+
+      '</button>'+
+      '<div class="time-select-note">'+note+'</div>'+
+    '</div>';
+
+    $('openTimePickerBtn').onclick=openTimePicker
   }
 
   function validateName(show){
@@ -1354,6 +1514,9 @@ a{text-decoration:none;color:inherit}
   $('phone').addEventListener('input',updateSubmit);
   $('name').addEventListener('blur',function(){validateName(true)});
   $('phone').addEventListener('blur',function(){validatePhone(true)});
+  $('closeTimePickerBtn').addEventListener('click',closeTimePicker);
+  $('timePickerBackdrop').addEventListener('click',function(e){if(e.target===this)closeTimePicker()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('timePickerBackdrop').hidden)closeTimePicker()});
   $('bookingForm').addEventListener('submit',submitBooking);
   $('newBookingBtn').addEventListener('click',resetBooking);
 
