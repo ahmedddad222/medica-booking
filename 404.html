@@ -192,6 +192,9 @@ a{text-decoration:none;color:inherit}
 .time-select-copy strong{display:block;font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .time-select-meta{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;color:var(--brand);font-size:9.5px;font-weight:900}
 .time-select-meta svg{width:15px;height:15px}
+.time-select-trigger svg{display:block!important;max-width:none!important;max-height:none!important;fill:none!important;stroke:currentColor!important}
+.time-select-icon svg{width:20px!important;height:20px!important;flex:0 0 20px!important}
+.time-select-meta svg{width:15px!important;height:15px!important;flex:0 0 15px!important}
 .time-select-trigger.has-value{border-color:var(--brand-line);background:linear-gradient(135deg,var(--brand-soft),#fff)}
 .time-select-trigger.has-value .time-select-icon{background:var(--brand);color:#fff;border-color:var(--brand)}
 
@@ -378,7 +381,6 @@ body.time-picker-open{overflow:hidden}
   .page-shell{width:min(800px,calc(100% - 22px));margin-top:14px}
   .content-grid{grid-template-columns:1fr}
   .side{position:static;grid-template-columns:1fr 1fr}
-  .side .card:last-child{grid-column:1/-1}
 }
 @media(max-width:680px){
   :root{
@@ -950,7 +952,7 @@ body.time-picker-open{overflow:hidden}
 <div id="page" class="page-shell">
   <header class="clinic-hero">
     <div class="hero-topline">
-      <span class="product-mark"><i></i> Medica • الحجز اللكتروني</span>
+      <span class="product-mark"><i></i> Medica • الحجز الإلكتروني</span>
       <span class="availability"><i></i> الحجز متاح</span>
     </div>
 
@@ -1103,9 +1105,6 @@ body.time-picker-open{overflow:hidden}
         <div id="hoursList" class="hours-list"></div>
       </section>
 
-      <section class="card side-card">
-        <div class="confirm-note"><i></i><div><strong>تأكيد الموعد</strong><span>يُثبت الموعد بعد مراجعة السكرتير/ة.</span></div></div>
-      </section>
     </aside>
   </div>
 
@@ -1130,7 +1129,7 @@ body.time-picker-open{overflow:hidden}
     </div>
   </div>
 
-  <div class="footer">الحجز اللكتروني بإدارة <strong>Medica</strong></div>
+  <div class="footer">الحجز الإلكتروني بإدارة <strong>Medica</strong></div>
 </div>
 
 <script>
