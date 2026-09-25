@@ -144,20 +144,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .footer strong{color:#53656e}
 
 /* Mobile booking experience */
-.mobile-flow,.mobile-picked{display:none}
-@media(max-width:620px){
-  body{background:#f3f6f7}
-  .mobile-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 10px 0;padding:7px;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:0 8px 24px rgba(18,42,51,.06)}
-  .mobile-flow span{min-width:0;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:10px;color:#89969d;font-size:9.5px;font-weight:850;transition:.18s ease}
-  .mobile-flow span b{width:20px;height:20px;border-radius:7px;display:grid;place-items:center;background:#eef2f3;color:#77868d;font-size:9px}
-  .mobile-flow span.done{color:var(--brand);background:var(--brand-soft)}
-  .mobile-flow span.done b,.mobile-flow span.active b{background:var(--brand);color:#fff}
-  .mobile-flow span.active{color:var(--ink);background:#f7fafa}
-
-  .mobile-picked{display:grid;grid-template-columns:1fr 92px;gap:8px;margin:0 0 10px;padding:10px;border:1px solid var(--brand-line);background:linear-gradient(135deg,var(--brand-soft),#fff);border-radius:14px}
-  .mobile-picked div{min-width:0}.mobile-picked span{display:block;color:var(--muted);font-size:8.5px;margin-bottom:3px}.mobile-picked strong{display:block;color:var(--ink);font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .mobile-picked .time{text-align:center;border-right:1px solid var(--brand-line);padding-right:8px}
-}
+.mobile-flow,.mobile-picked{display:none!important}
 
 @media(max-width:1080px){
   .app{width:min(940px,calc(100% - 24px));margin-top:16px}
@@ -165,6 +152,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
   .side{position:static;grid-template-columns:repeat(3,minmax(0,1fr))}
   .schedule-grid{grid-template-columns:minmax(340px,.9fr) minmax(0,1.1fr)}
 }
+
 @media(max-width:820px){
   .app{width:min(720px,calc(100% - 22px))}
   .hero{padding:25px 24px;border-radius:26px}
@@ -175,53 +163,232 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
   .side{grid-template-columns:1fr 1fr}
   .side .panel:last-child{grid-column:1/-1}
 }
+
 @media(max-width:620px){
-  .app{width:100%;max-width:100%;margin:0;padding:0 0 max(20px,env(safe-area-inset-bottom))}
-  .hero{border-radius:0;padding:calc(14px + env(safe-area-inset-top)) 14px 18px;box-shadow:none;background:linear-gradient(155deg,#0b171b 0%,#102a30 72%,#12343b 100%)}
-  .hero:after{width:190px;height:190px;right:-85px;bottom:-105px;box-shadow:0 0 0 28px rgba(255,255,255,.022),0 0 0 56px rgba(255,255,255,.014)}
-  .hero-top{align-items:center;gap:10px}
-  .clinic-brand{gap:10px;flex:1}.logo-shell{width:48px;height:48px;border-radius:14px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
-  .hero-copy .kicker{font-size:8px;margin-bottom:3px;color:#9db9bf}.hero-copy h1{font-size:18px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px}.hero-copy p{font-size:9.5px;margin-top:3px;color:#b8cdd1}.doctor-name{font-size:10.5px;margin-top:4px}
-  .live-chip{flex:0 0 auto;padding:0;width:32px;height:32px;justify-content:center;border-radius:11px;font-size:0;background:rgba(255,255,255,.07)}.live-chip i{width:8px;height:8px}
-  .hero-note{margin-top:13px;padding-top:11px;border-top-color:rgba(255,255,255,.08);display:block;font-size:9.5px;line-height:1.65}.hero-note span:last-child{display:none}.hero-note strong{font-weight:850}
+  body{background:#f3f6f7}
 
-  .booking-layout{display:block;margin:9px 9px 0}
-  .main-panel{padding:0;border:0;background:transparent;box-shadow:none;border-radius:0}
-  .schedule-grid{display:grid;grid-template-columns:1fr;gap:9px}
-  .schedule-grid .section,.main-panel>#bookingFlow>.section{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px;box-shadow:0 8px 24px rgba(18,42,51,.055)}
-  .schedule-grid .section+.section,.main-panel>#bookingFlow>.section{border-top:1px solid var(--line);padding-top:13px}
+  .app{
+    width:100%;max-width:100%;margin:0;
+    padding:0 0 max(24px,env(safe-area-inset-bottom))
+  }
+
+  .hero{
+    border-radius:0;
+    padding:calc(14px + env(safe-area-inset-top)) 12px 38px;
+    background:linear-gradient(155deg,#0b171b 0%,#102a30 58%,#15363d 100%);
+    box-shadow:none;
+  }
+  .hero:after{
+    width:180px;height:180px;right:-86px;bottom:-92px;
+    box-shadow:0 0 0 26px rgba(255,255,255,.02),0 0 0 52px rgba(255,255,255,.012)
+  }
+  .hero-top{
+    position:relative;z-index:2;
+    align-items:center;gap:10px;
+    background:#fff;color:var(--ink);
+    border:1px solid rgba(255,255,255,.55);
+    border-radius:21px;padding:12px;
+    box-shadow:0 16px 40px rgba(0,0,0,.18)
+  }
+  .clinic-brand{gap:10px;flex:1;min-width:0}
+  .logo-shell{
+    width:52px;height:52px;border-radius:15px;
+    border:1px solid var(--line);box-shadow:none
+  }
+  .hero-copy{min-width:0;flex:1}
+  .hero-copy .kicker{display:none}
+  .hero-copy h1{
+    color:var(--ink);font-size:18px;line-height:1.2;
+    max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+  }
+  .hero-copy p{
+    margin-top:4px;color:var(--muted);font-size:10px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px
+  }
+  .doctor-name{margin-top:5px;color:var(--brand);font-size:10.5px;font-weight:900}
+  .live-chip{
+    flex:0 0 auto;align-self:flex-start;
+    padding:6px 8px;border-radius:999px;
+    background:#edf8f4;border:1px solid #d5eee4;
+    color:#267254;font-size:8.5px
+  }
+  .live-chip i{width:6px;height:6px;background:#35ae7b;box-shadow:none}
+
+  .hero-note{
+    position:relative;z-index:2;
+    margin:12px 4px 0;padding:0;border:0;
+    display:flex;align-items:center;justify-content:center;
+    color:#b8cdd1;font-size:9.5px;line-height:1.6;text-align:center
+  }
+  .hero-note span:last-child{display:none}
+  .hero-note strong{color:#fff;font-weight:900}
+
+  .booking-layout{
+    display:block;position:relative;z-index:3;
+    margin:-20px 10px 0
+  }
+  .main-panel{
+    padding:0;border:0;background:transparent;box-shadow:none;border-radius:0
+  }
+
+  .schedule-grid{
+    display:block;
+    background:#fff;border:1px solid var(--line);
+    border-radius:22px;overflow:hidden;
+    box-shadow:0 12px 34px rgba(18,42,51,.08)
+  }
+  .schedule-grid .section{
+    background:transparent;border:0;border-radius:0;
+    box-shadow:none;padding:16px 14px;margin:0
+  }
+  .schedule-grid .section+.section{
+    border-top:1px solid #edf1f2;padding-top:16px
+  }
+
+  .main-panel>#bookingFlow>.section{
+    margin-top:10px;padding:16px 14px;
+    background:#fff;border:1px solid var(--line);
+    border-radius:22px;box-shadow:0 10px 28px rgba(18,42,51,.06)
+  }
+
   .section{padding-bottom:0}
-  .section-head{align-items:flex-start;gap:8px;margin-bottom:11px}.section-title{gap:8px;min-width:0}.section-copy{min-width:0}.section-copy h2{font-size:14px}.section-copy p{font-size:9px;line-height:1.55;margin-top:3px}
-  .step{width:28px;height:28px;border-radius:9px;font-size:10px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}
-  .selected-pill{display:none!important}
+  .section-head{
+    align-items:flex-start;gap:8px;margin-bottom:13px
+  }
+  .section-title{gap:9px;min-width:0}
+  .section-copy{min-width:0}
+  .section-copy h2{font-size:14px;line-height:1.3}
+  .section-copy p{
+    font-size:9px;line-height:1.5;margin-top:3px;
+    color:#88969d
+  }
+  .step{
+    width:27px;height:27px;border-radius:9px;
+    font-size:10px;background:var(--brand-soft);
+    border-color:var(--brand-line);box-shadow:none
+  }
+  .selected-pill{
+    display:none!important
+  }
 
-  .calendar{max-width:none;width:100%;padding:8px;border-radius:14px;background:#f8fafb}
-  .calendar-head{grid-template-columns:34px 1fr 34px;gap:6px;margin-bottom:6px}.month-nav{height:32px;border-radius:9px;font-size:17px}.month-title strong{font-size:13px}.month-title small{font-size:7.5px}
-  .weekdays,.days{gap:3px}.weekdays span{font-size:7px;padding:3px 0}.day{min-height:33px;border-radius:9px;font-size:10.5px}.day.today:after{bottom:3px}.calendar-foot{font-size:7.5px;margin-top:6px}
-  .slots-wrap{min-height:78px;max-height:none;overflow:visible;padding:0}.slots-empty{padding:18px 12px;border-radius:13px;font-size:10.5px}
-  .slot-group+.slot-group{margin-top:12px}.slot-group-title{margin-bottom:6px}.slot-group-title strong{font-size:10px}.slot-group-title span{font-size:8.5px}
-  .slots{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.slot{min-height:42px;border-radius:11px;font-size:10.5px;background:#fbfcfc}.slot.active{box-shadow:0 7px 16px color-mix(in srgb,var(--brand) 18%,transparent)}
-  .slots-loading{grid-template-columns:repeat(3,1fr);gap:6px}.slot-skeleton{height:42px;border-radius:11px}
+  .calendar{
+    width:100%;max-width:none;margin:0;
+    border:0;border-radius:0;background:transparent;padding:0
+  }
+  .calendar-head{
+    grid-template-columns:34px 1fr 34px;gap:7px;
+    margin:0 0 10px;padding:6px;
+    background:#f6f8f9;border:1px solid #edf1f2;border-radius:13px
+  }
+  .month-nav{
+    height:32px;border-radius:9px;border:0;
+    background:#fff;box-shadow:0 1px 3px rgba(18,42,51,.06);
+    font-size:17px
+  }
+  .month-title strong{font-size:13px}
+  .month-title small{font-size:7.5px;margin-top:2px}
+  .weekdays{margin-bottom:5px}
+  .weekdays,.days{gap:4px}
+  .weekdays span{
+    font-size:7.4px;padding:2px 0;color:#96a2a8
+  }
+  .day{
+    min-height:36px;border-radius:10px;font-size:10.5px;
+    background:#f8fafb;border:1px solid transparent
+  }
+  .day:hover:not(:disabled){transform:none}
+  .day:disabled{background:#fbfcfc;color:#c5cdd1}
+  .day.selected{
+    background:var(--brand);border-color:var(--brand);color:#fff;
+    box-shadow:0 6px 14px color-mix(in srgb,var(--brand) 18%,transparent)
+  }
+  .day.today:after{bottom:3px}
+  .calendar-foot{
+    margin-top:8px;font-size:7.8px;
+    padding-top:7px;border-top:1px solid #eef2f3
+  }
 
-  .mobile-picked{margin-top:9px}
-  .main-panel>#bookingFlow>.section{margin-top:9px}
-  .form-grid{grid-template-columns:1fr;gap:8px}.field.full{grid-column:auto}.field{gap:5px}.field label{font-size:10px}
-  .field input,.field textarea{font-size:12px;padding:12px 12px;border-radius:12px;background:#f9fbfb}.field input{min-height:46px}.field textarea{min-height:82px}
-  .field-error{min-height:12px;font-size:8.5px}
-  .submit-row{position:sticky;bottom:0;z-index:8;margin:10px -13px -13px;padding:10px 13px calc(10px + env(safe-area-inset-bottom));align-items:stretch;flex-direction:column;gap:5px;background:linear-gradient(180deg,rgba(255,255,255,.80),#fff 30%);backdrop-filter:blur(12px);border-radius:0 0 18px 18px}
-  .submit{width:100%;min-width:0;min-height:48px;border-radius:13px;font-size:12px}.submit-note{text-align:center;font-size:8.5px}
+  .slots-wrap{
+    min-height:80px;max-height:none;overflow:visible;padding:0
+  }
+  .slots-empty{
+    padding:18px 12px;border-radius:13px;
+    background:#f8fafb;font-size:10px
+  }
+  .slot-group+.slot-group{margin-top:14px}
+  .slot-group-title{margin-bottom:7px}
+  .slot-group-title strong{font-size:10px;color:var(--ink)}
+  .slot-group-title span{font-size:8.5px}
+  .slots{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px
+  }
+  .slot{
+    min-height:42px;border-radius:11px;
+    background:#f8fafb;border-color:#e5ecef;
+    font-size:10.5px
+  }
+  .slot.active{
+    background:var(--brand);border-color:var(--brand);color:#fff;
+    box-shadow:0 6px 15px color-mix(in srgb,var(--brand) 16%,transparent)
+  }
+  .slots-loading{grid-template-columns:repeat(3,1fr);gap:7px}
+  .slot-skeleton{height:42px;border-radius:11px}
+
+  .form-grid{grid-template-columns:1fr;gap:10px}
+  .field.full{grid-column:auto}
+  .field{gap:5px}
+  .field label{font-size:10px;color:#53656e}
+  .field input,.field textarea{
+    font-size:12px;padding:12px 12px;
+    border-radius:12px;background:#f8fafb;border-color:#e1e9ec
+  }
+  .field input{min-height:47px}
+  .field textarea{min-height:86px}
+  .field-error{min-height:11px;font-size:8.5px}
+
+  .submit-row{
+    position:static;margin-top:10px;padding:0;
+    align-items:stretch;flex-direction:column;gap:6px;
+    background:none;border-radius:0
+  }
+  .submit{
+    width:100%;min-width:0;min-height:49px;
+    border-radius:13px;font-size:12px
+  }
+  .submit-note{text-align:center;font-size:8.5px;line-height:1.5}
   .notice{font-size:10px;border-radius:11px}
 
   .side{display:none}
-  .success-view{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px 16px;box-shadow:0 8px 24px rgba(18,42,51,.055)}
-  .success-mark{width:62px;height:62px;border-radius:20px;font-size:26px}.success-view h2{font-size:18px}
-  .footer{margin:13px 0 0;font-size:8.5px}
+
+  .success-view{
+    margin-top:0;background:#fff;border:1px solid var(--line);
+    border-radius:22px;padding:30px 16px;
+    box-shadow:0 10px 28px rgba(18,42,51,.06)
+  }
+  .success-mark{width:62px;height:62px;border-radius:20px;font-size:26px}
+  .success-view h2{font-size:18px}
+  .success-view>p{font-size:10.5px}
+  .footer{margin:14px 0 0;font-size:8.5px}
 }
+
 @media(max-width:390px){
-  .hero-copy h1{max-width:170px;font-size:17px}.booking-layout{margin-inline:7px}.mobile-flow{margin-inline:7px}
-  .calendar{padding:7px}.day{min-height:30px;font-size:10px}.weekdays span{font-size:6.7px}.calendar-head{grid-template-columns:30px 1fr 30px}.month-nav{height:29px}
-  .slots{grid-template-columns:repeat(2,minmax(0,1fr))}.mobile-picked{grid-template-columns:1fr 82px}
+  .hero{padding-inline:10px}
+  .hero-top{padding:10px;border-radius:18px}
+  .logo-shell{width:48px;height:48px}
+  .hero-copy h1{font-size:17px;max-width:165px}
+  .hero-copy p{max-width:170px}
+  .live-chip{font-size:0;width:29px;height:29px;padding:0;justify-content:center}
+  .booking-layout{margin-inline:7px}
+  .schedule-grid .section,.main-panel>#bookingFlow>.section{padding-inline:11px}
+  .day{min-height:32px;font-size:10px}
+  .weekdays,.days{gap:3px}
+  .weekdays span{font-size:6.8px}
+  .calendar-head{grid-template-columns:30px 1fr 30px}
+  .month-nav{height:29px}
+  .slots{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 </style>
 </head>
