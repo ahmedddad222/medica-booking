@@ -175,24 +175,23 @@ a{text-decoration:none;color:inherit}
 
 
 /* Compact time picker */
-.time-select-shell{display:grid;gap:8px}
+.time-select-shell{display:block}
 .time-select-trigger{
-  width:100%;min-height:64px;padding:10px 12px;border:1px solid #dfe7ea;border-radius:15px;background:#fff;
-  color:var(--ink);display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:11px;
+  width:100%;min-height:58px;padding:8px 10px;border:1px solid #dfe7ea;border-radius:14px;background:#fff;
+  color:var(--ink);display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:10px;
   text-align:right;cursor:pointer;transition:.16s ease
 }
 .time-select-trigger:hover{border-color:var(--brand-line);background:#fbfdfd}
 .time-select-icon{
-  width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+  width:38px;height:38px;border-radius:12px;display:grid;place-items:center;
   color:var(--brand);background:var(--brand-soft);border:1px solid var(--brand-line)
 }
 .time-select-icon svg{width:20px;height:20px;display:block}
 .time-select-copy{min-width:0}
 .time-select-copy span{display:block;color:var(--muted);font-size:9px;margin-bottom:3px}
-.time-select-copy strong{display:block;font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.time-select-meta{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;color:var(--brand);font-size:9.5px;font-weight:900}
+.time-select-copy strong{display:block;font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.time-select-meta{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;color:var(--brand);font-size:9.5px;font-weight:900}
 .time-select-meta svg{width:15px;height:15px}
-.time-select-note{color:var(--muted);font-size:9px;line-height:1.5;padding-inline:2px}
 .time-select-trigger.has-value{border-color:var(--brand-line);background:linear-gradient(135deg,var(--brand-soft),#fff)}
 .time-select-trigger.has-value .time-select-icon{background:var(--brand);color:#fff;border-color:var(--brand)}
 
@@ -202,9 +201,10 @@ a{text-decoration:none;color:inherit}
 }
 .time-picker-backdrop[hidden]{display:none!important}
 .time-picker-sheet{
-  width:min(520px,100%);max-height:min(680px,88vh);overflow:auto;padding:19px;border-radius:22px;
+  width:min(500px,100%);max-height:min(640px,82vh);overflow:auto;padding:17px;border-radius:22px;
   background:#fff;border:1px solid #dfe7ea;box-shadow:0 28px 70px rgba(8,25,31,.25)
 }
+.time-picker-handle{display:none;width:42px;height:4px;border-radius:999px;background:#d9e0e3;margin:0 auto 12px}
 .time-picker-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
 .time-picker-head>div>span{display:block;color:var(--brand);font-size:9px;font-weight:900;margin-bottom:4px}
 .time-picker-head h3{margin:0;color:var(--ink);font-size:18px}
@@ -219,17 +219,17 @@ a{text-decoration:none;color:inherit}
 .time-picker-legend i{width:8px;height:8px;border-radius:50%}
 .time-picker-legend i.available{background:var(--brand)}
 .time-picker-legend i.booked{background:#c7cfd3}
-.time-picker-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.time-picker-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
 .time-option{
-  min-height:54px;padding:7px;border:1px solid #dfe7ea;border-radius:13px;background:#fff;color:#42565f;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:inherit;cursor:pointer
+  min-height:50px;padding:6px;border:1px solid #dfe7ea;border-radius:12px;background:#fff;color:#42565f;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:inherit;cursor:pointer
 }
 .time-option strong{font-size:11.5px}
 .time-option small{font-size:8px;color:#8a989f}
 .time-option.available:hover{border-color:var(--brand-line);color:var(--brand)}
 .time-option.active{background:var(--brand);border-color:var(--brand);color:#fff}
 .time-option.active small{color:rgba(255,255,255,.8)}
-.time-option.booked{background:#f5f7f8;color:#a2adb2;border-color:#e6ebed;cursor:not-allowed}
+.time-option.booked{background:#f3f5f6;color:#a2adb2;border-color:#e4e9eb;cursor:not-allowed;opacity:.8}
 .time-option.booked strong{text-decoration:line-through;text-decoration-thickness:1px}
 .time-picker-empty{grid-column:1/-1;padding:18px;border:1px dashed #d8e2e5;border-radius:13px;background:#fafcfc;color:var(--muted);font-size:10.5px;text-align:center;line-height:1.7}
 body.time-picker-open{overflow:hidden}
@@ -834,6 +834,50 @@ body.time-picker-open{overflow:hidden}
     font-size:10.5px;
   }
 
+  /* Compact mobile time picker: opens as a bottom sheet instead of expanding the page. */
+  .time-picker-backdrop{
+    place-items:end center;
+    padding:0;
+    background:rgba(7,21,26,.42);
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+  .time-picker-sheet{
+    width:100%;
+    max-height:min(68vh,560px);
+    padding:10px 14px calc(16px + env(safe-area-inset-bottom));
+    border:0;
+    border-top:1px solid #e0e7ea;
+    border-radius:22px 22px 0 0;
+    box-shadow:0 -18px 44px rgba(8,25,31,.18);
+  }
+  .time-picker-handle{display:block}
+  .time-picker-head{
+    padding:0 1px 12px;
+  }
+  .time-picker-head>div>span{display:none}
+  .time-picker-head h3{font-size:17px}
+  .time-picker-head small{font-size:10.5px}
+  .time-picker-close{
+    width:36px;height:36px;flex-basis:36px;
+    border-radius:11px;
+  }
+  .time-picker-legend{
+    padding:10px 1px 9px;
+    font-size:9.5px;
+  }
+  .time-picker-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+    padding-bottom:2px;
+  }
+  .time-option{
+    min-height:49px;
+    border-radius:12px;
+  }
+  .time-option strong{font-size:11.5px}
+  .time-option small{font-size:8.5px}
+
   /* Hide desktop-only side panel; all essential clinic info is in the mobile hero. */
   .side{display:none}
 
@@ -978,7 +1022,7 @@ body.time-picker-open{overflow:hidden}
 
         <section class="booking-step">
           <div class="step-head">
-            <div class="step-title"><span class="step-number">2</span><div class="step-copy"><h3>اختيار الوقت</h3><p>اضغط على الوقت واختر الموعد المناسب؛ المحجوز يظهر بوضوح داخل القائمة.</p></div></div>
+            <div class="step-title"><span class="step-number">2</span><div class="step-copy"><h3>اختيار الوقت</h3><p>اختر الوقت المناسب إلك.</p></div></div>
           </div>
           <div id="slotsWrap"><div class="slots-placeholder">اختَر يوماً حتى تظهر الأوقات المتاحة.</div></div>
         </section>
@@ -1067,6 +1111,7 @@ body.time-picker-open{overflow:hidden}
 
   <div id="timePickerBackdrop" class="time-picker-backdrop" hidden>
     <div class="time-picker-sheet" role="dialog" aria-modal="true" aria-labelledby="timePickerTitle">
+      <div class="time-picker-handle" aria-hidden="true"></div>
       <div class="time-picker-head">
         <div>
           <span>الوقت المناسب</span>
@@ -1404,16 +1449,14 @@ body.time-picker-open{overflow:hidden}
 
   function renderSlots(){
     var availableCount=state.slotItems.filter(function(x){return x.status==='available'}).length;
-    var bookedCount=state.slotItems.filter(function(x){return x.status==='booked'}).length;
 
     if(!state.slotItems.length){
       $('slotsWrap').innerHTML='<div class="slots-placeholder">هذا اليوم ما بيه أوقات للحجز حالياً. اختَر يوم ثاني.</div>';
       return
     }
 
-    var selected=state.selectedTime?fmtTime(state.selectedTime):'اضغط لاختيار الوقت';
-    var meta=state.selectedTime?'تم الاختيار':(availableCount?availableCount+' وقت متاح':'كل الأوقات محجوزة');
-    var note=bookedCount?'الأوقات المحجوزة تبين داخل القائمة حتى يكون الاختيار أوضح.':'اختر الوقت المناسب من القائمة المختصرة.';
+    var selected=state.selectedTime?fmtTime(state.selectedTime):'اختر الوقت';
+    var meta=state.selectedTime?'مختار':(availableCount?availableCount+' متاح':'ممتلئ');
 
     $('slotsWrap').innerHTML='<div class="time-select-shell">'+
       '<button id="openTimePickerBtn" type="button" class="time-select-trigger'+(state.selectedTime?' has-value':'')+'">'+
@@ -1421,7 +1464,6 @@ body.time-picker-open{overflow:hidden}
         '<span class="time-select-copy"><span>وقت الموعد</span><strong>'+selected+'</strong></span>'+
         '<span class="time-select-meta">'+meta+' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>'+
       '</button>'+
-      '<div class="time-select-note">'+note+'</div>'+
     '</div>';
 
     $('openTimePickerBtn').onclick=openTimePicker
