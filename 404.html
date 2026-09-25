@@ -320,88 +320,491 @@ a{text-decoration:none;color:inherit}
   .side .card:last-child{grid-column:1/-1}
 }
 @media(max-width:680px){
-  body{background:#f3f6f7}
-  .page-shell{width:100%;margin:0;padding:0 0 max(22px,env(safe-area-inset-bottom))}
+  :root{
+    --mobile-gutter:14px;
+    --mobile-radius:20px;
+  }
+
+  html{background:#f3f6f7}
+  body{
+    background:#f3f6f7;
+    font-size:15px;
+  }
+
+  .page-shell{
+    width:100%;
+    margin:0;
+    padding:0 0 max(24px,env(safe-area-inset-bottom));
+  }
+
+  /* ===== Clinic header ===== */
   .clinic-hero{
-    border-radius:0;padding:calc(13px + env(safe-area-inset-top)) 13px 24px;
+    border-radius:0;
+    padding:calc(14px + env(safe-area-inset-top)) var(--mobile-gutter) 18px;
     background:
-      radial-gradient(circle at 90% 5%,color-mix(in srgb,var(--brand) 35%,transparent),transparent 32%),
-      linear-gradient(155deg,#091518 0%,#10282e 64%,#15353c 100%);
-    box-shadow:none
+      radial-gradient(circle at 92% 0%,color-mix(in srgb,var(--brand) 28%,transparent),transparent 34%),
+      linear-gradient(155deg,#09171b 0%,#0f282e 68%,#15343a 100%);
+    box-shadow:none;
   }
-  .hero-topline{margin-bottom:12px}
-  .product-mark{font-size:8.5px}.availability{padding:6px 8px;font-size:8.5px}
-  .clinic-main{display:block}
-  .identity{gap:11px}
-  .logo{width:59px;height:59px;border-radius:17px}
-  .identity-copy h1{font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .identity-subtitle{font-size:9.5px;margin-top:4px}
-  .doctor{font-size:10.5px;margin-top:5px}
-  .hero-actions{margin-top:13px;display:grid;grid-template-columns:1fr 1fr;gap:7px}
-  .hero-action{min-height:39px;border-radius:12px;font-size:9.5px}
-  .clinic-meta{grid-template-columns:1fr 1fr;gap:7px;margin-top:13px;padding-top:12px}
-  .meta-item{padding:8px 9px;border-radius:12px}
-  .meta-item:last-child{grid-column:1/-1}
-  .clinic-fact{min-height:66px;padding:9px 10px;gap:9px;border-radius:13px}
-  .fact-icon{width:40px;height:40px;flex-basis:40px;border-radius:13px}
-  .fact-icon svg{width:20px;height:20px}
-  .fact-copy span{font-size:7.7px;margin-bottom:2px}
-  .fact-copy strong{font-size:9.5px}
+  .clinic-hero:after{
+    width:260px;height:260px;left:-135px;bottom:-155px;
+    box-shadow:0 0 0 34px rgba(255,255,255,.015),0 0 0 68px rgba(255,255,255,.01)
+  }
 
-  .content-grid{display:block;margin-top:-11px;position:relative;z-index:2}
-  .booking-card{margin:0 8px;padding:15px 12px 13px;border-radius:22px;box-shadow:0 12px 34px rgba(12,32,39,.08)}
-  .booking-head{display:block;margin-bottom:12px;padding:1px 2px}
-  .booking-head h2{font-size:17px}.booking-head p{font-size:9.5px;margin-top:4px}
-  .selection-chip{display:none}
-  .booking-step{padding:15px 1px}
-  .booking-step+.booking-step{border-top-color:#edf1f2}
-  .step-head{margin-bottom:11px}.step-title{gap:8px}
-  .step-number{width:27px;height:27px;border-radius:9px;font-size:10px}
-  .step-copy h3{font-size:13px}.step-copy p{font-size:8.8px;margin-top:3px}
+  .hero-topline{
+    margin-bottom:15px;
+    gap:8px;
+  }
+  .product-mark{
+    gap:7px;
+    font-size:10px;
+    color:#c0d2d6;
+    letter-spacing:0;
+  }
+  .product-mark i{
+    width:7px;height:7px;
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--brand) 17%,transparent)
+  }
+  .availability{
+    min-height:32px;
+    padding:0 10px;
+    border-radius:999px;
+    font-size:10px;
+    background:rgba(255,255,255,.075);
+  }
 
-  .month-tabs{gap:6px;padding-bottom:7px;margin-inline:-1px}
-  .month-tab{min-width:92px;min-height:35px;border-radius:11px;font-size:9.5px}
+  .clinic-main{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+  .identity{
+    display:grid;
+    grid-template-columns:68px minmax(0,1fr);
+    gap:13px;
+    align-items:center;
+  }
+  .logo{
+    width:68px;height:68px;
+    border-radius:20px;
+    box-shadow:0 10px 24px rgba(0,0,0,.14);
+  }
+  .logo span{font-size:24px}
+  .identity-copy h1{
+    font-size:23px;
+    line-height:1.25;
+    white-space:normal;
+    overflow:visible;
+    text-overflow:clip;
+  }
+  .identity-subtitle{
+    margin-top:5px;
+    font-size:12px;
+    line-height:1.45;
+  }
+  .doctor{
+    margin-top:6px;
+    font-size:12px;
+    line-height:1.4;
+  }
+
+  .hero-actions{
+    margin:0;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
+  }
+  .hero-action{
+    min-height:46px;
+    padding:0 12px;
+    border-radius:14px;
+    gap:8px;
+    font-size:12px;
+    font-weight:900;
+  }
+  .hero-action svg{
+    width:19px;height:19px;
+    stroke-width:1.9;
+  }
+  .hero-action.primary{
+    box-shadow:0 7px 16px rgba(0,0,0,.08)
+  }
+
+  .clinic-meta{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+    margin-top:15px;
+    padding-top:14px;
+  }
+  .clinic-fact{
+    min-height:58px;
+    padding:9px 11px;
+    gap:10px;
+    border-radius:15px;
+    background:rgba(255,255,255,.055);
+  }
+  .fact-icon{
+    width:38px;height:38px;
+    flex-basis:38px;
+    border-radius:12px;
+  }
+  .fact-icon svg{width:19px;height:19px}
+  .fact-copy span{
+    margin-bottom:3px;
+    font-size:9.5px;
+    line-height:1.2;
+  }
+  .fact-copy strong{
+    font-size:11.5px;
+    line-height:1.45;
+    white-space:normal;
+    overflow:visible;
+    text-overflow:clip;
+  }
+
+  /* ===== Booking surface ===== */
+  .content-grid{
+    display:block;
+    margin-top:12px;
+    position:relative;
+    z-index:2;
+  }
+  .booking-card{
+    margin:0 var(--mobile-gutter);
+    padding:0;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+  }
+
+  .booking-head{
+    display:block;
+    margin:0;
+    padding:18px;
+    border:1px solid var(--line);
+    border-radius:var(--mobile-radius);
+    background:#fff;
+    box-shadow:0 8px 24px rgba(12,32,39,.045);
+  }
+  .eyebrow{
+    margin-bottom:6px;
+    font-size:10px;
+  }
+  .booking-head h2{
+    margin:0;
+    font-size:20px;
+    line-height:1.4;
+  }
+  .booking-head p{
+    margin:7px 0 0;
+    color:#75858c;
+    font-size:12px;
+    line-height:1.7;
+  }
+  .selection-chip{
+    display:block;
+    width:100%;
+    min-width:0;
+    margin-top:13px;
+    padding:10px 12px;
+    border-radius:13px;
+  }
+  .selection-chip span{
+    margin-bottom:4px;
+    font-size:9.5px;
+  }
+  .selection-chip strong{
+    font-size:11px;
+    line-height:1.4;
+  }
+
+  .booking-step{
+    margin-top:12px;
+    padding:17px;
+    border:1px solid var(--line);
+    border-radius:var(--mobile-radius);
+    background:#fff;
+    box-shadow:0 8px 24px rgba(12,32,39,.04);
+  }
+  .booking-step+.booking-step{
+    border-top:1px solid var(--line);
+  }
+  .step-head{
+    margin-bottom:14px;
+  }
+  .step-title{
+    gap:10px;
+  }
+  .step-number{
+    width:34px;height:34px;
+    border-radius:11px;
+    font-size:12px;
+  }
+  .step-copy h3{
+    margin-top:1px;
+    font-size:16px;
+    line-height:1.3;
+  }
+  .step-copy p{
+    margin-top:4px;
+    font-size:10.5px;
+    line-height:1.55;
+  }
+
+  /* ===== Month + date selection ===== */
+  .month-tabs{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(94px,1fr));
+    gap:8px;
+    max-width:none;
+    overflow:visible;
+    padding:0;
+    margin:0 0 11px;
+  }
+  .month-tab{
+    min-width:0;
+    min-height:42px;
+    padding:0 10px;
+    border-radius:12px;
+    font-size:11px;
+  }
+  .month-tab.active{
+    background:#10262c;
+    border-color:#10262c;
+    box-shadow:none;
+  }
+
   .date-list{
-    display:grid;grid-auto-flow:column;grid-auto-columns:76px;grid-template-columns:none;
-    gap:7px;overflow-x:auto;overflow-y:hidden;padding:2px 1px 8px;margin-top:2px;
-    scrollbar-width:none;overscroll-behavior-inline:contain;scroll-snap-type:x proximity
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    grid-auto-flow:row;
+    grid-auto-columns:auto;
+    gap:8px;
+    overflow:visible;
+    padding:0;
+    margin:0;
+    scroll-snap-type:none;
   }
-  .date-list::-webkit-scrollbar{display:none}
   .date-card{
-    min-height:86px;border-radius:15px;padding:10px 6px;scroll-snap-align:start;background:#f8fafb
+    min-width:0;
+    min-height:86px;
+    padding:10px 5px;
+    border-radius:14px;
+    background:#f8fafb;
+    scroll-snap-align:none;
   }
-  .date-card .weekday{font-size:8.5px;white-space:normal;line-height:1.2}
-  .date-card .daynum{font-size:22px;margin:7px 0 4px}
-  .date-card .monthnum{font-size:8px}
-  .dates-empty{width:calc(100vw - 42px);padding:16px;font-size:9.5px}
+  .date-card:hover{transform:none}
+  .date-card .weekday{
+    font-size:9px;
+    line-height:1.2;
+    white-space:nowrap;
+  }
+  .date-card .daynum{
+    margin:7px 0 5px;
+    font-size:23px;
+  }
+  .date-card .monthnum{
+    font-size:8.5px;
+  }
+  .date-card.active{
+    box-shadow:0 8px 18px color-mix(in srgb,var(--brand) 18%,transparent)
+  }
+  .dates-empty{
+    width:auto;
+    padding:16px 12px;
+    border-radius:13px;
+    font-size:10.5px;
+    line-height:1.7;
+  }
 
-  .slots{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
-  .slot{min-height:42px;border-radius:11px;font-size:10px;background:#f9fbfb}
-  .slots-loading{grid-template-columns:repeat(3,1fr);gap:7px}
-  .slot-group+.slot-group{margin-top:13px}
-  .slot-group-head strong{font-size:10px}.slot-group-head span{font-size:8px}
+  /* ===== Time selection ===== */
+  .slots-placeholder{
+    padding:18px 13px;
+    border-radius:14px;
+    font-size:11px;
+    line-height:1.7;
+  }
+  .slot-group+.slot-group{margin-top:15px}
+  .slot-group-head{
+    margin-bottom:9px;
+  }
+  .slot-group-head strong{font-size:11px}
+  .slot-group-head span{font-size:9px}
+  .slots{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+  .slot{
+    min-height:48px;
+    border-radius:13px;
+    background:#f9fbfb;
+    font-size:11.5px;
+  }
+  .slots-loading{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+  .skeleton{
+    height:48px;
+    border-radius:13px;
+  }
 
-  .form-grid{grid-template-columns:1fr;gap:9px}.field.full{grid-column:auto}
-  .field input,.field textarea{padding:12px;border-radius:12px;font-size:12px}
-  .appointment-review{grid-template-columns:1fr 88px}
-  .submit-row{display:block;margin-top:11px}
-  .submit{width:100%;min-width:0;min-height:49px;border-radius:13px}
-  .submit-note{display:block;text-align:center;margin-top:6px;font-size:8px}
-  .notice{font-size:9.5px}
+  /* ===== Patient form ===== */
+  .form-grid{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  .field.full{grid-column:auto}
+  .field{
+    gap:7px;
+  }
+  .field label{
+    font-size:11.5px;
+  }
+  .optional{
+    font-size:9px;
+  }
+  .field input,.field textarea{
+    padding:13px 14px;
+    border-radius:14px;
+    background:#fafcfc;
+    font-size:14px;
+  }
+  .field input{
+    min-height:52px;
+  }
+  .field textarea{
+    min-height:94px;
+    max-height:150px;
+  }
+  .field-error{
+    min-height:13px;
+    font-size:9px;
+  }
 
+  .appointment-review{
+    grid-template-columns:minmax(0,1fr) 92px;
+    gap:10px;
+    margin-top:14px;
+    padding:13px;
+    border-radius:15px;
+  }
+  .appointment-review span{
+    margin-bottom:4px;
+    font-size:9.5px;
+  }
+  .appointment-review strong{
+    font-size:11.5px;
+    line-height:1.45;
+  }
+  .review-time{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-right:10px;
+  }
+
+  .submit-row{
+    position:sticky;
+    bottom:max(8px,env(safe-area-inset-bottom));
+    z-index:4;
+    display:block;
+    margin:14px -5px -5px;
+    padding:8px;
+    border:1px solid #e2e9ec;
+    border-radius:16px;
+    background:rgba(255,255,255,.96);
+    box-shadow:0 12px 30px rgba(12,32,39,.12);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+  }
+  .submit{
+    width:100%;
+    min-width:0;
+    min-height:52px;
+    border-radius:13px;
+    font-size:12px;
+  }
+  .submit-note{
+    display:block;
+    margin:7px 4px 1px;
+    text-align:center;
+    font-size:9px;
+    line-height:1.5;
+  }
+  .notice{
+    margin-top:10px;
+    padding:11px 12px;
+    border-radius:12px;
+    font-size:10.5px;
+  }
+
+  /* Hide desktop-only side panel; all essential clinic info is in the mobile hero. */
   .side{display:none}
-  .success-view{padding:28px 8px 18px}
-  .success-mark{width:62px;height:62px;border-radius:20px}
-  .success-view h2{font-size:18px}.success-view>p{font-size:9.5px}
-  .footer{margin-top:12px}
+
+  /* ===== Success state ===== */
+  .success-view{
+    margin:0;
+    padding:28px 18px 22px;
+    border:1px solid var(--line);
+    border-radius:var(--mobile-radius);
+    background:#fff;
+    box-shadow:0 8px 24px rgba(12,32,39,.045);
+  }
+  .success-mark{
+    width:64px;height:64px;
+    margin-bottom:16px;
+    border-radius:20px;
+    font-size:26px;
+  }
+  .success-view h2{font-size:20px}
+  .success-view>p{
+    font-size:11px;
+    line-height:1.75;
+  }
+  .success-card{
+    margin-top:17px;
+    padding:12px;
+    border-radius:15px;
+  }
+  .success-card span{font-size:9px}
+  .success-card strong{font-size:10.5px}
+  .secondary-btn{
+    min-height:45px;
+    margin-top:14px;
+    padding:0 16px;
+    border-radius:12px;
+    font-size:11px;
+  }
+
+  .footer{
+    margin:14px 0 0;
+    padding:0 var(--mobile-gutter);
+    font-size:9px;
+  }
 }
-@media(max-width:370px){
-  .clinic-hero{padding-inline:10px}
-  .identity-copy h1{font-size:18px}
-  .logo{width:54px;height:54px}
-  .booking-card{margin-inline:6px;padding-inline:10px}
-  .slots{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .date-list{grid-auto-columns:72px}
+
+@media(max-width:430px){
+  :root{--mobile-gutter:12px}
+  .clinic-hero{padding-inline:12px}
+  .identity{grid-template-columns:62px minmax(0,1fr)}
+  .logo{width:62px;height:62px;border-radius:18px}
+  .identity-copy h1{font-size:21px}
+  .booking-head,.booking-step{padding:15px}
+  .date-list{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .date-card{min-height:82px;padding-inline:3px}
+  .date-card .weekday{font-size:8.5px}
+  .date-card .daynum{font-size:21px}
+  .date-card .monthnum{font-size:8px}
+}
+
+@media(max-width:350px){
+  :root{--mobile-gutter:10px}
+  .hero-actions{grid-template-columns:1fr}
+  .date-list{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .appointment-review{grid-template-columns:1fr 78px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -464,7 +867,7 @@ a{text-decoration:none;color:inherit}
           <div>
             <span class="eyebrow">طلب موعد جديد</span>
             <h2>احجز الموعد المناسب إلك</h2>
-            <p>اختَر اليوم والوقت، أدخل بياناتك، وبعدها يوصل الطلب مباشرة لاستقبال العيادة.</p>
+            <p>اختَر اليوم والوقت، أدخل بياناتك، وبعدها يوصل الطلب مباشرة للسكرتير/ة.</p>
           </div>
           <div class="selection-chip">
             <span>اختيارك الحالي</span>
@@ -957,6 +1360,5 @@ a{text-decoration:none;color:inherit}
   init()
 })();
 </script>
-<!-- pages-sync: secretary-copy-and-duration-removal -->
 </body>
 </html>
