@@ -248,25 +248,29 @@ a{text-decoration:none;color:inherit}
 .side-clinic>div:last-child{min-width:0;text-align:right}
 .side-clinic strong{display:block;font-size:12px;line-height:1.4}
 .side-clinic small{display:block;color:var(--muted);font-size:9px;margin-top:4px}
-.info-list{display:grid;gap:0}
+.info-list{display:flex;flex-direction:column;gap:0}
 .info-row{
-  display:grid;grid-template-columns:46px minmax(0,1fr);align-items:center;gap:12px;direction:rtl;
-  min-height:68px;padding:11px 0;border-bottom:1px solid #edf1f2
+  display:flex;align-items:center;justify-content:flex-start;gap:13px;direction:rtl;
+  min-height:74px;padding:11px 0;border-bottom:1px solid #edf1f2
 }
 .info-row:last-child{border-bottom:0}
 .info-symbol{
-  width:46px;height:46px;border-radius:15px;
-  display:flex;align-items:center;justify-content:center;
+  width:50px;height:50px;flex:0 0 50px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;align-self:center;
   color:var(--brand);background:linear-gradient(145deg,var(--brand-soft),#fff);
-  border:1px solid var(--brand-line);box-shadow:0 5px 14px color-mix(in srgb,var(--brand) 8%,transparent)
+  border:1px solid var(--brand-line);box-shadow:0 6px 16px color-mix(in srgb,var(--brand) 9%,transparent)
 }
 .info-symbol svg{
-  width:23px;height:23px;display:block;stroke:currentColor;stroke-width:1.9;
+  width:24px;height:24px;display:block;stroke:currentColor;stroke-width:1.9;
   stroke-linecap:round;stroke-linejoin:round
 }
-.info-row>div{min-width:0;text-align:right}
-.info-row span{display:block;color:var(--muted);font-size:8.6px;margin-bottom:4px;line-height:1.2}
-.info-row strong{display:block;font-size:10.5px;line-height:1.45;word-break:break-word;font-weight:900}
+.info-copy{
+  min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  text-align:right;align-self:stretch
+}
+.info-copy span{display:block;width:100%;color:var(--muted);font-size:8.8px;margin:0 0 4px;line-height:1.2}
+.info-copy strong{display:block;width:100%;font-size:10.8px;line-height:1.45;word-break:break-word;font-weight:900}
+.info-copy strong[dir="ltr"]{text-align:right}
 .map-wide{
   margin-top:13px;width:100%;min-height:42px;border:1px solid var(--brand-line);border-radius:12px;
   background:var(--brand-soft);color:var(--brand);display:flex;align-items:center;justify-content:center;gap:7px;
@@ -541,9 +545,18 @@ a{text-decoration:none;color:inherit}
           <div><strong id="sideClinicName">Medica</strong><small id="sideDoctorName">حجز إلكتروني</small></div>
         </div>
         <div class="info-list">
-          <div id="sideAddress" class="info-row" hidden><span class="info-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div><span>العنوان</span><strong></strong></div></div>
-          <div id="sidePhone" class="info-row" hidden><span class="info-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.62a2 2 0 0 1-.45 2.11L9 10.7a16 16 0 0 0 4.3 4.3l1.25-1.25a2 2 0 0 1 2.11-.45c.84.29 1.72.5 2.62.62A2 2 0 0 1 22 16.92Z"/></svg></span><div><span>الهاتف</span><strong></strong></div></div>
-          <div class="info-row"><span class="info-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span><div><span>مدة الموعد</span><strong id="durationText">—</strong></div></div>
+          <div id="sideAddress" class="info-row" hidden>
+            <span class="info-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+            <div class="info-copy"><span>العنوان</span><strong></strong></div>
+          </div>
+          <div id="sidePhone" class="info-row">
+            <span class="info-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.62a2 2 0 0 1-.45 2.11L9 10.7a16 16 0 0 0 4.3 4.3l1.25-1.25a2 2 0 0 1 2.11-.45c.84.29 1.72.5 2.62.62A2 2 0 0 1 22 16.92Z"/></svg></span>
+            <div class="info-copy"><span>رقم الهاتف</span><strong dir="ltr">غير مضاف</strong></div>
+          </div>
+          <div class="info-row">
+            <span class="info-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span>
+            <div class="info-copy"><span>مدة الموعد</span><strong id="durationText">—</strong></div>
+          </div>
         </div>
         <a id="mapsSideBtn" class="map-wide" target="_blank" rel="noopener noreferrer" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> الاتجاهات إلى العيادة</a>
       </section>
@@ -642,9 +655,12 @@ a{text-decoration:none;color:inherit}
       $('addressMeta').hidden=false;$('addressMeta').querySelector('strong').textContent=c.address;
       $('sideAddress').hidden=false;$('sideAddress').querySelector('strong').textContent=c.address
     }
-    if(c.phone){
-      $('phoneHeroBtn').hidden=false;$('phoneHeroBtn').href='tel:'+c.phone;
-      $('sidePhone').hidden=false;$('sidePhone').querySelector('strong').textContent=c.phone
+    var phoneValue=String(c.phone||'').trim();
+    var sidePhoneStrong=$('sidePhone')?.querySelector('strong');
+    if(sidePhoneStrong)sidePhoneStrong.textContent=phoneValue||'غير مضاف';
+    if(phoneValue){
+      $('phoneHeroBtn').hidden=false;
+      $('phoneHeroBtn').href='tel:'+phoneValue.replace(/\s+/g,'')
     }
     if(c.maps_url){
       $('mapsHeroBtn').hidden=false;$('mapsHeroBtn').href=c.maps_url;
