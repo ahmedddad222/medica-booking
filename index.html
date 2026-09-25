@@ -93,17 +93,17 @@ a{text-decoration:none;color:inherit}
   margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.09)
 }
 .meta-item{
-  display:flex;align-items:center;gap:11px;min-width:0;padding:11px 12px;border-radius:15px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.075)
+  display:grid;grid-template-columns:32px minmax(0,1fr);align-items:center;gap:10px;min-width:0;
+  padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07)
 }
-.meta-item>div{flex:1;min-width:0;text-align:right}
+.meta-item>div{min-width:0;text-align:right}
 .meta-icon{
-  width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex:0 0 36px;
-  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.10);color:#f2f8f9
+  width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#dcebed
 }
-.meta-icon svg{width:18px!important;height:18px!important;display:block;stroke:currentColor}
-.meta-item span{display:block;color:#a8c0c5;font-size:8.5px;margin-bottom:3px}
-.meta-item strong{display:block;color:#fff;font-size:10.5px;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta-icon svg{width:16px!important;height:16px!important;display:block;stroke:currentColor;stroke-width:1.8}
+.meta-item span{display:block;color:#9fb7bc;font-size:8px;margin-bottom:2px;line-height:1.25}
+.meta-item strong{display:block;color:#fff;font-size:10.5px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 .content-grid{
   display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px;align-items:start;margin-top:16px;min-width:0
@@ -232,16 +232,16 @@ a{text-decoration:none;color:inherit}
 .side-logo span{font-weight:950;color:var(--brand)}
 .side-clinic strong{display:block;font-size:11px}
 .side-clinic small{display:block;color:var(--muted);font-size:8.5px;margin-top:3px}
-.info-list{display:grid;gap:10px}
-.info-row{display:flex;gap:10px;align-items:center;direction:rtl}
-.info-row>div{flex:1;min-width:0;text-align:right}
+.info-list{display:grid;gap:11px}.info-row+ .info-row{padding-top:10px;border-top:1px solid #edf1f2}
+.info-row{display:grid;grid-template-columns:30px minmax(0,1fr);gap:9px;align-items:center;direction:rtl}
+.info-row>div{min-width:0;text-align:right}
 .info-icon{
-  width:36px;height:36px;border-radius:11px;background:var(--brand-soft);border:1px solid var(--brand-line);
-  display:grid;place-items:center;flex:0 0 36px;color:var(--brand)
+  width:30px;height:30px;border-radius:50%;background:#f7fbfb;border:1px solid var(--brand-line);
+  display:grid;place-items:center;color:var(--brand)
 }
-.info-icon svg{width:18px!important;height:18px!important;display:block;stroke:currentColor}
-.info-row span{display:block;color:var(--muted);font-size:8.5px;margin-bottom:2px}
-.info-row strong{display:block;font-size:10px;line-height:1.6;word-break:break-word}
+.info-icon svg{width:15px!important;height:15px!important;display:block;stroke:currentColor;stroke-width:1.8}
+.info-row span{display:block;color:var(--muted);font-size:8px;margin-bottom:2px;line-height:1.25}
+.info-row strong{display:block;font-size:9.8px;line-height:1.5;word-break:break-word}
 .map-wide{
   margin-top:13px;width:100%;min-height:42px;border:1px solid var(--brand-line);border-radius:12px;
   background:var(--brand-soft);color:var(--brand);display:flex;align-items:center;justify-content:center;gap:7px;
@@ -313,10 +313,10 @@ a{text-decoration:none;color:inherit}
   .clinic-meta{grid-template-columns:1fr 1fr;gap:7px;margin-top:13px;padding-top:12px}
   .meta-item{padding:8px 9px;border-radius:12px}
   .meta-item:last-child{grid-column:1/-1}
-  .meta-icon{width:32px;height:32px;flex-basis:32px;border-radius:10px}
-  .meta-icon svg{width:16px!important;height:16px!important}
-  .meta-item{gap:9px;padding:9px 10px}
-  .meta-item span{font-size:7.5px}.meta-item strong{font-size:9px}
+  .meta-icon{width:30px;height:30px;border-radius:50%}
+  .meta-icon svg{width:14px!important;height:14px!important}
+  .meta-item{grid-template-columns:30px minmax(0,1fr);gap:8px;padding:9px 10px}
+  .meta-item span{font-size:7.4px}.meta-item strong{font-size:9px}
 
   .content-grid{display:block;margin-top:-11px;position:relative;z-index:2}
   .booking-card{margin:0 8px;padding:15px 12px 13px;border-radius:22px;box-shadow:0 12px 34px rgba(12,32,39,.08)}
