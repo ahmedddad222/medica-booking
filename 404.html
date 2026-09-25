@@ -86,7 +86,8 @@ a{text-decoration:none;color:inherit}
   font-size:10.5px;font-weight:850;cursor:pointer
 }
 .hero-action.primary{background:#fff;color:#102127;border-color:#fff}
-.hero-action svg{width:15px;height:15px;flex:0 0 auto}
+.hero-action svg{width:15px;height:15px;flex:0 0 auto;display:block}
+.meta-icon svg,.info-icon svg,.map-wide svg{width:15px;height:15px;display:block;stroke:currentColor}
 .clinic-meta{
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;
   margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.09)
@@ -400,13 +401,13 @@ a{text-decoration:none;color:inherit}
 
     <div class="clinic-meta">
       <div id="addressMeta" class="meta-item" hidden>
-        <span class="meta-icon">⌖</span><div><span>عنوان العيادة</span><strong></strong></div>
+        <span class="meta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div><span>عنوان العيادة</span><strong></strong></div>
       </div>
       <div id="todayHoursMeta" class="meta-item">
-        <span class="meta-icon">◷</span><div><span>الدوام</span><strong>حسب جدول العيادة</strong></div>
+        <span class="meta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span><div><span>الدوام</span><strong>حسب جدول العيادة</strong></div>
       </div>
       <div class="meta-item">
-        <span class="meta-icon">✓</span><div><span>تأكيد الموعد</span><strong>بعد مراجعة الاستقبال</strong></div>
+        <span class="meta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg></span><div><span>تأكيد الموعد</span><strong>بعد مراجعة الاستقبال</strong></div>
       </div>
     </div>
   </header>
@@ -499,11 +500,11 @@ a{text-decoration:none;color:inherit}
           <div><strong id="sideClinicName">Medica</strong><small id="sideDoctorName">حجز إلكتروني</small></div>
         </div>
         <div class="info-list">
-          <div id="sideAddress" class="info-row" hidden><span class="info-icon">⌖</span><div><span>العنوان</span><strong></strong></div></div>
-          <div id="sidePhone" class="info-row" hidden><span class="info-icon">☎</span><div><span>الهاتف</span><strong></strong></div></div>
-          <div class="info-row"><span class="info-icon">◷</span><div><span>مدة الموعد</span><strong id="durationText">—</strong></div></div>
+          <div id="sideAddress" class="info-row" hidden><span class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div><span>العنوان</span><strong></strong></div></div>
+          <div id="sidePhone" class="info-row" hidden><span class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.62a2 2 0 0 1-.45 2.11L9 10.7a16 16 0 0 0 4.3 4.3l1.25-1.25a2 2 0 0 1 2.11-.45c.84.29 1.72.5 2.62.62A2 2 0 0 1 22 16.92Z"/></svg></span><div><span>الهاتف</span><strong></strong></div></div>
+          <div class="info-row"><span class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span><div><span>مدة الموعد</span><strong id="durationText">—</strong></div></div>
         </div>
-        <a id="mapsSideBtn" class="map-wide" target="_blank" rel="noopener noreferrer" hidden>⌖ الاتجاهات إلى العيادة</a>
+        <a id="mapsSideBtn" class="map-wide" target="_blank" rel="noopener noreferrer" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> الاتجاهات إلى العيادة</a>
       </section>
 
       <section class="card side-card">
