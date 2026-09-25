@@ -572,13 +572,14 @@ a{text-decoration:none;color:inherit}
 
   function setLogo(url){
     if(!url)return;
-    [$('clinicLogo'),$('sideLogo')].forEach(function(img){
+    var pairs=[[$('clinicLogo'),$('logoFallback')],[$('sideLogo'),$('sideLogoFallback')]];
+    pairs.forEach(function(pair){
+      var img=pair[0],fallback=pair[1];
       if(!img)return;
-      img.onload=function(){img.hidden=false};
+      img.onload=function(){img.hidden=false;if(fallback)fallback.hidden=true};
+      img.onerror=function(){img.hidden=true;if(fallback)fallback.hidden=false};
       img.src=url
-    });
-    $('logoFallback').hidden=true;
-    $('sideLogoFallback').hidden=true
+    })
   }
 
   function applyContext(ctx){
