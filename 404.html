@@ -89,26 +89,30 @@ a{text-decoration:none;color:inherit}
 .hero-action svg{width:16px;height:16px;flex:0 0 auto;display:block;stroke:currentColor}
 .map-wide svg{width:16px;height:16px;display:block;stroke:currentColor}
 .clinic-meta{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
   margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.09)
 }
-.meta-item{
-  display:grid;grid-template-columns:44px minmax(0,1fr);align-items:center;gap:12px;min-width:0;
-  min-height:72px;padding:11px 14px;border-radius:15px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)
+.clinic-fact{
+  min-width:0;min-height:78px;padding:12px 14px;
+  display:flex;align-items:center;justify-content:flex-start;gap:13px;direction:rtl;
+  border-radius:16px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.085)
 }
-.meta-item>div{min-width:0;text-align:right;align-self:center}
-.meta-icon{
-  width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-  align-self:center;justify-self:center;flex:0 0 44px;
-  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);color:#edf7f8
+.fact-icon{
+  width:48px;height:48px;flex:0 0 48px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  color:#f2f8f9;background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.14)
 }
-.meta-icon svg{
-  width:22px!important;height:22px!important;display:block;stroke:currentColor;stroke-width:1.9;
+.fact-icon svg{
+  width:24px;height:24px;display:block;stroke:currentColor;stroke-width:1.9;
   stroke-linecap:round;stroke-linejoin:round
 }
-.meta-item span{display:block;color:#a8c0c5;font-size:8.5px;margin-bottom:3px;line-height:1.25}
-.meta-item strong{display:block;color:#fff;font-size:11px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fact-copy{min-width:0;flex:1;text-align:right;align-self:center}
+.fact-copy span{display:block;color:#a9c0c5;font-size:8.5px;line-height:1.25;margin:0 0 4px}
+.fact-copy strong{
+  display:block;color:#fff;font-size:11px;line-height:1.45;font-weight:900;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
 
 .content-grid{
   display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px;align-items:start;margin-top:16px;min-width:0
@@ -238,15 +242,22 @@ a{text-decoration:none;color:inherit}
 .side-clinic strong{display:block;font-size:11px}
 .side-clinic small{display:block;color:var(--muted);font-size:8.5px;margin-top:3px}
 .info-list{display:grid;gap:11px}.info-row+ .info-row{padding-top:10px;border-top:1px solid #edf1f2}
-.info-row{display:grid;grid-template-columns:30px minmax(0,1fr);gap:9px;align-items:center;direction:rtl}
-.info-row>div{min-width:0;text-align:right}
-.info-icon{
-  width:30px;height:30px;border-radius:50%;background:#f7fbfb;border:1px solid var(--brand-line);
-  display:grid;place-items:center;color:var(--brand)
+.info-row{
+  display:flex;align-items:center;gap:10px;direction:rtl;
+  min-height:48px;padding:8px 0
 }
-.info-icon svg{width:15px!important;height:15px!important;display:block;stroke:currentColor;stroke-width:1.8}
-.info-row span{display:block;color:var(--muted);font-size:8px;margin-bottom:2px;line-height:1.25}
-.info-row strong{display:block;font-size:9.8px;line-height:1.5;word-break:break-word}
+.info-symbol{
+  width:38px;height:38px;flex:0 0 38px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--brand);background:var(--brand-soft);border:1px solid var(--brand-line)
+}
+.info-symbol svg{
+  width:19px;height:19px;display:block;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round
+}
+.info-row>div{min-width:0;flex:1;text-align:right}
+.info-row span{display:block;color:var(--muted);font-size:8.3px;margin-bottom:3px;line-height:1.25}
+.info-row strong{display:block;font-size:10px;line-height:1.5;word-break:break-word}
 .map-wide{
   margin-top:13px;width:100%;min-height:42px;border:1px solid var(--brand-line);border-radius:12px;
   background:var(--brand-soft);color:var(--brand);display:flex;align-items:center;justify-content:center;gap:7px;
@@ -318,10 +329,11 @@ a{text-decoration:none;color:inherit}
   .clinic-meta{grid-template-columns:1fr 1fr;gap:7px;margin-top:13px;padding-top:12px}
   .meta-item{padding:8px 9px;border-radius:12px}
   .meta-item:last-child{grid-column:1/-1}
-  .meta-icon{width:38px;height:38px;border-radius:12px;flex-basis:38px}
-  .meta-icon svg{width:19px!important;height:19px!important}
-  .meta-item{grid-template-columns:38px minmax(0,1fr);gap:10px;min-height:62px;padding:10px 11px}
-  .meta-item span{font-size:7.8px}.meta-item strong{font-size:9.5px}
+  .clinic-fact{min-height:66px;padding:9px 10px;gap:9px;border-radius:13px}
+  .fact-icon{width:40px;height:40px;flex-basis:40px;border-radius:13px}
+  .fact-icon svg{width:20px;height:20px}
+  .fact-copy span{font-size:7.7px;margin-bottom:2px}
+  .fact-copy strong{font-size:9.5px}
 
   .content-grid{display:block;margin-top:-11px;position:relative;z-index:2}
   .booking-card{margin:0 8px;padding:15px 12px 13px;border-radius:22px;box-shadow:0 12px 34px rgba(12,32,39,.08)}
@@ -411,14 +423,23 @@ a{text-decoration:none;color:inherit}
     </div>
 
     <div class="clinic-meta">
-      <div id="addressMeta" class="meta-item" hidden>
-        <span class="meta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div><span>عنوان العيادة</span><strong></strong></div>
+      <div id="addressMeta" class="clinic-fact" hidden>
+        <span class="fact-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        </span>
+        <div class="fact-copy"><span>عنوان العيادة</span><strong></strong></div>
       </div>
-      <div id="todayHoursMeta" class="meta-item">
-        <span class="meta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span><div><span>الدوام</span><strong>حسب جدول العيادة</strong></div>
+      <div id="todayHoursMeta" class="clinic-fact">
+        <span class="fact-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg>
+        </span>
+        <div class="fact-copy"><span>الدوام</span><strong>حسب جدول العيادة</strong></div>
       </div>
-      <div class="meta-item">
-        <span class="meta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg></span><div><span>تأكيد الموعد</span><strong>بعد مراجعة الاستقبال</strong></div>
+      <div class="clinic-fact">
+        <span class="fact-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="8"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg>
+        </span>
+        <div class="fact-copy"><span>تأكيد الموعد</span><strong>بعد مراجعة الاستقبال</strong></div>
       </div>
     </div>
   </header>
@@ -511,9 +532,9 @@ a{text-decoration:none;color:inherit}
           <div><strong id="sideClinicName">Medica</strong><small id="sideDoctorName">حجز إلكتروني</small></div>
         </div>
         <div class="info-list">
-          <div id="sideAddress" class="info-row" hidden><span class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div><span>العنوان</span><strong></strong></div></div>
-          <div id="sidePhone" class="info-row" hidden><span class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.62a2 2 0 0 1-.45 2.11L9 10.7a16 16 0 0 0 4.3 4.3l1.25-1.25a2 2 0 0 1 2.11-.45c.84.29 1.72.5 2.62.62A2 2 0 0 1 22 16.92Z"/></svg></span><div><span>الهاتف</span><strong></strong></div></div>
-          <div class="info-row"><span class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span><div><span>مدة الموعد</span><strong id="durationText">—</strong></div></div>
+          <div id="sideAddress" class="info-row" hidden><span class="info-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div><span>العنوان</span><strong></strong></div></div>
+          <div id="sidePhone" class="info-row" hidden><span class="info-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.62a2 2 0 0 1-.45 2.11L9 10.7a16 16 0 0 0 4.3 4.3l1.25-1.25a2 2 0 0 1 2.11-.45c.84.29 1.72.5 2.62.62A2 2 0 0 1 22 16.92Z"/></svg></span><div><span>الهاتف</span><strong></strong></div></div>
+          <div class="info-row"><span class="info-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span><div><span>مدة الموعد</span><strong id="durationText">—</strong></div></div>
         </div>
         <a id="mapsSideBtn" class="map-wide" target="_blank" rel="noopener noreferrer" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> الاتجاهات إلى العيادة</a>
       </section>
