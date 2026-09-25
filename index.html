@@ -553,10 +553,7 @@ a{text-decoration:none;color:inherit}
             <span class="info-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.62a2 2 0 0 1-.45 2.11L9 10.7a16 16 0 0 0 4.3 4.3l1.25-1.25a2 2 0 0 1 2.11-.45c.84.29 1.72.5 2.62.62A2 2 0 0 1 22 16.92Z"/></svg></span>
             <div class="info-copy"><span>رقم الهاتف</span><strong dir="ltr">غير مضاف</strong></div>
           </div>
-          <div class="info-row">
-            <span class="info-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span>
-            <div class="info-copy"><span>مدة الموعد</span><strong id="durationText">—</strong></div>
-          </div>
+
         </div>
         <a id="mapsSideBtn" class="map-wide" target="_blank" rel="noopener noreferrer" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> الاتجاهات إلى العيادة</a>
       </section>
@@ -667,8 +664,6 @@ a{text-decoration:none;color:inherit}
       $('mapsSideBtn').hidden=false;$('mapsSideBtn').href=c.maps_url
     }
 
-    var mins=Number(b.slot_minutes||20);
-    $('durationText').textContent=mins+' دقيقة';
     renderHours(b.hours||[]);
     updateTodayHours(b.hours||[])
   }
