@@ -70,19 +70,23 @@
   }
 
   function installMobileClinicBrand() {
-    if (!mobile || document.querySelector('.mobile-clinic-brand')) return
-    const staffApp = document.getElementById('staffApp')
-    const main = document.querySelector('#staffApp .premium-main, #staffApp .main')
-    const topbar = document.querySelector('#staffApp .premium-topbar, #staffApp .topbar')
+    if (!mobile) return
+
+    document.querySelector('.mobile-clinic-brand')?.remove()
+
+    const heroCopy = document.querySelector('#dashboard .dashboard-hero .hero-copy')
     const sourceLogo = document.getElementById('staffBrandLogo')
     const sourceName = document.getElementById('staffBrandName')
     const sourceSubtitle = document.getElementById('staffBrandSubtitle')
-    if (!staffApp || !main || !topbar || !sourceLogo || !sourceName) return
+    if (!heroCopy || !sourceLogo || !sourceName) return
 
-    const brand = document.createElement('div')
-    brand.className = 'mobile-clinic-brand'
-    brand.innerHTML = '<img class="mobile-clinic-brand-logo" alt="شعار العيادة"><div class="mobile-clinic-brand-copy"><strong></strong><small></small></div>'
-    main.insertBefore(brand, topbar)
+    let brand = heroCopy.querySelector('.mobile-hero-clinic-brand')
+    if (!brand) {
+      brand = document.createElement('div')
+      brand.className = 'mobile-hero-clinic-brand'
+      brand.innerHTML = '<img class="mobile-hero-clinic-logo" alt="شعار العيادة"><div class="mobile-hero-clinic-brand-copy"><strong></strong><small></small></div>'
+      heroCopy.insertBefore(brand, heroCopy.firstChild)
+    }
 
     const mobileLogo = brand.querySelector('img')
     const mobileName = brand.querySelector('strong')
@@ -93,15 +97,23 @@
       mobileName.textContent = sourceName.textContent?.trim() || 'Medica'
       mobileSubtitle.textContent = sourceSubtitle?.textContent?.trim() || 'إدارة العيادة'
     }
-    mobileLogo.addEventListener('error', () => {
-      if (!mobileLogo.src.endsWith('/medica-icon.svg')) mobileLogo.src = './medica-icon.svg'
-    })
+
+    if (!mobileLogo.dataset.fallbackBound) {
+      mobileLogo.dataset.fallbackBound = '1'
+      mobileLogo.addEventListener('error', () => {
+        if (!mobileLogo.src.endsWith('/medica-icon.svg')) mobileLogo.src = './medica-icon.svg'
+      })
+    }
+
     syncBrand()
 
-    const observer = new MutationObserver(syncBrand)
-    observer.observe(sourceLogo, { attributes:true, attributeFilter:['src'] })
-    observer.observe(sourceName, { childList:true, subtree:true, characterData:true })
-    if (sourceSubtitle) observer.observe(sourceSubtitle, { childList:true, subtree:true, characterData:true })
+    if (!brand.dataset.syncBound) {
+      brand.dataset.syncBound = '1'
+      const observer = new MutationObserver(syncBrand)
+      observer.observe(sourceLogo, { attributes:true, attributeFilter:['src'] })
+      observer.observe(sourceName, { childList:true, subtree:true, characterData:true })
+      if (sourceSubtitle) observer.observe(sourceSubtitle, { childList:true, subtree:true, characterData:true })
+    }
   }
 
   function installMobileUtilities() {
@@ -156,7 +168,7 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
       try {
-        const registration = await navigator.serviceWorker.register('./sw.js?v=14', { scope:'./' })
+        const registration = await navigator.serviceWorker.register('./sw.js?v=15', { scope:'./' })
         registration.update().catch(() => undefined)
       } catch {}
     })
