@@ -24,7 +24,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          base64 -d deploy_bundle2/medica-web-final.zip.b64 > /tmp/medica-web-final.zip
+          base64 --ignore-garbage -d deploy_bundle2/medica-web-final.zip.b64 > /tmp/medica-web-final.zip
+          unzip -tq /tmp/medica-web-final.zip
           rm -rf app
           mkdir -p app
           unzip -q /tmp/medica-web-final.zip -d app
