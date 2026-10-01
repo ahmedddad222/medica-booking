@@ -16,6 +16,8 @@
     } catch { return false }
   })()
 
+  if (!hasStoredSession || !mobile) document.documentElement.classList.add('mobile-auth-ready')
+
   let splash = null
   const beginSessionGuard = () => {
     if (!hasStoredSession || !mobile) return
@@ -32,6 +34,11 @@
     document.documentElement.classList.remove('session-checking')
     document.querySelector('.medica-session-splash')?.remove()
     splash = null
+  }
+
+  const revealAuth = () => {
+    document.documentElement.classList.add('mobile-auth-ready')
+    finishSessionGuard()
   }
 
   const viewIsVisible = node => Boolean(node && !node.hidden && !node.classList.contains('hidden') && getComputedStyle(node).display !== 'none')
@@ -62,11 +69,15 @@
       const authWasTouched = records.some(record => record.target === authView)
       if (authWasTouched && authView && !authView.classList.contains('hidden')) {
         observer.disconnect()
-        finishSessionGuard()
+        revealAuth()
       }
     })
     observed.forEach(node => observer.observe(node, { attributes:true, attributeFilter:['class','style','hidden'] }))
-    setTimeout(() => { observer.disconnect(); finishSessionGuard() }, 7000)
+    setTimeout(() => {
+      observer.disconnect()
+      if (authView && !authView.classList.contains('hidden')) revealAuth()
+      else finishSessionGuard()
+    }, 6500)
   }
 
   function installMobileClinicBrand() {
@@ -168,7 +179,7 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
       try {
-        const registration = await navigator.serviceWorker.register('./sw.js?v=16', { scope:'./' })
+        const registration = await navigator.serviceWorker.register('./sw.js?v=17', { scope:'./' })
         registration.update().catch(() => undefined)
       } catch {}
     })
