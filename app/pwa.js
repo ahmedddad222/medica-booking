@@ -69,12 +69,49 @@
     setTimeout(() => { observer.disconnect(); finishSessionGuard() }, 7000)
   }
 
+  function installMobileClinicBrand() {
+    if (!mobile || document.querySelector('.mobile-clinic-brand')) return
+    const staffApp = document.getElementById('staffApp')
+    const main = document.querySelector('#staffApp .premium-main, #staffApp .main')
+    const topbar = document.querySelector('#staffApp .premium-topbar, #staffApp .topbar')
+    const sourceLogo = document.getElementById('staffBrandLogo')
+    const sourceName = document.getElementById('staffBrandName')
+    const sourceSubtitle = document.getElementById('staffBrandSubtitle')
+    if (!staffApp || !main || !topbar || !sourceLogo || !sourceName) return
+
+    const brand = document.createElement('div')
+    brand.className = 'mobile-clinic-brand'
+    brand.innerHTML = '<img class="mobile-clinic-brand-logo" alt="شعار العيادة"><div class="mobile-clinic-brand-copy"><strong></strong><small></small></div>'
+    main.insertBefore(brand, topbar)
+
+    const mobileLogo = brand.querySelector('img')
+    const mobileName = brand.querySelector('strong')
+    const mobileSubtitle = brand.querySelector('small')
+
+    const syncBrand = () => {
+      mobileLogo.src = sourceLogo.currentSrc || sourceLogo.getAttribute('src') || './medica-icon.svg'
+      mobileName.textContent = sourceName.textContent?.trim() || 'Medica'
+      mobileSubtitle.textContent = sourceSubtitle?.textContent?.trim() || 'إدارة العيادة'
+    }
+    mobileLogo.addEventListener('error', () => {
+      if (!mobileLogo.src.endsWith('/medica-icon.svg')) mobileLogo.src = './medica-icon.svg'
+    })
+    syncBrand()
+
+    const observer = new MutationObserver(syncBrand)
+    observer.observe(sourceLogo, { attributes:true, attributeFilter:['src'] })
+    observer.observe(sourceName, { childList:true, subtree:true, characterData:true })
+    if (sourceSubtitle) observer.observe(sourceSubtitle, { childList:true, subtree:true, characterData:true })
+  }
+
   function installMobileUtilities() {
     if (!mobile) return
     const staffApp = document.getElementById('staffApp')
     const topbarMeta = document.querySelector('#staffApp .topbar-meta')
     const logout = document.getElementById('staffLogout')
     const settingsTarget = document.querySelector('#staffMobileNav [data-staff-page="settings"]')
+
+    installMobileClinicBrand()
 
     if (logout && topbarMeta && logout.parentElement !== topbarMeta) {
       logout.classList.add('mobile-header-logout')
@@ -119,7 +156,7 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
       try {
-        const registration = await navigator.serviceWorker.register('./sw.js?v=13', { scope:'./' })
+        const registration = await navigator.serviceWorker.register('./sw.js?v=14', { scope:'./' })
         registration.update().catch(() => undefined)
       } catch {}
     })
