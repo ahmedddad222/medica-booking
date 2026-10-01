@@ -1,5 +1,5 @@
-@import url('./mobile-v3.css?v=20261001-v3b');
-@import url('./mobile-v3-admin.css?v=20261001-v3b');
+@import url('./mobile-v3.css?v=20261001-v3c');
+@import url('./mobile-v3-admin.css?v=20261001-v3c');
 
 html.web-mobile,html.web-mobile body{min-height:100%;width:100%;max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;overscroll-behavior-y:contain}
 html.web-mobile body{padding-bottom:env(safe-area-inset-bottom)}
@@ -12,3 +12,15 @@ html.web-mobile .mobile-web-tools{display:none}
 .medica-install-help-card strong{display:block;font-size:19px;margin-bottom:8px}
 .medica-install-help-card p{margin:7px 0 0;color:#6b7b83;font-size:13px;line-height:1.8}
 .medica-install-close{position:absolute;top:10px;left:10px;width:40px;height:40px;min-height:40px;border:0;border-radius:13px;background:#f1f5f6;color:#40545d;font-size:24px}
+
+/* Critical mobile visibility fix: hidden app views/dialogs must always stay hidden. */
+html.web-mobile .hidden,
+html.web-mobile .dialog-backdrop.hidden,
+html.web-mobile .prescription-editor-backdrop.hidden,
+html.web-mobile .ultrasound-editor-backdrop.hidden,
+html.web-mobile #uiDialog.hidden,
+html.web-mobile #authView.hidden,
+html.web-mobile #onboardingView.hidden,
+html.web-mobile #blockedView.hidden,
+html.web-mobile #staffApp.hidden,
+html.web-mobile #adminApp.hidden{display:none!important}
