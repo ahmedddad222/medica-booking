@@ -3,13 +3,13 @@
   if (Boolean(window.__TAURI_INTERNALS__)) return
 
   document.documentElement.classList.add('web-mobile')
-
   const themeMeta = document.querySelector('meta[name="theme-color"]')
-  if (themeMeta) themeMeta.setAttribute('content', '#0e9384')
+  if (themeMeta) themeMeta.setAttribute('content', '#0f766e')
 
   const standalone = window.matchMedia?.('(display-mode: standalone)')?.matches || window.navigator.standalone === true
   if (standalone) document.documentElement.classList.add('pwa-standalone')
 
+  const mobile = window.matchMedia?.('(max-width: 820px)')?.matches !== false
   const hasStoredSession = (() => {
     try {
       return Object.keys(localStorage).some(key => /^sb-.*-auth-token$/.test(key) && Boolean(localStorage.getItem(key)))
@@ -17,25 +17,72 @@
   })()
 
   let splash = null
-  if (hasStoredSession) {
+  const beginSessionGuard = () => {
+    if (!hasStoredSession || !mobile) return
     document.documentElement.classList.add('session-checking')
-    splash = document.createElement('div')
-    splash.className = 'medica-session-splash'
-    splash.innerHTML = '<div><img src="./medica-icon.svg" alt="Medica"><i></i><span>جاري استعادة الجلسة</span></div>'
-    document.body.appendChild(splash)
+    if (!document.querySelector('.medica-session-splash')) {
+      splash = document.createElement('div')
+      splash.className = 'medica-session-splash'
+      splash.innerHTML = '<div class="medica-session-splash-inner"><img src="./medica-icon.svg" alt="Medica"><span class="medica-session-spinner"></span><span>جاري فتح Medica</span></div>'
+      document.body.appendChild(splash)
+    }
   }
 
-  const finishSessionCheck = () => {
+  const finishSessionGuard = () => {
     document.documentElement.classList.remove('session-checking')
-    splash?.remove()
+    document.querySelector('.medica-session-splash')?.remove()
     splash = null
   }
 
-  function installUtilities() {
+  const viewIsVisible = node => Boolean(node && !node.hidden && !node.classList.contains('hidden') && getComputedStyle(node).display !== 'none')
+
+  function watchSessionRestore() {
+    if (!hasStoredSession || !mobile) return
+    const authView = document.getElementById('authView')
+    const resolvedViews = ['staffApp','adminApp','onboardingView','blockedView'].map(id => document.getElementById(id)).filter(Boolean)
+
+    const settleIfResolved = () => {
+      const appView = resolvedViews.find(viewIsVisible)
+      if (appView) {
+        authView?.classList.add('hidden')
+        finishSessionGuard()
+        return true
+      }
+      return false
+    }
+
+    if (settleIfResolved()) return
+
+    const observed = [authView, ...resolvedViews].filter(Boolean)
+    const observer = new MutationObserver(records => {
+      if (settleIfResolved()) {
+        observer.disconnect()
+        return
+      }
+      const authWasTouched = records.some(record => record.target === authView)
+      if (authWasTouched && authView && !authView.classList.contains('hidden')) {
+        observer.disconnect()
+        finishSessionGuard()
+      }
+    })
+    observed.forEach(node => observer.observe(node, { attributes:true, attributeFilter:['class','style','hidden'] }))
+    setTimeout(() => { observer.disconnect(); finishSessionGuard() }, 7000)
+  }
+
+  function installMobileUtilities() {
+    if (!mobile) return
     const staffApp = document.getElementById('staffApp')
-    const settingsTarget = document.querySelector('#staffMobileNav [data-staff-page="settings"]')
-    const logoutTarget = document.getElementById('staffLogout')
     const topbarMeta = document.querySelector('#staffApp .topbar-meta')
+    const logout = document.getElementById('staffLogout')
+    const settingsTarget = document.querySelector('#staffMobileNav [data-staff-page="settings"]')
+
+    if (logout && topbarMeta && logout.parentElement !== topbarMeta) {
+      logout.classList.add('mobile-header-logout')
+      logout.classList.remove('w100')
+      topbarMeta.appendChild(logout)
+    }
+
+    document.querySelector('.mobile-logout-shortcut')?.remove()
 
     if (settingsTarget && !document.querySelector('.mobile-settings-shortcut')) {
       const settings = document.createElement('button')
@@ -49,52 +96,30 @@
 
       const syncSettings = () => {
         const targetHidden = settingsTarget.hidden || settingsTarget.classList.contains('hidden') || settingsTarget.classList.contains('role-hidden') || settingsTarget.classList.contains('feature-hidden') || getComputedStyle(settingsTarget).display === 'none'
-        const appHidden = !staffApp || staffApp.hidden || staffApp.classList.contains('hidden') || getComputedStyle(staffApp).display === 'none'
+        const appHidden = !viewIsVisible(staffApp)
         settings.hidden = targetHidden || appHidden
       }
       syncSettings()
       const observer = new MutationObserver(syncSettings)
-      observer.observe(settingsTarget, { attributes: true, attributeFilter: ['class','style','hidden'] })
-      if (staffApp) observer.observe(staffApp, { attributes: true, attributeFilter: ['class','style','hidden'] })
-    }
-
-    if (logoutTarget && topbarMeta && !document.querySelector('.mobile-header-logout')) {
-      document.querySelector('.mobile-logout-shortcut')?.remove()
-      const logout = document.createElement('button')
-      logout.type = 'button'
-      logout.className = 'mobile-header-logout'
-      logout.setAttribute('aria-label', 'تسجيل الخروج')
-      logout.setAttribute('title', 'تسجيل الخروج')
-      logout.textContent = 'تسجيل الخروج'
-      logout.addEventListener('click', () => logoutTarget.click())
-      topbarMeta.appendChild(logout)
+      observer.observe(settingsTarget, { attributes:true, attributeFilter:['class','style','hidden'] })
+      if (staffApp) observer.observe(staffApp, { attributes:true, attributeFilter:['class','style','hidden'] })
     }
   }
 
-  function watchSessionRestore() {
-    if (!hasStoredSession) return
-    const ids = ['authView','blockedView','onboardingView','adminApp','staffApp']
-    const nodes = ids.map(id => document.getElementById(id)).filter(Boolean)
-    const observer = new MutationObserver(() => {
-      const visible = nodes.find(node => !node.hidden && !node.classList.contains('hidden') && getComputedStyle(node).display !== 'none')
-      if (visible) {
-        observer.disconnect()
-        finishSessionCheck()
-      }
-    })
-    nodes.forEach(node => observer.observe(node, { attributes:true, attributeFilter:['class','style','hidden'] }))
-    setTimeout(() => { observer.disconnect(); finishSessionCheck() }, 8000)
-  }
+  beginSessionGuard()
 
-  const boot = () => { installUtilities(); watchSessionRestore() }
+  const boot = () => {
+    installMobileUtilities()
+    watchSessionRestore()
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once:true })
   else boot()
-  window.addEventListener('load', installUtilities, { once:true })
+  window.addEventListener('load', installMobileUtilities, { once:true })
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
       try {
-        const registration = await navigator.serviceWorker.register('./sw.js?v=12', { scope:'./' })
+        const registration = await navigator.serviceWorker.register('./sw.js?v=13', { scope:'./' })
         registration.update().catch(() => undefined)
       } catch {}
     })
