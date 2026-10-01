@@ -1,0 +1,41 @@
+name: Publish Medica App
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'deploy_bundle2/**'
+      - '.github/workflows/publish-medica-app.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Decode and publish Medica web app
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 -d deploy_bundle2/medica-web-final.zip.b64 > /tmp/medica-web-final.zip
+          rm -rf app
+          mkdir -p app
+          unzip -q /tmp/medica-web-final.zip -d app
+          test -f app/index.html
+          test -f app/assets/index-C5wl6y5-.js
+          test -f app/manifest.webmanifest
+          test -f app/sw.js
+          rm -rf deploy_bundle2
+          rm -f .github/workflows/publish-medica-app.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Publish Medica mobile web app'
+          git push origin HEAD:main
