@@ -166,10 +166,95 @@
     }
   }
 
+  function installMobileOfflineGrace() {
+    if (!mobile || window.__medicaOfflineGraceInstalled) return
+    window.__medicaOfflineGraceInstalled = true
+
+    const staffApp = document.getElementById('staffApp')
+    const offlineBar = document.getElementById('offlineBar')
+    const offlineTitle = document.getElementById('offlineStatusTitle')
+    const refresh = document.getElementById('staffRefresh')
+    const liveStatus = document.getElementById('liveStatus')
+    if (!staffApp) return
+
+    let graceTimer = null
+    let mutating = false
+    let graceActive = false
+
+    const looksOffline = () => staffApp.classList.contains('offline-limited') || /بدون إنترنت/.test(liveStatus?.textContent || '')
+
+    const suppressOfflineUi = () => {
+      mutating = true
+      staffApp.classList.remove('offline-limited')
+      if (offlineBar && /لا يوجد اتصال/.test(offlineTitle?.textContent || '')) offlineBar.classList.add('hidden')
+      if (refresh) refresh.disabled = false
+      if (liveStatus && /بدون إنترنت/.test(liveStatus.textContent || '')) liveStatus.innerHTML = '<i></i> مباشر'
+      queueMicrotask(() => { mutating = false })
+    }
+
+    const confirmOfflineUi = () => {
+      mutating = true
+      staffApp.classList.add('offline-limited')
+      if (offlineBar) offlineBar.classList.remove('hidden')
+      if (offlineTitle) offlineTitle.textContent = 'لا يوجد اتصال بالإنترنت'
+      if (refresh) refresh.disabled = true
+      if (liveStatus) liveStatus.innerHTML = '<i></i> بدون إنترنت'
+      queueMicrotask(() => { mutating = false })
+    }
+
+    const healthCheck = async () => {
+      if (!navigator.onLine) return false
+      const controller = new AbortController()
+      const timer = setTimeout(() => controller.abort(), 4000)
+      try {
+        const response = await fetch('https://kpnlechlpdpoivrafehl.supabase.co/auth/v1/health', {
+          method: 'GET',
+          cache: 'no-store',
+          signal: controller.signal
+        })
+        return response.ok
+      } catch {
+        return false
+      } finally {
+        clearTimeout(timer)
+      }
+    }
+
+    const beginGrace = () => {
+      if (mutating || graceActive || !looksOffline()) return
+      graceActive = true
+      suppressOfflineUi()
+      clearTimeout(graceTimer)
+      graceTimer = setTimeout(async () => {
+        const healthy = await healthCheck()
+        graceActive = false
+        if (!healthy) confirmOfflineUi()
+      }, 6500)
+    }
+
+    const recover = () => {
+      clearTimeout(graceTimer)
+      graceTimer = null
+      graceActive = false
+    }
+
+    const observer = new MutationObserver(() => {
+      if (mutating) return
+      if (looksOffline()) beginGrace()
+      else recover()
+    })
+    observer.observe(staffApp, { attributes:true, attributeFilter:['class'] })
+    if (liveStatus) observer.observe(liveStatus, { childList:true, subtree:true, characterData:true })
+
+    window.addEventListener('online', recover)
+    if (looksOffline()) beginGrace()
+  }
+
   beginSessionGuard()
 
   const boot = () => {
     installMobileUtilities()
+    installMobileOfflineGrace()
     watchSessionRestore()
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once:true })
