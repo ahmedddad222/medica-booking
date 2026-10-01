@@ -1,0 +1,48 @@
+name: Publish Medica Mobile Web
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'mobile_payload/**'
+      - '.github/workflows/publish-medica-mobile.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Rebuild Medica mobile pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p app
+          cat mobile_payload/index/part-* | base64 -d | gzip -d > app/index.html
+          cat mobile_payload/print/part-* | base64 -d | gzip -d > app/print.html
+          test -s app/index.html
+          test -s app/print.html
+          grep -qi '<html' app/index.html
+          grep -q 'Medica' app/index.html
+          grep -qi '<html' app/print.html
+          echo "Medica mobile pages rebuilt successfully"
+
+      - name: Commit published pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/index.html app/print.html
+          if git diff --cached --quiet; then
+            echo "No published-page changes"
+            exit 0
+          fi
+          git commit -m "Publish Medica mobile web"
+          git push
