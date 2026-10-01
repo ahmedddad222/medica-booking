@@ -1,20 +1,67 @@
-@import url('./mobile-v3.css?v=20261001-v3c');
-@import url('./mobile-v3-admin.css?v=20261001-v3c');
+/* Medica mobile compatibility layer.
+   The actual layout/order comes from the desktop stylesheet inside index.html.
+   This file only adds safe mobile behavior without rearranging the DOM. */
 
-html.web-mobile,html.web-mobile body{min-height:100%;width:100%;max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;overscroll-behavior-y:contain}
-html.web-mobile body{padding-bottom:env(safe-area-inset-bottom)}
-html.web-mobile input,html.web-mobile textarea,html.web-mobile select{font-size:16px}
-html.web-mobile button,html.web-mobile input,html.web-mobile textarea,html.web-mobile select{touch-action:manipulation}
-html.web-mobile .mobile-web-tools{display:none}
-.medica-install-help{position:fixed;inset:0;z-index:9999;display:grid;place-items:end center;padding:14px;background:rgba(8,23,28,.52);backdrop-filter:blur(10px)}
-.medica-install-help-card{width:min(460px,100%);position:relative;padding:28px 20px calc(26px + env(safe-area-inset-bottom));border-radius:26px;background:#fff;box-shadow:0 30px 90px rgba(8,25,31,.28);text-align:center}
-.medica-install-help-card img{width:68px;height:68px;object-fit:contain;border-radius:18px;margin-bottom:10px}
-.medica-install-help-card strong{display:block;font-size:19px;margin-bottom:8px}
-.medica-install-help-card p{margin:7px 0 0;color:#6b7b83;font-size:13px;line-height:1.8}
-.medica-install-close{position:absolute;top:10px;left:10px;width:40px;height:40px;min-height:40px;border:0;border-radius:13px;background:#f1f5f6;color:#40545d;font-size:24px}
+html.web-mobile,
+html.web-mobile body{
+  width:100%;
+  max-width:100%;
+  min-height:100%;
+  overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
+}
 
-/* Critical mobile visibility fix: hidden app views/dialogs must always stay hidden. */
+html.web-mobile *,
+html.web-mobile *::before,
+html.web-mobile *::after{box-sizing:border-box}
+
+html.web-mobile img,
+html.web-mobile svg{max-width:100%}
+
+html.web-mobile input,
+html.web-mobile select,
+html.web-mobile textarea,
+html.web-mobile button{
+  max-width:100%;
+  min-width:0;
+  touch-action:manipulation;
+}
+
+/* Prevent iOS zoom while keeping the desktop visual hierarchy intact. */
+@media (max-width:760px){
+  html.web-mobile input,
+  html.web-mobile select,
+  html.web-mobile textarea{font-size:16px!important}
+
+  html.web-mobile .app{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+  html.web-mobile .main,
+  html.web-mobile .premium-main{padding-bottom:calc(94px + env(safe-area-inset-bottom))!important}
+  html.web-mobile .mobile-nav{bottom:max(10px,env(safe-area-inset-bottom))}
+
+  html.web-mobile .form-grid > *,
+  html.web-mobile .split > *,
+  html.web-mobile .dashboard-workgrid > *,
+  html.web-mobile .queue-layout > *,
+  html.web-mobile .settings-grid > *,
+  html.web-mobile .medical-tools-grid > *{min-width:0}
+
+  html.web-mobile .table-wrap,
+  html.web-mobile .panel,
+  html.web-mobile .premium-card,
+  html.web-mobile .auth-card,
+  html.web-mobile .overlay-card{max-width:100%}
+
+  html.web-mobile .toolbar,
+  html.web-mobile .item-actions,
+  html.web-mobile .appointment-actions,
+  html.web-mobile .queue-actions,
+  html.web-mobile .employee-actions,
+  html.web-mobile .patient-card-actions{max-width:100%}
+}
+
+/* Never allow mobile styling to reveal a view/dialog that application logic hid. */
 html.web-mobile .hidden,
+html.web-mobile [hidden],
 html.web-mobile .dialog-backdrop.hidden,
 html.web-mobile .prescription-editor-backdrop.hidden,
 html.web-mobile .ultrasound-editor-backdrop.hidden,
