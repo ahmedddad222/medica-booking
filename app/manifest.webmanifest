@@ -1,0 +1,29 @@
+{
+  "name": "Medica - إدارة العيادة",
+  "short_name": "Medica",
+  "description": "نظام Medica لإدارة العيادة من الموبايل والكمبيوتر بنفس البيانات.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#f4f7fb",
+  "theme_color": "#0e9384",
+  "categories": ["medical", "business", "productivity"],
+  "icons": [
+    {
+      "src": "./medica-icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./medica-icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

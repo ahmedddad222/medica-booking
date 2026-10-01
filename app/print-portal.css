@@ -1,0 +1,167 @@
+.medica-print-portal{
+  --print-brand:#0e9384;
+  --print-ink:#16272f;
+  --print-muted:#6d7a82;
+  --print-line:#dce5e9;
+  position:fixed;
+  top:0;
+  left:-400vw;
+  z-index:-9999;
+  width:210mm;
+  visibility:hidden;
+  pointer-events:none;
+  background:#fff;
+  direction:rtl;
+}
+.medica-print-portal[data-orientation="landscape"]{width:297mm}
+.medica-print-paper{
+  width:100%;
+  min-height:0;
+  margin:0;
+  padding:12mm 14mm 13mm;
+  background:#fff;
+  color:var(--print-ink);
+  font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+  font-size:9.7pt;
+  line-height:1.55;
+}
+.medica-print-portal[data-orientation="landscape"] .medica-print-paper{padding:10mm 12mm 11mm}
+.medica-print-header{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:8mm;
+  align-items:center;
+  margin:0 0 5mm;
+  padding:0 0 4mm;
+  border-bottom:.45mm solid var(--print-brand);
+  break-inside:avoid;
+  page-break-inside:avoid;
+}
+.medica-print-clinic{display:flex;align-items:center;gap:4mm;min-width:0}
+.medica-print-logo{width:17mm;height:17mm;min-width:17mm;border:1px solid var(--print-line);border-radius:3.5mm;object-fit:contain;background:#fff;padding:1.2mm}
+.medica-print-logo-fallback{display:grid;place-items:center;padding:0;background:#eef8f6;color:var(--print-brand);font-size:17pt;font-weight:900}
+.medica-print-clinic-copy{min-width:0}
+.medica-print-clinic-copy h2{margin:0 0 .8mm;color:var(--print-ink);font-size:15pt;line-height:1.2;font-weight:850}
+.medica-print-specialty{font-size:8pt;color:var(--print-muted);font-weight:700}
+.medica-print-meta{display:flex;flex-wrap:wrap;gap:1mm 3mm;margin-top:1.1mm;color:var(--print-muted);font-size:7.4pt}
+.medica-print-title{text-align:left;max-width:72mm}
+.medica-print-portal[data-orientation="landscape"] .medica-print-title{max-width:100mm}
+.medica-print-title h1{margin:0;color:var(--print-ink);font-size:17pt;line-height:1.25;font-weight:900}
+.medica-print-title p{margin:1.1mm 0 0;color:var(--print-muted);font-size:8pt}
+.medica-print-block{margin-top:4mm}
+.medica-print-block:first-child{margin-top:0}
+.medica-print-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2.5mm}
+.medica-print-stat{min-width:0;border:1px solid var(--print-line);border-radius:3mm;background:#fbfcfd;padding:3mm;break-inside:avoid}
+.medica-print-stat span{display:block;color:var(--print-muted);font-size:7pt;font-weight:750}
+.medica-print-stat strong{display:block;margin-top:.8mm;color:var(--print-ink);font-size:12pt;font-weight:900;overflow-wrap:anywhere}
+.medica-print-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.5mm}
+.medica-print-info-cell{border:1px solid var(--print-line);border-radius:2.8mm;background:#fff;padding:2.8mm 3.2mm;break-inside:avoid}
+.medica-print-info-cell span{display:block;color:var(--print-muted);font-size:7pt;font-weight:750}
+.medica-print-info-cell strong{display:block;margin-top:.7mm;color:#25363e;font-size:9pt;font-weight:800;overflow-wrap:anywhere}
+.medica-print-section-title{display:flex;align-items:center;gap:1.6mm;margin:5mm 0 2mm;padding-bottom:1.7mm;border-bottom:1px solid var(--print-line);font-size:10.5pt;font-weight:900;break-after:avoid-page}
+.medica-print-section-title::before{content:"";width:2mm;height:2mm;border-radius:50%;background:var(--print-brand);flex:0 0 auto}
+.medica-print-note{border:1px solid var(--print-line);border-radius:2.8mm;background:#fbfcfd;padding:3mm;white-space:pre-wrap;overflow-wrap:anywhere;break-inside:avoid}
+.medica-print-note-label{display:block;margin-bottom:1mm;color:var(--print-muted);font-size:7pt;font-weight:800}
+.medica-print-note p{margin:0;color:#273941}
+.medica-print-amount{display:flex;align-items:center;justify-content:space-between;gap:8mm;border:1px solid var(--print-line);border-right:1.2mm solid var(--print-brand);border-radius:3mm;background:#f2fbf9;padding:4mm;break-inside:avoid}
+.medica-print-amount span{color:var(--print-muted);font-weight:750}
+.medica-print-amount strong{font-size:18pt;color:var(--print-brand);font-weight:950}
+.medica-print-table-wrap{overflow:visible}
+.medica-print-table{width:100%;border-collapse:collapse;border:1px solid var(--print-line);font-size:7.9pt}
+.medica-print-table thead{display:table-header-group}
+.medica-print-table tr{break-inside:avoid;page-break-inside:avoid}
+.medica-print-table th,.medica-print-table td{padding:2.15mm 2.3mm;text-align:right;vertical-align:top;border-bottom:1px solid #e5ebee;border-left:1px solid #e5ebee;overflow-wrap:anywhere}
+.medica-print-table th:last-child,.medica-print-table td:last-child{border-left:0}
+.medica-print-table tbody tr:last-child td{border-bottom:0}
+.medica-print-table th{background:#edf8f6;color:var(--print-brand);font-size:7.2pt;font-weight:900;white-space:nowrap}
+.medica-print-table td{background:#fff;color:#2d3d45}
+.medica-print-table tbody tr:nth-child(even) td{background:#fcfdfd}
+.medica-print-empty{text-align:center!important;color:var(--print-muted)!important;padding:5mm!important}
+.medica-print-signatures{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20mm;margin-top:14mm;break-inside:avoid}
+.medica-print-signature{padding-top:2mm;border-top:1px solid #aeb9bf;text-align:center;color:#687781;font-size:8pt}
+.medica-print-footer{display:flex;justify-content:space-between;gap:5mm;margin-top:7mm;padding-top:2.5mm;border-top:1px solid #e3e9ec;color:#879299;font-size:6.8pt;break-inside:avoid}
+.medica-print-rxmark{font:italic 700 31pt Georgia,"Times New Roman",serif;color:var(--print-brand);line-height:1;margin:3mm 0 1.5mm}
+.medica-print-info.rx-patient{grid-template-columns:2fr 1fr 1fr 1fr}
+.medica-print-note.rx-diagnosis{border-right:1mm solid var(--print-brand);background:#f2fbf9}
+.medica-print-table.rx-table td strong{font-size:8.5pt;color:#172a32}
+.medica-print-rxnum{width:9mm;text-align:center!important;color:var(--print-brand);font-weight:900}
+
+/* 10 clinic templates */
+.medica-print-paper[data-template="minimal_white"]{--print-brand:#30383c}
+.medica-print-paper[data-template="minimal_white"] .medica-print-header{border-bottom:1px solid #4b555a}
+.medica-print-paper[data-template="minimal_white"] .medica-print-logo,
+.medica-print-paper[data-template="minimal_white"] .medica-print-stat,
+.medica-print-paper[data-template="minimal_white"] .medica-print-info-cell,
+.medica-print-paper[data-template="minimal_white"] .medica-print-note{border-radius:0;background:#fff}
+.medica-print-paper[data-template="minimal_white"] .medica-print-table th{background:#fff;color:#111;border-bottom:2px solid #30383c}
+
+.medica-print-paper[data-template="executive_teal"] .medica-print-header{background:var(--print-brand);padding:5mm;border:0;border-radius:4mm}
+.medica-print-paper[data-template="executive_teal"] .medica-print-header,
+.medica-print-paper[data-template="executive_teal"] .medica-print-header *{color:#fff}
+.medica-print-paper[data-template="executive_teal"] .medica-print-table th{background:var(--print-brand);color:#fff}
+.medica-print-paper[data-template="executive_teal"] .medica-print-stat{border:0;background:#f3faf9}
+
+.medica-print-paper[data-template="soft_cards"]{background:linear-gradient(180deg,#eff9f7 0,#fff 40mm)}
+.medica-print-paper[data-template="soft_cards"] .medica-print-header,
+.medica-print-paper[data-template="soft_cards"] .medica-print-stat,
+.medica-print-paper[data-template="soft_cards"] .medica-print-info-cell,
+.medica-print-paper[data-template="soft_cards"] .medica-print-note{border:0;box-shadow:0 .5mm 2.5mm rgba(20,50,60,.08);border-radius:4mm;background:#fff}
+.medica-print-paper[data-template="soft_cards"] .medica-print-header{padding:5mm}
+
+.medica-print-paper[data-template="framed_medical"]{outline:.7mm solid var(--print-brand);outline-offset:-5mm;padding:15mm 16mm}
+.medica-print-paper[data-template="framed_medical"] .medica-print-header{border-bottom:.7mm double var(--print-brand)}
+.medica-print-paper[data-template="framed_medical"] .medica-print-section-title{border-bottom:.35mm solid var(--print-brand)}
+
+.medica-print-paper[data-template="split_accent"]{border-right:7mm solid var(--print-brand);padding-right:10mm}
+.medica-print-paper[data-template="split_accent"] .medica-print-header{border-bottom:0}
+.medica-print-paper[data-template="split_accent"] .medica-print-title{border-right:1mm solid var(--print-brand);padding-right:4mm}
+.medica-print-paper[data-template="split_accent"] .medica-print-stat{border-right:.9mm solid var(--print-brand);border-radius:1mm}
+
+.medica-print-paper[data-template="elegant_center"] .medica-print-header{display:flex;flex-direction:column;text-align:center;gap:2.5mm}
+.medica-print-paper[data-template="elegant_center"] .medica-print-clinic{flex-direction:column}
+.medica-print-paper[data-template="elegant_center"] .medica-print-clinic-copy,
+.medica-print-paper[data-template="elegant_center"] .medica-print-title{text-align:center;max-width:none}
+.medica-print-paper[data-template="elegant_center"] .medica-print-logo{width:20mm;height:20mm}
+.medica-print-paper[data-template="elegant_center"] .medica-print-section-title{justify-content:center}
+
+.medica-print-paper[data-template="compact_pro"]{padding:9mm 10mm;font-size:8.8pt}
+.medica-print-paper[data-template="compact_pro"] .medica-print-header{margin-bottom:3.5mm;padding-bottom:3mm}
+.medica-print-paper[data-template="compact_pro"] .medica-print-logo{width:14mm;height:14mm;min-width:14mm}
+.medica-print-paper[data-template="compact_pro"] .medica-print-stat{padding:2.3mm}
+.medica-print-paper[data-template="compact_pro"] .medica-print-stat strong{font-size:10.8pt}
+.medica-print-paper[data-template="compact_pro"] .medica-print-table th,
+.medica-print-paper[data-template="compact_pro"] .medica-print-table td{padding:1.65mm 1.9mm;font-size:7.1pt}
+
+.medica-print-paper[data-template="modern_grid"] .medica-print-header{background:#102a32;color:#fff;border:0;border-radius:3mm;padding:5mm}
+.medica-print-paper[data-template="modern_grid"] .medica-print-header *{color:#fff}
+.medica-print-paper[data-template="modern_grid"] .medica-print-title{background:var(--print-brand);padding:3.5mm;border-radius:2.5mm;text-align:center}
+.medica-print-paper[data-template="modern_grid"] .medica-print-stat{border:0;border-bottom:1mm solid var(--print-brand);border-radius:1mm;background:#f8fbfc}
+.medica-print-paper[data-template="modern_grid"] .medica-print-table th{background:#102a32;color:#fff}
+
+.medica-print-paper[data-template="doctor_signature"] .medica-print-clinic-copy h2::after{content:"  •  " attr(data-doctor);font-size:8pt;color:var(--print-brand);font-weight:700}
+.medica-print-paper[data-template="doctor_signature"] .medica-print-title h1{font-family:Georgia,"Times New Roman",serif;font-style:italic}
+.medica-print-paper[data-template="doctor_signature"] .medica-print-stat{border-radius:1mm;background:#fff}
+.medica-print-paper[data-template="doctor_signature"] .medica-print-rxmark{font-size:37pt}
+
+@media print{
+  @page{margin:0}
+  html[data-medica-print-orientation="portrait"]{page:auto}
+  html,body{margin:0!important;padding:0!important;background:#fff!important;overflow:visible!important}
+  body>*:not(#medicaPrintPortal){display:none!important}
+  #medicaPrintPortal{
+    display:block!important;
+    position:static!important;
+    left:auto!important;
+    top:auto!important;
+    z-index:auto!important;
+    visibility:visible!important;
+    pointer-events:auto!important;
+    width:210mm!important;
+    margin:0!important;
+    padding:0!important;
+    background:#fff!important;
+  }
+  #medicaPrintPortal[data-orientation="landscape"]{width:297mm!important}
+  #medicaPrintPortal .medica-print-paper{margin:0!important;box-shadow:none!important}
+  #medicaPrintPortal,#medicaPrintPortal *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+}

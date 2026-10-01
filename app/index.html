@@ -1,13 +1,1072 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta http-equiv="refresh" content="0;url=https://kpnlechlpdpoivrafehl.supabase.co/storage/v1/object/public/medica-web/index.html">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f766e" />
   <title>Medica</title>
-  <script>location.replace('https://kpnlechlpdpoivrafehl.supabase.co/storage/v1/object/public/medica-web/index.html');</script>
+  <link rel="stylesheet" href="./print-portal.css" />
+  <style>
+  :root{
+    --bg:#f4f7fb;--surface:#ffffff;--surface-2:#f8fafc;--line:#e6ebf2;--line-strong:#d8e0ea;
+    --text:#172033;--heading:#0f172a;--muted:#748094;--muted-2:#98a2b3;
+    --brand:#0e9384;--brand-strong:#08786d;--brand-light:#1fb3a3;--brand-mid:#79cfc4;--brand-soft:#e9f8f5;--brand-soft-2:#f2fbf9;--brand-soft-hover:#e2f3f0;--brand-border:#d4eee9;--brand-rgb:14,147,132;--brand-contrast:#ffffff;
+    --nav:#10232b;--nav-2:#132d36;--nav-text:#c8d5da;--nav-muted:#87a0a8;
+    --danger:#c63c45;--danger-soft:#fff0f1;--warning:#b7791f;--warning-soft:#fff8e7;--ok:#16865d;--ok-soft:#eaf9f2;
+    --shadow-sm:0 1px 2px rgba(15,23,42,.04),0 4px 16px rgba(15,23,42,.03);
+    --shadow-md:0 18px 44px rgba(15,23,42,.08);--shadow-lg:0 30px 80px rgba(15,23,42,.14);
+    --radius:18px;--radius-sm:13px;--sidebar:274px;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--bg)}
+  body{margin:0;font-family:Inter,"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+  button,input,select,textarea{font:inherit}button{user-select:none}.hidden{display:none!important}
+  ::selection{background:var(--brand-soft);color:var(--brand-strong)}
+  .muted{color:var(--muted);font-size:13px;line-height:1.65}.error{color:var(--danger)}.success{color:var(--ok)}
+
+  /* Auth / onboarding */
+  .center-shell,.onboard-layout{min-height:100vh;display:grid;place-items:center;padding:28px;position:relative;overflow:hidden;background:
+    radial-gradient(circle at 12% 14%,rgba(var(--brand-rgb),.13),transparent 28%),
+    radial-gradient(circle at 88% 80%,rgba(35,80,110,.10),transparent 30%),
+    linear-gradient(135deg,#f7fafc 0%,#eef6f6 100%)}
+  .center-shell::before,.onboard-layout::before{content:"";position:absolute;inset:28px;border:1px solid rgba(var(--brand-rgb),.09);border-radius:30px;pointer-events:none}
+  .auth-card,.overlay-card{width:min(480px,100%);background:rgba(255,255,255,.94);border:1px solid rgba(219,227,234,.95);border-radius:28px;padding:34px;box-shadow:var(--shadow-lg);position:relative;z-index:1;backdrop-filter:blur(14px)}
+  .overlay-card{max-width:780px;width:100%}
+  .auth-card::before,.overlay-card::before{content:"";position:absolute;inset:0 auto auto 28px;width:78px;height:4px;border-radius:0 0 8px 8px;background:linear-gradient(90deg,var(--brand),var(--brand-light))}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:20px;letter-spacing:-.2px;color:var(--heading)}
+  .auth-card h1{margin:30px 0 7px;font-size:26px;letter-spacing:-.5px;color:var(--heading)}
+  .overlay-card h2{font-size:26px;color:var(--heading)}
+
+  /* Inputs */
+  .field{display:grid;gap:7px;margin:13px 0}.field span{font-size:12.5px;color:#526071;font-weight:650}
+  .field input,.field select,.field textarea,.search{width:100%;border:1px solid var(--line-strong);border-radius:13px;padding:12px 13px;background:#fff;color:var(--text);outline:none;min-height:46px;transition:border-color .18s,box-shadow .18s,background .18s}
+  .field textarea{min-height:100px;resize:vertical;line-height:1.7}.field input::placeholder,.field textarea::placeholder,.search::placeholder{color:#a6afbc}
+  .field input:hover,.field select:hover,.field textarea:hover,.search:hover{border-color:#c8d2de}
+  .field input:focus,.field select:focus,.field textarea:focus,.search:focus{border-color:var(--brand-mid);box-shadow:0 0 0 4px rgba(var(--brand-rgb),.10);background:#fff}
+  .field input:disabled,.field select:disabled,.field textarea:disabled{background:#f4f6f8;color:#8b96a6;cursor:not-allowed}
+
+  /* Buttons */
+  .btn{border:0;border-radius:12px;padding:10px 15px;min-height:42px;cursor:pointer;font-weight:700;transition:transform .15s,box-shadow .15s,background .15s,border-color .15s,color .15s;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+  .btn:hover{transform:translateY(-1px)}.btn:active{transform:translateY(0)}
+  .btn.primary{background:var(--brand-action,var(--brand));color:var(--brand-action-contrast,var(--brand-contrast));box-shadow:0 8px 20px rgba(var(--brand-rgb),.22)}.btn.primary:hover{background:var(--brand-action-hover,var(--brand-strong));box-shadow:0 12px 24px rgba(var(--brand-rgb),.28)}
+  .btn.light{background:var(--brand-soft);color:var(--brand-strong)}.btn.light:hover{background:var(--brand-soft-hover)}
+  .btn.outline{background:#fff;color:#354154;border:1px solid var(--line-strong);box-shadow:0 1px 2px rgba(15,23,42,.02)}.btn.outline:hover{border-color:#bfcad6;background:#fbfcfd}
+  .btn.danger{background:var(--danger-soft);color:var(--danger);border:1px solid #ffd9dd}.btn.danger:hover{background:#ffe6e9}
+  .btn.small{padding:7px 10px;min-height:34px;font-size:12px;border-radius:10px}.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}.w100{width:100%}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+  /* App shell */
+  .app{min-height:100vh;display:grid;grid-template-columns:var(--sidebar) minmax(0,1fr);background:var(--bg)}
+  .sidebar{background:linear-gradient(180deg,var(--nav) 0%,var(--nav-2) 100%);padding:22px 16px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;box-shadow:-1px 0 0 rgba(255,255,255,.04) inset;z-index:15}
+  .sidebar .brand{padding:3px 8px 22px;color:#fff}.sidebar .sidebar .brand>div:last-child{color:#f7fbfc}
+  .nav{display:grid;gap:7px;margin-top:4px}.nav button{border:1px solid transparent;background:transparent;border-radius:13px;padding:11px 13px;text-align:right;cursor:pointer;color:var(--nav-text);font-weight:600;min-height:46px;position:relative;transition:.18s}
+  .nav button::before{content:"";width:8px;height:8px;border:1.8px solid currentColor;border-radius:3px;display:inline-block;margin-left:10px;opacity:.72;transform:rotate(45deg)}
+  .nav button.active,.nav button:hover{background:rgba(255,255,255,.075);color:#fff;border-color:rgba(255,255,255,.06)}
+  .nav button.active{box-shadow:0 10px 28px rgba(0,0,0,.10)}.nav button.active::after{content:"";position:absolute;right:-16px;top:10px;bottom:10px;width:3px;border-radius:4px;background:var(--brand-light)}
+  .nav button.active::before{background:var(--brand);border-color:var(--brand);box-shadow:0 0 0 4px rgba(var(--brand-rgb),.14)}
+  .side-bottom{margin-top:auto;padding:17px 8px 0;border-top:1px solid rgba(255,255,255,.085)}.side-bottom .muted{color:var(--nav-muted);word-break:break-word}.side-bottom .btn.outline{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.10);color:#dbe7ea}.side-bottom .btn.outline:hover{background:rgba(255,255,255,.08)}
+  .main{padding:0 30px 34px;min-width:0;max-width:1540px;width:100%;margin:0 auto}
+  .topbar{min-height:86px;display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:24px;position:sticky;top:0;z-index:10;background:rgba(244,247,251,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(218,226,235,.78)}
+  .topbar h2{margin:0 0 4px;font-size:23px;letter-spacing:-.45px;color:var(--heading)}
+  .page{display:block;animation:pageIn .24s ease-out}@keyframes pageIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+  /* Dashboard */
+  .grid-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:18px}
+  .stat,.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+  .stat{padding:20px;min-height:128px;position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s,border-color .18s}
+  .stat:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(15,23,42,.07);border-color:#d9e2eb}.stat::after{content:"";position:absolute;left:-18px;bottom:-26px;width:88px;height:88px;border-radius:50%;background:var(--brand-soft);opacity:.72}
+  .stat:nth-child(2)::after{background:#eef3ff}.stat:nth-child(3)::after{background:#eefaf3}.stat:nth-child(4)::after{background:#fff5e9}
+  .stat span{font-size:12.5px;color:var(--muted);font-weight:650}.stat strong{display:block;font-size:27px;margin-top:12px;letter-spacing:-.55px;color:var(--heading);font-weight:800;position:relative;z-index:1}
+  .stat::before{content:"";position:absolute;left:18px;top:18px;width:9px;height:9px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 5px var(--brand-soft)}.stat:nth-child(2)::before{background:#6f8fe8;box-shadow:0 0 0 5px #eef2ff}.stat:nth-child(3)::before{background:#42a979;box-shadow:0 0 0 5px #ecf8f1}.stat:nth-child(4)::before{background:#d99b44;box-shadow:0 0 0 5px #fff7eb}
+  .panel{padding:20px}.panel+.panel{margin-top:16px}.panel h3{margin:0 0 15px;font-size:16px;color:var(--heading);letter-spacing:-.2px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.panel-head h3{margin:0}
+  .split{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr);gap:16px}.split+.split{margin-top:16px}
+  .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px}.form-grid .full{grid-column:1/-1}.inline-form{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.inline-form .field{margin:0;min-width:170px;flex:1}
+
+  /* Lists / tables */
+  .list{display:grid;gap:10px}.item{border:1px solid #e9edf2;border-radius:14px;padding:14px 15px;background:#fff;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;transition:border-color .16s,box-shadow .16s,transform .16s}.item:hover{border-color:#d7e1e9;box-shadow:0 8px 24px rgba(15,23,42,.045);transform:translateY(-1px)}
+  .item-title{font-weight:750;color:#1c2738;font-size:14px}.item-meta{display:flex;gap:8px 14px;flex-wrap:wrap;margin-top:7px;color:var(--muted);font-size:12px}.item-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .badge{display:inline-flex;align-items:center;border-radius:999px;padding:5px 9px;font-size:10.5px;font-weight:750;background:#f1f4f7;color:#536071;border:1px solid #e8edf2;white-space:nowrap}.badge.ok{background:var(--ok-soft);color:var(--ok);border-color:#d5f0e3}.badge.warn{background:var(--warning-soft);color:var(--warning);border-color:#fae6b5}.badge.bad{background:var(--danger-soft);color:var(--danger);border-color:#ffdce0}.badge.brand{background:var(--brand-soft);color:var(--brand-strong);border-color:var(--brand-border);font-size:10.5px}
+  .empty{padding:36px 24px;text-align:center;color:var(--muted);border:1px dashed #d5dee8;border-radius:15px;background:linear-gradient(180deg,#fcfdfe,#f9fbfc)}
+  .empty-icon{width:38px;height:38px;display:grid;place-items:center;margin:0 auto 11px;border-radius:12px;background:var(--brand-soft-2);color:var(--brand-strong);border:1px solid var(--brand-border)}
+  .empty-icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .empty::before{display:none!important;content:none!important}
+  .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}.table{width:100%;border-collapse:collapse;min-width:680px}.table th,.table td{padding:13px;border-bottom:1px solid #edf1f5;text-align:right;font-size:12.5px}.table th{color:#697586;font-weight:750;background:#f8fafc}.table tr:last-child td{border-bottom:0}.table tr:hover td{background:#fbfcfd}
+  .money{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700;color:#273548}
+  .search{max-width:330px;background:#fbfcfd}
+
+  /* Notices */
+  .notice{border:1px solid #cfe7e2;background:#f2fbf9;border-radius:14px;padding:13px 14px;color:#2c6d65}.notice.warning{border-color:#f0d99d;background:#fff9e9;color:#8a641e}.notice.danger{border-color:#f3cbd0;background:#fff2f3;color:#9f3841}
+  .credentials{background:linear-gradient(145deg,#15252d,#0f1e25);color:#dff5f1;border-radius:15px;padding:17px;direction:ltr;text-align:left;font-family:Consolas,"SFMono-Regular",monospace;white-space:pre-wrap;overflow:auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+  .section-title{font-size:12px;font-weight:800;text-transform:none;letter-spacing:.1px;color:#445164;margin:18px 0 9px}.sep{height:1px;background:var(--line);margin:18px 0}.subtle{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:14px}.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-left:5px;background:#98a2b3}.status-dot.on{background:#23b778;box-shadow:0 0 0 4px #eaf8f2}
+
+  /* Toast + dialog */
+  #toastStack{position:fixed;left:24px;bottom:24px;z-index:9999;display:grid;gap:10px;pointer-events:none}.toast{min-width:280px;max-width:420px;background:#14242b;color:#f4fbfb;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:13px 15px;box-shadow:var(--shadow-lg);transform:translateY(8px);opacity:0;animation:toastIn .22s forwards;line-height:1.55;font-size:13px}.toast.success{border-right:4px solid #36c69b}.toast.error{border-right:4px solid #f06b75}.toast.warning{border-right:4px solid #e4ac54}@keyframes toastIn{to{opacity:1;transform:none}}
+  .dialog-backdrop{position:fixed;inset:0;background:rgba(10,20,27,.44);backdrop-filter:blur(6px);display:grid;place-items:center;padding:20px;z-index:9998;overflow-y:auto}.dialog-card{width:min(500px,100%);background:#fff;border:1px solid #dfe6ed;border-radius:22px;padding:22px;box-shadow:var(--shadow-lg);animation:dialogIn .2s ease-out;max-height:calc(100vh - 40px);overflow-y:auto;overscroll-behavior:contain}.dialog-card.wide{width:min(860px,100%)}.dialog-card.compact{padding:20px}.dialog-card.compact p{margin-bottom:14px}.dialog-card .dialog-summary{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 14px}.dialog-summary .badge{font-size:11px}@keyframes dialogIn{from{opacity:0;transform:scale(.98) translateY(5px)}to{opacity:1;transform:none}}.dialog-card h3{margin:0 0 7px;color:var(--heading);font-size:19px}.dialog-card p{margin:0 0 16px;color:var(--muted);font-size:13px;line-height:1.7}.dialog-actions{display:flex;gap:8px;justify-content:flex-start;margin-top:16px;position:sticky;bottom:-20px;background:linear-gradient(180deg,rgba(255,255,255,.92),#fff 35%);padding:14px 0 2px;z-index:2;border-top:1px solid rgba(230,235,242,.75)}.dialog-fields{display:grid;gap:10px}.dialog-fields .field{margin:0}.dialog-fields.card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.dialog-fields.card-grid .field{border:1px solid var(--line);border-radius:16px;padding:12px 14px;background:#fbfcfd}.dialog-fields.card-grid .field.full{grid-column:1/-1}.dialog-fields.card-grid .field.field-compact textarea{min-height:84px}.dialog-fields.card-grid .field .field-help{display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5}.dialog-fields.card-grid .field.field-highlight{background:linear-gradient(180deg,#f4fbf9 0%,#fbfefd 100%);border-color:#dbeeea}.dialog-fields.card-grid .field.field-highlight input,.dialog-fields.card-grid .field.field-highlight select{background:#fff}.dialog-fields.card-grid .field.field-highlight .money-hint{display:flex;gap:8px;align-items:center;justify-content:space-between;padding-top:4px;color:var(--brand-strong);font-size:12px;font-weight:700}.dialog-fields.card-grid .field span{font-weight:700}.dialog-fields.card-grid .field textarea{min-height:112px}
+
+  /* Mobile */
+  .mobile-nav{display:none}
+
+  /* Booking workspace */
+  .eyebrow{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--brand);margin-bottom:4px}
+  .booking-shell{padding:0;overflow:visible}.booking-head{padding:22px 22px 16px;border-bottom:1px solid var(--line);margin:0}.booking-head h3{margin:2px 0 4px;font-size:21px}.booking-head p{margin:0;max-width:720px;line-height:1.7}
+  .booking-form{padding:18px 22px 20px;display:grid;grid-template-columns:1fr 1.25fr;gap:16px}.booking-section{border:1px solid var(--line);background:#fbfdfe;border-radius:17px;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}.booking-section-title{grid-column:1/-1;display:flex;align-items:center;gap:10px;padding-bottom:5px}.booking-section-title strong{display:block;color:var(--heading);font-size:14px}.booking-section-title small{display:block;color:var(--muted);margin-top:2px}.step-dot{width:28px;height:28px;border-radius:10px;background:rgba(var(--brand-rgb),.11);color:var(--brand);display:grid;place-items:center;font-weight:900}.patient-booking-section{grid-template-columns:minmax(0,1.35fr) minmax(170px,.65fr)}.appointment-booking-section{grid-template-columns:repeat(2,minmax(0,1fr))}.booking-submit{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:2px}.booking-save{min-width:170px;height:46px;font-size:14px}.patient-lookup-wrap{position:relative}.patient-suggestions{position:absolute;z-index:50;top:calc(100% - 2px);right:0;left:0;background:#fff;border:1px solid #d9e3ea;border-radius:14px;box-shadow:0 18px 40px rgba(15,31,41,.13);padding:6px;max-height:260px;overflow:auto}.patient-suggestion{width:100%;border:0;background:transparent;border-radius:10px;padding:10px 11px;display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:right;cursor:pointer;color:var(--text)}.patient-suggestion:hover{background:var(--brand-soft-2)}.patient-suggestion strong{display:block;color:var(--heading);font-size:13px}.patient-suggestion small{color:var(--muted)}.patient-match-hint{border:1px dashed #d7e2e8;border-radius:12px;padding:9px 11px;color:var(--muted);font-size:12px;background:#fff}.patient-match-hint.matched{border-color:var(--brand-border);background:var(--brand-soft-2);color:var(--brand-strong)}.patient-match-hint.new{border-color:#d9e3ea;background:#fafcfd}.input-money{position:relative}.input-money input{padding-left:54px}.input-money b{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--muted)}
+  .appointment-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 15px}.date-nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.compact-date input{height:39px;min-width:145px;border:1px solid var(--line);border-radius:11px;background:#fff;padding:0 10px;color:var(--heading);font:inherit}.booking-period-field{align-self:end}.booking-period-field>span{display:block;margin-bottom:7px}.period-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}.period-option{position:relative;cursor:pointer}.period-option input{position:absolute;opacity:0;pointer-events:none}.period-option span{min-height:43px;border:1px solid var(--line);border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--heading);transition:.16s ease;box-shadow:0 1px 2px rgba(15,23,42,.02)}.period-option:hover span{border-color:var(--brand-border);background:var(--brand-soft)}.period-option input:checked+span{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 7px 16px rgba(var(--brand-rgb),.18)}.period-option input:focus-visible+span{outline:3px solid rgba(var(--brand-rgb),.18);outline-offset:2px}.icon-btn{width:39px;height:39px;border:1px solid var(--line);background:#fff;border-radius:11px;display:grid;place-items:center;font-size:22px;line-height:1;color:var(--heading);cursor:pointer}.icon-btn:hover{background:#f4f8fa}.appointment-mini-stats{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.appointment-mini-stats span{background:#f5f8fa;border:1px solid #e4eaef;border-radius:999px;padding:7px 10px;font-size:11px;color:var(--muted)}.appointment-mini-stats b{color:var(--heading);margin-left:3px}.appointment-list-panel{padding:18px}.appointment-list{display:grid;gap:9px}.appointment-subgroup{display:grid;gap:9px;padding:12px;border:1px solid var(--line);border-radius:16px;background:#fbfcfd}.appointment-subgroup+.appointment-subgroup{margin-top:8px}.appointment-subgroup-title{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--heading);font-weight:900;font-size:12px;padding:1px 2px 4px}.appointment-subgroup.completed{background:#fbfefd}.appointment-subgroup.inactive{background:#fcfcfc}.appointment-day-title{display:flex;align-items:center;gap:9px;padding:13px 3px 5px;color:var(--heading);font-weight:900;font-size:13px}.appointment-day-title::after{content:"";height:1px;background:var(--line);flex:1}.appointment-row{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:14px;align-items:center;border:1px solid #e2e9ee;border-radius:15px;padding:13px 14px;background:#fff;transition:.18s ease}.appointment-row:hover{border-color:#c9d8df;box-shadow:0 7px 18px rgba(16,35,43,.05)}.appointment-time{min-height:58px;border:1px solid #e7edf1;border-radius:14px;text-align:center;padding:7px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f8fafb}.appointment-time strong{display:block;color:var(--heading);font-size:17px;line-height:1.15;font-variant-numeric:tabular-nums}.appointment-time small{display:block;color:var(--muted);font-size:10px;margin-top:4px;line-height:1.2}.appointment-row:hover .appointment-time{background:var(--brand-soft-2);border-color:var(--brand-border)}.appointment-person{min-width:0}.appointment-person-top{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.appointment-person h4{margin:0;color:var(--heading);font-size:14px}.appointment-subline{display:flex;gap:10px;flex-wrap:wrap;margin-top:5px;color:var(--muted);font-size:11.5px}.appointment-subline span{display:inline-flex;align-items:center;gap:4px}.appointment-note{margin-top:7px;padding:6px 9px;border-radius:9px;background:#f7f9fa;color:#596a73;font-size:11px;display:inline-block}.appointment-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap;max-width:310px}.patient-link{border:0;background:none;padding:0;color:var(--brand);font-weight:800;cursor:pointer;font:inherit}.patient-link:hover{text-decoration:underline}
+  .patient-record-card{width:min(1050px,96vw);max-height:90vh;overflow:auto;background:#f8fafb;border:1px solid #dfe6ed;border-radius:24px;padding:0;box-shadow:var(--shadow-lg)}.patient-record-head{position:sticky;top:0;z-index:3;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;border-bottom:1px solid var(--line)}.patient-record-head h2{margin:2px 0 3px;color:var(--heading);font-size:22px}.patient-record-stats{padding:16px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.record-stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px}.record-stat span{display:block;color:var(--muted);font-size:11px}.record-stat strong{display:block;color:var(--heading);font-size:19px;margin-top:5px}.patient-record-grid{display:grid;grid-template-columns:.75fr 1.25fr;gap:14px;padding:0 20px 20px}.record-block{background:#fff;border:1px solid var(--line);border-radius:17px;padding:16px}.record-block-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.record-block-head h3{margin:0;font-size:14px;color:var(--heading)}.detail-grid{display:grid;gap:0}.detail-row{display:grid;grid-template-columns:115px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid #eef2f4;font-size:12px}.detail-row:last-child{border-bottom:0}.detail-row span{color:var(--muted)}.detail-row strong{color:var(--heading);font-weight:700}.patient-timeline{display:grid;gap:8px}.timeline-row{display:grid;grid-template-columns:96px 1fr auto;gap:11px;align-items:center;border:1px solid #e8edf0;border-radius:12px;padding:10px 11px}.timeline-date strong{display:block;color:var(--heading);font-size:12px}.timeline-date small{color:var(--muted);font-size:10px}.timeline-main strong{display:block;font-size:12px;color:var(--heading)}.timeline-main small{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+
+  /* Clinic identity / finance / payroll */
+  .clinic-brand{min-width:0}.clinic-brand-logo{width:42px;height:42px;border-radius:13px;object-fit:contain;background:#fff;padding:4px;border:1px solid rgba(255,255,255,.12)}
+  .clinic-brand-copy{min-width:0}.clinic-brand-copy strong{display:block;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:165px}.clinic-brand-copy small{display:block;color:var(--nav-muted);font-size:10.5px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:165px}
+  .brand-preview{display:flex;align-items:center;gap:14px;padding:14px;border:1px dashed #cfdbe3;border-radius:16px;background:#f8fbfb;margin-bottom:14px}.brand-preview img{width:68px;height:68px;object-fit:contain;border-radius:16px;background:#fff;border:1px solid var(--line);padding:5px}
+  .role-notice{padding:12px 14px;border-radius:13px;background:var(--brand-soft-2);border:1px solid var(--brand-border);color:var(--brand-strong);font-size:12px;line-height:1.7;margin-bottom:14px}
+  .finance-toolbar{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}.finance-toolbar .field{margin:0;min-width:190px}.finance-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.finance-shortcuts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.finance-details{padding:0;overflow:hidden}.finance-details>summary{list-style:none;cursor:pointer;padding:17px 19px;font-weight:800;color:var(--heading);display:flex;align-items:center;justify-content:space-between;gap:10px}.finance-details>summary::-webkit-details-marker{display:none}.finance-details>summary::after{content:"+";width:26px;height:26px;border-radius:9px;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand-strong);font-size:18px}.finance-details[open]>summary::after{content:"−"}.finance-details>summary span{font-size:11px;color:var(--muted);font-weight:500;margin-right:auto}.finance-details-body{padding:0 19px 19px;border-top:1px solid var(--line)}
+  .category-chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 8px;background:#f4f7f9;color:#5e6c7a;font-size:10.5px;border:1px solid #e7ecef}.category-chip.salary{background:#eef3ff;color:#526aa7}.category-chip.rent{background:#fff6e9;color:#9b6a20}.category-chip.electricity{background:#fff9df;color:#8e7220}
+  .employee-card{border:1px solid #e5ebef;border-radius:16px;padding:15px;background:#fff;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center}.employee-card+.employee-card{margin-top:9px}.employee-avatar{width:42px;height:42px;border-radius:13px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-weight:900;float:right;margin-left:11px}.employee-meta{display:flex;gap:7px 13px;flex-wrap:wrap;margin-top:6px;color:var(--muted);font-size:11px}.employee-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .report-breakdown{display:grid;gap:8px}.report-line{display:grid;grid-template-columns:130px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #edf1f3}.report-line:last-child{border-bottom:0}.report-bar{height:7px;background:#edf2f4;border-radius:999px;overflow:hidden}.report-bar i{display:block;height:100%;background:var(--brand);border-radius:999px}.report-line strong{font-size:12px}.report-line span{font-size:11px;color:var(--muted)}
+  .doctor-only.hidden{display:none!important}.secretary-only.hidden{display:none!important}.role-hidden{display:none!important}.doctor-mode #patients .split{grid-template-columns:1fr}.doctor-mode #patients .panel:first-child.secretary-only{display:none!important}.settings-grid{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:16px}
+  .queue-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}.queue-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:15px;display:grid;grid-template-columns:60px minmax(0,1fr) auto;gap:13px;align-items:center}.queue-card.in-service{border-color:rgba(var(--brand-rgb),.35);box-shadow:0 10px 28px rgba(var(--brand-rgb),.10)}.queue-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:5px;color:var(--muted);font-size:11.5px}.queue-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.queue-hero{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.queue-hero .stat{min-height:110px}.ledger{display:grid;gap:8px}.ledger-row{display:grid;grid-template-columns:110px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #edf1f3}.ledger-row:last-child{border-bottom:0}.ledger-row .charge{color:#b45309}.ledger-row .payment{color:#08786d}.visit-note{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfcfd}.visit-note+ .visit-note{margin-top:9px}.visit-note-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:7px}.visit-note-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.visit-note-grid div{background:#fff;border:1px solid #edf1f3;border-radius:10px;padding:8px}.visit-note-grid span{display:block;font-size:10px;color:var(--muted);margin-bottom:3px}
+  @media(max-width:1100px){:root{--sidebar:238px}.grid-cards{grid-template-columns:repeat(2,1fr)}.finance-grid{grid-template-columns:repeat(2,1fr)}.split,.settings-grid{grid-template-columns:1fr}.main{padding-inline:22px}}
+  @media(max-width:900px){.booking-form{grid-template-columns:1fr}.appointment-toolbar{align-items:flex-start;flex-direction:column}.patient-record-grid{grid-template-columns:1fr}.patient-record-stats{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:760px){.dialog-backdrop{padding:10px}.dialog-card{max-height:calc(100vh - 20px);border-radius:18px}.dialog-actions{bottom:-20px}.app{display:block;padding-bottom:82px}.sidebar{display:none}.main{padding:0 14px 22px}.topbar{min-height:74px;margin-bottom:16px;top:0}.topbar h2{font-size:20px}.mobile-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(58px,1fr));position:fixed;bottom:10px;left:10px;right:10px;background:var(--nav);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08);border-radius:17px;z-index:40;padding:7px;box-shadow:0 20px 45px rgba(15,23,42,.22)}.mobile-nav button{border:0;background:transparent;padding:9px 3px;font-size:10.5px;color:#a9bdc3;border-radius:11px}.mobile-nav button.active{color:#fff;background:rgba(255,255,255,.08);font-weight:800}.form-grid{grid-template-columns:1fr}.grid-cards{grid-template-columns:1fr 1fr;gap:10px}.stat{min-height:112px;padding:16px}.stat strong{font-size:22px}.item{grid-template-columns:1fr}.item-actions{justify-content:flex-start}.panel{padding:16px}.panel-head{align-items:flex-start;flex-direction:column}.search{max-width:none}.center-shell,.onboard-layout{padding:14px}.center-shell::before,.onboard-layout::before{display:none}.auth-card,.overlay-card{padding:24px;border-radius:22px}.dialog-fields.card-grid{grid-template-columns:1fr}.dialog-card.wide{width:min(100%,100%)}.dialog-actions{flex-direction:column}.dialog-actions .btn{width:100%}}
+  @media(max-width:620px){.queue-layout{grid-template-columns:1fr}.queue-hero{grid-template-columns:1fr 1fr}.queue-card{grid-template-columns:52px 1fr}.queue-actions{grid-column:1/-1;justify-content:flex-start}.closing-grid{grid-template-columns:1fr 1fr}.visit-note-grid{grid-template-columns:1fr}.ledger-row{grid-template-columns:85px 1fr}.ledger-row> :last-child{grid-column:2}.booking-form{padding:14px}.patient-booking-section,.appointment-booking-section{grid-template-columns:1fr}.booking-submit{align-items:stretch;flex-direction:column}.booking-save{width:100%}.appointment-row{grid-template-columns:70px minmax(0,1fr);align-items:start}.appointment-actions{grid-column:1/-1;justify-content:flex-start;max-width:none;padding-top:7px;border-top:1px solid #edf1f3}.appointment-time{padding:7px 6px}.date-nav{width:100%}.compact-date{flex:1}.compact-date input{width:100%;min-width:0}.appointment-mini-stats{width:100%}.patient-record-stats{grid-template-columns:1fr 1fr}.patient-record-grid{padding:0 10px 12px}.patient-record-head{padding:15px}.timeline-row{grid-template-columns:80px 1fr}.timeline-row> :last-child{grid-column:1/-1}.detail-row{grid-template-columns:95px 1fr}}
+  @media(max-width:470px){.grid-cards{grid-template-columns:1fr}.main{padding-inline:10px}.topbar{padding-inline:3px}.toolbar{gap:6px}.topbar .toolbar .badge{display:none}.stat{min-height:105px}.auth-card{padding:21px}}
+
+  /* Premium refinement */
+  body{background:linear-gradient(180deg,#f7fafb 0%,#f3f7f8 100%)}
+  .panel,.stat,.booking-section,.appointment-row,.queue-card,.employee-card{box-shadow:0 10px 32px rgba(15,35,43,.055)}
+  .panel{border-color:rgba(20,48,58,.075)}
+  .stat{position:relative;overflow:hidden}.stat:after{content:"";position:absolute;inset:auto -28px -38px auto;width:92px;height:92px;border-radius:50%;background:rgba(var(--brand-rgb),.065)}
+  .btn.primary{box-shadow:0 8px 18px rgba(var(--brand-rgb),.16)}
+  .refresh-btn{width:40px;height:40px;display:inline-grid;place-items:center;padding:0;border-radius:50%;background:#fff;border:1px solid var(--line);box-shadow:0 5px 14px rgba(18,42,49,.06)}
+.refresh-btn .refresh-icon{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.85;stroke-linecap:round;stroke-linejoin:round;transition:transform .18s ease}
+.refresh-btn:hover{background:var(--brand-soft);border-color:var(--brand-border);color:var(--brand-strong)}
+.refresh-btn:hover .refresh-icon{transform:rotate(-18deg)}
+.refresh-btn:active .refresh-icon{transform:rotate(-48deg) scale(.95)}
+  .live-pill{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid rgba(var(--brand-rgb),.16);border-radius:999px;background:var(--brand-soft-2);color:var(--brand-strong);font-size:11px;font-weight:800}.live-pill i{width:7px;height:7px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 4px rgba(var(--brand-rgb),.11)}
+  .entry-alert{margin:14px 0;padding:14px 16px;border:1px solid rgba(var(--brand-rgb),.22);border-radius:16px;background:linear-gradient(135deg,var(--brand-soft-2),#fff);color:var(--heading);font-weight:800;box-shadow:0 12px 30px rgba(var(--brand-rgb),.08);animation:softPulse 1.8s ease-in-out infinite}
+  @keyframes softPulse{0%,100%{box-shadow:0 12px 30px rgba(var(--brand-rgb),.07)}50%{box-shadow:0 12px 34px rgba(var(--brand-rgb),.16)}}
+  .queue-card.requested{border-color:rgba(var(--brand-rgb),.36);background:linear-gradient(135deg,var(--brand-soft-2),#fff)}
+  .queue-time{width:58px;height:52px;border-radius:15px;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand-strong);font-size:14px;font-weight:900}
+  .queue-card.in-service .queue-time{background:var(--brand);color:var(--brand-contrast)}
+
+  /* ===== Medica sale-ready workspace ===== */
+  :root{--radius:22px;--radius-sm:14px;--sidebar:258px;--content-max:1460px}
+  body{background:#f5f7fa}
+  .premium-main{max-width:var(--content-max);padding:0 34px 42px}
+  .premium-sidebar{padding:22px 14px 18px;background:linear-gradient(180deg,var(--nav) 0%,var(--nav-2) 100%);border-left:1px solid rgba(255,255,255,.05)}
+  .premium-sidebar .clinic-brand{padding:2px 8px 24px;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,.07)}
+  .nav-section-label{padding:18px 13px 8px;color:rgba(224,239,242,.45);font-size:10px;font-weight:800;letter-spacing:.08em}
+  .staff-nav{gap:5px}.staff-nav button{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:14px;font-size:13px;font-weight:700}.staff-nav button::before{display:none}.staff-nav button.active::after{right:-14px;top:12px;bottom:12px;width:3px}.staff-nav .nav-icon{width:19px;height:19px;display:grid;place-items:center;color:currentColor;opacity:.86}.staff-nav .nav-icon svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.staff-nav button.active .nav-icon{opacity:1;color:var(--brand-light)}
+  .side-bottom{padding:15px 4px 0}.side-profile{display:block;align-items:center;gap:10px;padding:9px 7px 13px}.side-profile strong{display:block;color:#f4fbfc;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.side-profile small{display:block;color:var(--nav-muted);font-size:10px;margin-top:2px}.sidebar-logout{background:rgba(255,255,255,.045);color:#dfeaed;border:1px solid rgba(255,255,255,.08)}.sidebar-logout:hover{background:rgba(255,255,255,.08)}
+  .premium-topbar{min-height:90px;margin-bottom:26px;background:rgba(245,247,250,.90);border-bottom-color:#e6ebf0}.page-heading h2{font-size:24px}.page-subtitle{font-size:12px;color:var(--muted);margin-top:4px}.topbar-meta{display:flex;align-items:center;gap:8px}.date-pill,.role-pill,.count-pill,.subtle-chip,.live-dot-label{display:inline-flex;align-items:center;border-radius:999px;white-space:nowrap}.date-pill{padding:7px 10px;background:#fff;border:1px solid var(--line);color:#667386;font-size:11px;font-weight:650}.role-pill{padding:7px 10px;background:var(--brand-soft);color:var(--brand-strong);font-size:11px;font-weight:800;border:1px solid var(--brand-border)}
+  .workspace-page{padding-bottom:10px}.premium-card{background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 12px 34px rgba(15,23,42,.045)}
+  .dashboard-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(330px,.8fr);gap:22px;align-items:stretch;padding:25px 26px;margin-bottom:16px;position:relative;overflow:hidden}.dashboard-hero::after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;left:-95px;top:-150px;background:radial-gradient(circle,rgba(var(--brand-rgb),.09),transparent 66%);pointer-events:none}.hero-copy{align-self:center;position:relative;z-index:1}.hero-copy h3{font-size:25px;letter-spacing:-.55px;margin:4px 0 7px;color:var(--heading)}.hero-copy p{margin:0;color:var(--muted);font-size:13px}.focus-card{border:1px solid var(--brand-border);background:linear-gradient(145deg,var(--brand-soft-2),#fff);border-radius:19px;padding:17px 18px;min-height:110px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:1}.focus-card .focus-copy{min-width:0}.focus-card .focus-kicker{display:block;color:var(--brand-strong);font-size:10px;font-weight:900;margin-bottom:6px}.focus-card strong{display:block;color:var(--heading);font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.focus-card small{display:block;color:var(--muted);font-size:11px;margin-top:5px}.focus-card .focus-time{font-size:24px;font-weight:900;color:var(--brand-strong);white-space:nowrap}.focus-card.empty-focus{border-color:var(--line);background:#fbfcfd}.focus-card.empty-focus .focus-time{color:var(--muted-2)}
+  .dashboard-quick-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 16px}.dashboard-action{min-height:72px;border:1px solid #e2e9ee;background:#fff;border-radius:17px;padding:13px 14px;display:flex;align-items:center;gap:11px;text-align:right;cursor:pointer;transition:.18s ease;color:var(--heading);font:inherit;box-shadow:0 8px 24px rgba(15,35,43,.045)}.dashboard-action:hover{transform:translateY(-1px);border-color:var(--brand-border);box-shadow:0 12px 28px rgba(var(--brand-rgb),.09)}.dashboard-action.primary{background:linear-gradient(145deg,var(--brand),var(--brand-strong));border-color:transparent;color:var(--brand-contrast);box-shadow:0 12px 28px rgba(var(--brand-rgb),.18)}.dashboard-action .action-icon{width:38px;height:38px;border-radius:12px;background:var(--brand-soft);color:var(--brand-strong);display:grid;place-items:center;font-size:20px;font-weight:900;flex:0 0 auto}.dashboard-action.primary .action-icon{background:rgba(255,255,255,.15);color:inherit}.dashboard-action .action-copy{min-width:0}.dashboard-action strong{display:block;font-size:12.5px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dashboard-action small{display:block;margin-top:3px;color:var(--muted);font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dashboard-action.primary small{color:rgba(255,255,255,.78)}.dashboard-action.attention{border-color:#f1d99b;background:#fffaf0}.dashboard-action.attention .action-icon{background:#fff0c9;color:#9a6700}.dashboard-kpis{margin-bottom:16px}.dashboard-kpis .stat{min-height:114px;padding:18px 19px}.dashboard-kpis .stat strong{font-size:25px}.dashboard-workgrid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.55fr);gap:16px}.service-panel,.compact-panel{margin-top:0!important}.service-panel{min-height:390px}.compact-panel{min-height:390px}.text-link{border:0;background:transparent;color:var(--brand);font:inherit;font-size:11px;font-weight:800;cursor:pointer;padding:5px 0}.text-link:hover{text-decoration:underline}.count-pill{padding:5px 9px;background:#f5f7f9;color:#697586;font-size:10.5px;font-weight:800;border:1px solid #e6ebf0}
+  .service-list .appointment-row{grid-template-columns:78px minmax(0,1fr) auto;padding:13px 12px}.service-list .appointment-actions{display:flex;max-width:250px}.compact-list .appointment-row{grid-template-columns:66px minmax(0,1fr);padding:10px 11px;border-radius:13px}.compact-list .appointment-actions{display:none}.compact-list .appointment-time strong{font-size:14px}.compact-list .appointment-subline{margin-top:3px}.compact-list .appointment-note{display:none}
+  .queue-overview{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 22px;margin-bottom:15px}.queue-overview h3{margin:3px 0 0;font-size:20px}.queue-metrics{display:grid;grid-template-columns:repeat(3,minmax(110px,1fr));gap:8px}.queue-metrics>div{background:#f8fafb;border:1px solid var(--line);border-radius:15px;padding:11px 14px;min-width:112px}.queue-metrics span{display:block;color:var(--muted);font-size:10px}.queue-metrics strong{display:block;color:var(--heading);font-size:20px;margin-top:3px}.premium-queue-layout{grid-template-columns:minmax(330px,.7fr) minmax(0,1.3fr);align-items:start}.queue-current-panel{background:linear-gradient(180deg,#fff,var(--brand-soft-2))}.live-dot-label{gap:6px;padding:5px 8px;color:var(--brand-strong);font-size:10px;font-weight:800;background:var(--brand-soft);border:1px solid var(--brand-border)}.live-dot-label i{width:6px;height:6px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 4px rgba(var(--brand-rgb),.08)}.completed-drawer{padding:0;margin-top:16px;overflow:hidden}.completed-drawer>summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;font-weight:850;color:var(--heading)}.completed-drawer>summary::-webkit-details-marker{display:none}.completed-drawer>summary::after{content:"⌄";color:var(--muted);font-size:16px;margin-right:auto;margin-left:8px}.completed-drawer[open]>summary::after{transform:rotate(180deg)}.details-list{padding:0 18px 18px;border-top:1px solid var(--line);padding-top:14px}
+  .entry-alert{display:flex;align-items:center;justify-content:space-between;gap:12px}.entry-alert::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 6px rgba(var(--brand-rgb),.10);flex:0 0 auto}
+  .premium-booking{overflow:visible}.premium-booking .booking-head{padding:20px 22px}.subtle-chip{padding:6px 9px;background:#f6f8fa;color:#758194;border:1px solid var(--line);font-size:10px;font-weight:800}.premium-booking-form{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:14px}.premium-booking-form .booking-section{box-shadow:none;background:#fbfcfd;border-radius:18px}.premium-toolbar{border-radius:18px;box-shadow:none}.patient-match-hint:empty{display:none!important}
+  .patients-toolbar{padding:20px 22px;display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:15px}.patients-toolbar h3{margin:3px 0 0;font-size:20px}.patient-search-box{display:flex;align-items:center;gap:9px;min-width:min(520px,52%)}.patient-search-box .search{max-width:none}.patients-list-panel{padding:15px}.patient-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.patient-card{border:1px solid var(--line);border-radius:17px;padding:15px 16px;background:#fff;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;transition:.18s}.patient-card:hover{border-color:#cfd9e2;box-shadow:0 10px 26px rgba(15,23,42,.055);transform:translateY(-1px)}.patient-card-name{font-size:14px;font-weight:850;color:var(--heading)}.patient-card-meta{display:flex;flex-wrap:wrap;gap:6px 12px;color:var(--muted);font-size:11px;margin-top:6px}.patient-card-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .finance-toolbar{padding:18px 20px;align-items:center}.finance-toolbar h3{margin:3px 0 0;font-size:20px}.compact-field{margin:0!important;min-width:175px!important}.action-dock{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0 16px}.btn.ghost{background:transparent;color:#526071;border:1px solid transparent}.btn.ghost:hover{background:#f0f3f6;border-color:#e8edf1}.finance-service-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.finance-service-grid>.panel{margin-top:0}.obligations-panel{margin-top:16px}.subpage-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.employee-grid{display:grid;gap:10px}.report-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.report-grid{align-items:start}.premium-settings{align-items:start}.color-input{padding:5px!important;height:46px}.brand-preview{background:linear-gradient(145deg,var(--brand-soft-2),#fff);border-style:solid;border-color:var(--brand-border)}
+  .appointment-subgroup{padding:10px;background:#f9fbfc;border-radius:18px}.appointment-subgroup-title{padding:2px 4px 6px;font-size:11px}.appointment-subgroup.completed{background:#f7fbf9}.appointment-subgroup.inactive{background:#fafafa}.appointment-row{box-shadow:none;border-color:#e7ecf0}.appointment-row:hover{box-shadow:0 8px 22px rgba(15,23,42,.05)}.appointment-time strong{font-variant-numeric:tabular-nums}.appointment-person h4{font-size:13.5px}.appointment-actions .btn{min-height:32px}
+  .queue-card{box-shadow:none}.queue-card:hover{border-color:#d2dce4}.queue-list .queue-card.requested{box-shadow:0 8px 22px rgba(var(--brand-rgb),.08)}
+  .empty{padding:28px 20px;background:#fafcfd;border-color:#dbe3ea}
+  .panel{box-shadow:0 10px 30px rgba(15,23,42,.04)}.panel h3{font-weight:850}.stat{box-shadow:0 8px 26px rgba(15,23,42,.04);border-color:#e5eaf0}.stat::before{width:7px;height:7px;box-shadow:0 0 0 4px var(--brand-soft)}.stat::after{opacity:.42}
+  .dialog-card{border-radius:24px;box-shadow:0 28px 70px rgba(15,23,42,.16)}.dialog-card h3{font-weight:850}.dialog-fields.card-grid .field{box-shadow:none}
+  .patient-record-card{border-radius:26px;box-shadow:0 35px 90px rgba(15,23,42,.18)}
+  @media(max-width:1180px){.dashboard-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-hero{grid-template-columns:1fr}.dashboard-workgrid{grid-template-columns:1fr}.compact-panel{min-height:0}.premium-queue-layout{grid-template-columns:1fr}.finance-service-grid{grid-template-columns:1fr}.patient-grid{grid-template-columns:1fr}.report-kpis{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:760px){.dashboard-quick-actions{grid-template-columns:1fr 1fr}.service-list .appointment-row{grid-template-columns:68px minmax(0,1fr)}.service-list .appointment-actions{grid-column:1/-1;justify-content:flex-start;max-width:none;padding-top:8px;border-top:1px solid #edf1f3}.premium-main{padding:0 13px 90px}.premium-topbar{min-height:76px;margin-bottom:15px}.topbar-meta .date-pill,.topbar-meta .role-pill{display:none}.dashboard-hero{padding:19px}.hero-copy h3{font-size:21px}.focus-card{min-height:90px}.dashboard-workgrid{grid-template-columns:1fr}.queue-overview{align-items:flex-start;flex-direction:column}.queue-metrics{width:100%;grid-template-columns:repeat(3,1fr)}.patients-toolbar{align-items:stretch;flex-direction:column}.patient-search-box{min-width:0;width:100%}.premium-booking-form{grid-template-columns:1fr}.finance-service-grid{grid-template-columns:1fr}.subpage-head{align-items:stretch;flex-direction:column}.subpage-head>.toolbar{width:100%}.subpage-head>.toolbar .btn{flex:1}.patient-grid{grid-template-columns:1fr}.patient-card{grid-template-columns:1fr}.patient-card-actions{justify-content:flex-start}.report-kpis{grid-template-columns:1fr 1fr}}
+  @media(max-width:500px){.dashboard-quick-actions{grid-template-columns:1fr}.dashboard-action{min-height:64px}.queue-metrics{grid-template-columns:1fr 1fr}.queue-metrics>div:last-child{grid-column:1/-1}.focus-card{align-items:flex-start;flex-direction:column}.focus-card .focus-time{font-size:20px}.dashboard-kpis{grid-template-columns:1fr 1fr}.dashboard-kpis .stat{min-height:98px}.dashboard-kpis .stat strong{font-size:20px}}
+
+
+  .staff-nav .nav-count,#staffMobileNav .nav-count{margin-right:auto;min-width:21px;height:21px;padding:0 6px;border-radius:999px;display:inline-grid;place-items:center;background:var(--brand);color:var(--brand-contrast);font-size:10px;font-weight:900;box-shadow:0 0 0 4px rgba(var(--brand-rgb),.10)}
+  #staffMobileNav .nav-count{position:absolute;top:5px;left:8px;min-width:18px;height:18px;font-size:9px;padding:0 5px}
+
+  .brand-color-field{margin-top:2px}.brand-color-shell{border:1px solid #e1e7ed;border-radius:20px;padding:16px;background:linear-gradient(180deg,#fff,#fbfcfd);box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
+  .brand-color-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:13px}.brand-color-top strong{display:block;color:var(--heading);font-size:13px}.brand-color-top small{display:block;color:var(--muted);font-size:10.5px;margin-top:3px}.brand-custom-color{display:flex;align-items:center;gap:8px;direction:ltr}.brand-custom-color #brandColorInput{width:50px;height:42px;padding:0;border:1px solid #d9e1e8;border-radius:12px;background:#fff;cursor:pointer;overflow:hidden}.brand-custom-color #brandColorInput::-webkit-color-swatch-wrapper{padding:4px}.brand-custom-color #brandColorInput::-webkit-color-swatch{border:0;border-radius:8px}.brand-custom-color #brandColorInput::-moz-color-swatch{border:0;border-radius:8px}.brand-custom-color #brandColorHex{width:92px;height:42px;min-height:42px;padding:0 10px;border:1px solid #d9e1e8;border-radius:12px;background:#fff;color:#344054;font:700 12px/1 ui-monospace,SFMono-Regular,Consolas,monospace;text-align:center;text-transform:uppercase;outline:none}.brand-custom-color #brandColorHex:focus{border-color:var(--brand-mid);box-shadow:0 0 0 4px rgba(var(--brand-rgb),.10)}
+  .brand-preset-grid{display:grid;grid-template-columns:repeat(8,minmax(34px,1fr));gap:8px;margin-bottom:14px}.brand-swatch{position:relative;height:38px;border:0;border-radius:11px;background-color:var(--preset);background-image:none;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(15,23,42,.08),0 3px 8px rgba(15,23,42,.08);transition:transform .15s,box-shadow .15s}.brand-swatch:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px rgba(15,23,42,.06),0 7px 14px rgba(15,23,42,.13)}.brand-swatch.active{box-shadow:inset 0 0 0 3px #fff,0 0 0 2px var(--brand),0 7px 14px rgba(15,23,42,.12);transform:translateY(-1px)}.brand-swatch.active::after{content:"✓";position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:999px;display:grid;place-items:center;background:rgba(255,255,255,.94);color:#172033;font-size:11px;font-weight:900;box-shadow:0 1px 5px rgba(15,23,42,.14)}
+  .brand-color-preview{display:grid;grid-template-columns:92px 1fr;min-height:112px;border:1px solid var(--brand-border);border-radius:17px;overflow:hidden;background:#fff}.brand-preview-nav{background:linear-gradient(180deg,var(--nav),var(--nav-2));padding:14px 12px;display:grid;align-content:start;gap:8px}.brand-preview-nav i{display:block;height:7px;border-radius:999px;background:rgba(255,255,255,.16)}.brand-preview-nav i:nth-of-type(2){width:74%}.brand-preview-nav i:nth-of-type(3){width:86%}.brand-preview-body{padding:16px 17px;display:grid;align-content:center;gap:5px;background:radial-gradient(circle at 90% 10%,rgba(var(--brand-rgb),.08),transparent 38%),#fff}.brand-preview-body strong{font-size:14px;color:var(--heading)}.brand-preview-actions{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}.preview-primary,.preview-soft{display:inline-flex;align-items:center;justify-content:center;min-height:31px;padding:0 11px;border-radius:9px;font-size:10.5px;font-weight:800}.preview-primary{background:var(--brand-action,var(--brand));color:#fff!important;box-shadow:0 6px 14px rgba(var(--brand-rgb),.18)}.preview-soft{background:var(--brand-soft);color:var(--brand-strong);border:1px solid var(--brand-border)}
+  @media(max-width:700px){.brand-color-top{align-items:flex-start;flex-direction:column}.brand-custom-color{width:100%;justify-content:flex-start}.brand-preset-grid{grid-template-columns:repeat(4,1fr)}.brand-color-preview{grid-template-columns:72px 1fr}}
+  .appointment-subgroup>summary{list-style:none;cursor:pointer}.appointment-subgroup>summary::-webkit-details-marker{display:none}.appointment-subgroup>summary::after{content:"⌄";margin-right:auto;color:var(--muted);font-size:13px}.appointment-subgroup[open]>summary::after{transform:rotate(180deg)}.appointment-group-body{display:grid;gap:9px;padding-top:6px}
+
+
+/* Premium login */
+#authView.login-shell{padding:30px;background:#eef3f4;overflow:auto}
+#authView.login-shell::before{display:none}
+.login-frame{width:min(1080px,100%);min-height:620px;display:grid;grid-template-columns:1.08fr .92fr;background:#fff;border:1px solid #dfe7ea;border-radius:30px;overflow:hidden;box-shadow:0 34px 90px rgba(15,35,43,.14);position:relative;z-index:1}
+.login-showcase{position:relative;padding:46px 48px;background:linear-gradient(150deg,#0d191d 0%,#112f35 58%,#183e46 100%);color:#fff;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.login-showcase::before{content:"";position:absolute;width:330px;height:330px;border-radius:50%;border:1px solid rgba(255,255,255,.09);left:-120px;top:-120px;box-shadow:0 0 0 55px rgba(255,255,255,.025),0 0 0 110px rgba(255,255,255,.018)}
+.login-showcase::after{content:"+";position:absolute;left:46px;bottom:72px;font-size:220px;font-weight:200;line-height:.7;color:rgba(255,255,255,.035);pointer-events:none}
+.medica-app-logo{width:38px;height:38px;object-fit:contain;border-radius:10px;flex:0 0 auto}.medica-app-logo-dark{background:#fff;padding:3px}.login-mobile-brand .medica-app-logo{width:36px;height:36px}.sidebar>.brand>.medica-app-logo{width:34px;height:34px}
+.login-showcase-brand{display:flex;align-items:center;gap:12px;position:relative;z-index:1}.login-showcase-brand strong{font-size:21px}.login-showcase .login-showcase-copy{margin-top:76px;position:relative;z-index:1;max-width:500px}.login-showcase-copy>span{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.09);font-size:11px;font-weight:800;color:#cce9e5}.login-showcase-copy h2{font-size:43px;line-height:1.16;letter-spacing:-1.2px;margin:18px 0 16px;color:#fff;font-weight:800}
+.login-showcase-copy h2 span{display:block;color:#fff;font-weight:760}
+.login-showcase-copy h2 strong{display:block;margin-top:4px;color:#8edfd2;font-size:1.04em;font-weight:900;letter-spacing:-1.4px}
+.login-showcase-copy h2 strong::after{content:"";display:block;width:54px;height:3px;margin-top:13px;border-radius:999px;background:#56b9aa;box-shadow:0 0 0 5px rgba(86,185,170,.08)}.login-showcase-copy p{font-size:14px;line-height:1.9;color:#b9cbd0;margin:0;max-width:470px}
+.login-feature-list{display:grid;gap:10px;margin-top:34px;position:relative;z-index:1}.login-feature-list>div{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:center;padding:11px 0;border-top:1px solid rgba(255,255,255,.08)}.login-feature-list i{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(255,255,255,.08);font-style:normal;font-size:10px;color:#a9d8d2}.login-feature-list b{display:block;font-size:13px;color:#fff}.login-feature-list small{display:block;margin-top:2px;color:#9eb5bc;font-size:11px;line-height:1.55}
+.login-showcase-foot{margin-top:auto;display:flex;align-items:center;gap:8px;color:#8facb4;font-size:11px;position:relative;z-index:1}.login-showcase-foot span{width:7px;height:7px;border-radius:50%;background:#62cfba;box-shadow:0 0 0 4px rgba(98,207,186,.10)}
+.auth-card.login-card{width:auto;max-width:none;border:0;border-radius:0;box-shadow:none;background:#fff;padding:58px 56px;backdrop-filter:none;display:flex;align-items:center}.auth-card.login-card::before{display:none}.login-card>div{width:100%}.login-mobile-brand{display:none}
+.login-kicker{display:inline-block;font-size:11px;font-weight:850;color:var(--brand);background:var(--brand-soft);border:1px solid var(--brand-border);border-radius:999px;padding:6px 9px}.login-card h1{font-size:31px;margin:18px 0 7px;letter-spacing:-.8px}.login-subtitle{margin:0 0 18px;color:var(--muted);font-size:13px;line-height:1.7}
+.auth-network-pill{display:inline-flex;align-items:center;gap:7px;height:31px;padding:0 10px;border-radius:999px;background:#eef9f5;color:#187255;border:1px solid #d5eee5;font-size:11px;font-weight:800;margin-bottom:10px}.auth-network-pill i{width:7px;height:7px;border-radius:50%;background:#20a174;box-shadow:0 0 0 4px rgba(32,161,116,.10)}.auth-network-pill.offline{background:#fff7e7;color:#8a5f00;border-color:#f0d79a}.auth-network-pill.offline i{background:#dc9800;box-shadow:0 0 0 4px rgba(220,152,0,.12)}
+.login-field{margin:15px 0}.login-field span{font-size:12px}.login-field input{min-height:51px;border-radius:14px;background:#fbfcfd;padding:13px 14px}.login-field input:focus{background:#fff}.login-submit{height:51px;margin-top:8px;border-radius:14px;font-size:14px;box-shadow:0 12px 28px rgba(var(--brand-rgb),.20)}.login-message{min-height:22px;margin:10px 0 0}.login-footnote{border-top:1px solid var(--line);padding-top:16px;margin-top:16px;color:#8a95a5;font-size:11px;line-height:1.6;text-align:center}
+@media(max-width:850px){#authView.login-shell{padding:20px}.login-frame{grid-template-columns:1fr;min-height:auto;max-width:520px}.login-showcase{display:none}.auth-card.login-card{padding:38px 30px}.login-mobile-brand{display:flex;margin-bottom:34px}.login-card h1{font-size:28px}}
+@media(max-width:520px){#authView.login-shell{padding:12px}.login-frame{border-radius:22px}.auth-card.login-card{padding:30px 20px}.login-mobile-brand{margin-bottom:28px}}
+
+/* Online patient booking — final workspace */
+.online-booking-page{--ob-surface:#fff;--ob-soft:#f7fafb;--ob-line:#e3eaee;--ob-text:#17313a;--ob-muted:#6f7f88}
+.ob-page-head{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:24px 26px;margin-bottom:16px;border-radius:24px;background:#fff;box-shadow:0 12px 34px rgba(15,35,43,.045)}
+.ob-head-main{display:flex;align-items:center;gap:16px;min-width:0}.ob-head-icon{width:52px;height:52px;display:grid;place-items:center;flex:0 0 52px;border-radius:16px;background:var(--brand-soft);color:var(--brand-strong);border:1px solid var(--brand-border)}.ob-head-icon svg{width:25px;height:25px}
+.ob-page-head svg,.ob-overview-card svg,.ob-card svg,.ob-requests-panel svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ob-head-main .eyebrow{font-size:10px}.ob-head-main h2{margin:4px 0 6px;color:var(--heading);font-size:24px;letter-spacing:-.35px}.ob-head-main p{margin:0;color:var(--ob-muted);font-size:12.5px;line-height:1.75}
+.ob-head-status{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}.ob-status-chip{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 12px;border-radius:999px;background:#f6f8f9;color:#66757e;border:1px solid var(--ob-line);font-size:11px;font-weight:850;white-space:nowrap}.ob-status-chip i{width:8px;height:8px;border-radius:50%;background:#9ba8ae}.ob-status-chip.active{background:#edf9f4;color:#1b7350;border-color:#d3ecdf}.ob-status-chip.active i{background:#2bb27b;box-shadow:0 0 0 4px rgba(43,178,123,.10)}.ob-status-chip.warn{background:#fff8e8;color:#8b691f;border-color:#f1e0b0}.ob-status-chip.warn i{background:#dfa82d}
+.ob-overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}.ob-overview-card{display:grid;grid-template-columns:48px minmax(0,1fr);align-items:center;gap:13px;min-height:98px;padding:17px 18px;border:1px solid var(--ob-line);border-radius:20px;background:#fff;box-shadow:0 8px 24px rgba(15,35,43,.035)}.ob-overview-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:var(--brand-soft);color:var(--brand-strong);border:1px solid var(--brand-border)}.ob-overview-icon.whatsapp{background:#eef9f3;color:#1c8055;border-color:#d7ede1}.ob-overview-icon svg{width:22px;height:22px}.ob-overview-card>div{min-width:0}.ob-overview-card span:not(.ob-overview-icon){display:block;color:var(--ob-muted);font-size:11px}.ob-overview-card strong{display:block;margin-top:4px;color:var(--heading);font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ob-overview-card small{display:block;margin-top:3px;color:#98a3aa;font-size:10px}
+.ob-layout{display:grid;grid-template-columns:minmax(0,1.52fr) minmax(360px,.68fr);gap:16px;align-items:start}.ob-main-stack{display:grid;gap:16px;min-width:0}.ob-card,.ob-requests-panel{padding:22px;border-radius:22px;min-width:0}.ob-section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px}.ob-section-title{display:flex;align-items:flex-start;gap:12px;min-width:0}.ob-section-icon{width:40px;height:40px;display:grid;place-items:center;flex:0 0 40px;border-radius:13px;background:var(--brand-soft);color:var(--brand-strong);border:1px solid var(--brand-border)}.ob-section-icon svg{width:19px;height:19px}.ob-section-title h3{margin:1px 0 5px;color:var(--heading);font-size:16px}.ob-section-title p{margin:0;color:var(--ob-muted);font-size:11px;line-height:1.65}
+.ob-live-link{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--ob-line);border-radius:16px;background:var(--ob-soft)}.ob-live-link-value{display:flex;align-items:center;gap:10px;min-width:0;flex:1;height:48px;padding:0 14px;border:1px solid #dde6ea;border-radius:13px;background:#fff;color:#42545e}.ob-live-link-value>span:last-child{direction:ltr;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;font-weight:750}.ob-inline-icon{width:28px;height:28px;display:grid;place-items:center;flex:0 0 28px;border-radius:9px;background:var(--brand-soft);color:var(--brand-strong)}.ob-inline-icon svg{width:15px;height:15px}.ob-link-actions{display:flex;gap:7px;flex:0 0 auto}.ob-icon-action{width:48px;height:48px;display:grid;place-items:center;border:1px solid var(--ob-line);border-radius:13px;background:#fff;color:var(--brand-strong);cursor:pointer;transition:.16s ease}.ob-icon-action:hover{background:var(--brand-soft);border-color:var(--brand-border)}.ob-icon-action svg{width:19px;height:19px}
+.ob-link-meta{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:13px;padding:0 2px}.ob-link-meta>div{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.ob-link-meta strong{font-size:11.5px;color:var(--heading)}#bookingSlugChangesRemaining{display:inline-flex;align-items:center;min-height:25px;padding:0 9px;border-radius:999px;background:#f3f6f7;color:#64737c;border:1px solid #e3e9ec;font-size:9.5px;font-weight:850}.ob-edit-link-btn{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding-inline:12px}.ob-edit-link-btn svg{width:16px;height:16px}.ob-edit-link-btn:disabled{opacity:.48;cursor:not-allowed}
+.ob-slug-edit{margin-top:14px;padding:16px;border:1px solid var(--brand-border);border-radius:16px;background:var(--brand-soft-2)}.ob-slug-edit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}.ob-slug-edit-head strong{display:block;color:var(--heading);font-size:12px}.ob-slug-edit-head small{display:block;margin-top:4px;color:var(--ob-muted);font-size:9.8px;line-height:1.55}.ob-text-btn{border:0;background:transparent;color:var(--brand-strong);font:inherit;font-size:10.5px;font-weight:850;cursor:pointer;padding:3px 5px}.ob-slug-input{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;overflow:hidden;border:1px solid #cfdde2;border-radius:13px;background:#fff}.ob-slug-input>span{padding:0 0 0 13px;color:#76858e;font-size:11px;font-weight:800;white-space:nowrap;direction:ltr}.ob-slug-input input{direction:ltr;text-align:left;border:0!important;box-shadow:none!important;outline:0!important;background:transparent!important;min-height:46px;padding:11px 13px!important;color:var(--heading)!important}.ob-slug-preview{display:flex;align-items:center;gap:8px;margin-top:9px;color:var(--ob-muted);font-size:9.5px}.ob-slug-preview strong{direction:ltr;text-align:left;color:var(--brand-strong);font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ob-field-hint{display:block;margin-top:7px;color:#809099;font-size:9.5px}.ob-field-hint.invalid{color:#b44b4b}
+.ob-fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ob-field-card{margin:0;padding:15px;border:1px solid var(--ob-line);border-radius:16px;background:#fbfcfd}.ob-field-label{display:flex!important;align-items:center;gap:7px;color:var(--heading)!important;font-size:11.5px!important;font-weight:850}.ob-field-label svg{width:17px;height:17px;color:var(--brand-strong);flex:0 0 auto}.ob-field-label small{margin-inline-start:auto;color:#9aa6ad;font-size:9px;font-weight:700}.ob-field-card input{margin-top:9px;min-height:44px;background:#fff}.ob-field-card>small{display:block;margin-top:6px;color:var(--ob-muted);font-size:9.5px;line-height:1.55}.ob-info-note{display:flex;align-items:flex-start;gap:10px;margin-top:12px;padding:12px 13px;border:1px solid #dceee5;border-radius:14px;background:#f3fbf7;color:#27684e}.ob-info-note>svg{width:18px;height:18px;flex:0 0 18px;margin-top:1px}.ob-info-note strong{display:block;font-size:10.5px}.ob-info-note span{display:block;margin-top:3px;color:#59766a;font-size:9.5px;line-height:1.6}
+.ob-policy-grid{display:grid;grid-template-columns:1.35fr repeat(3,minmax(0,1fr));gap:10px}.ob-toggle-card,.ob-select-card{min-height:82px;border:1px solid var(--ob-line);border-radius:16px;background:#fbfcfd;padding:13px}.ob-toggle-card{display:flex;align-items:center;gap:11px;cursor:pointer}.ob-toggle-card input{position:absolute;opacity:0;pointer-events:none}.ob-toggle-ui{position:relative;width:42px;height:24px;border-radius:999px;background:#d5dde1;flex:0 0 42px;transition:.18s}.ob-toggle-ui::after{content:"";position:absolute;width:18px;height:18px;top:3px;right:3px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.12);transition:.18s}.ob-toggle-card input:checked+.ob-toggle-ui{background:var(--brand)}.ob-toggle-card input:checked+.ob-toggle-ui::after{transform:translateX(-18px)}.ob-toggle-card strong{display:block;color:var(--heading);font-size:11.5px}.ob-toggle-card small{display:block;margin-top:4px;color:var(--ob-muted);font-size:9.5px;line-height:1.45}.ob-select-card{margin:0}.ob-select-card>span{font-size:10px;font-weight:800;color:var(--heading)}.ob-select-card select{margin-top:8px;background:#fff;min-height:40px}
+.booking-hours-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.booking-hour-row{display:grid;grid-template-columns:minmax(92px,.75fr) minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center;min-height:58px;padding:9px 10px;border:1px solid var(--ob-line);border-radius:14px;background:#fff}.booking-day-toggle{display:flex;align-items:center;gap:8px;min-width:0;color:var(--heading);font-size:11px;font-weight:850}.booking-day-toggle input{width:17px;height:17px;accent-color:var(--brand)}.booking-hour-row select{width:100%;min-width:0;min-height:38px;border:1px solid #dce5e9;border-radius:10px;padding:7px 8px;background:#fbfcfd;color:var(--heading);font:inherit;font-size:10px}.booking-time-separator{color:#96a2a8;font-weight:900}.booking-hour-row.closed{background:#f7f9fa;opacity:.58}.booking-hour-row.closed select{pointer-events:none}.ob-save-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:17px;padding-top:16px;border-top:1px solid var(--ob-line)}.booking-save-hint{color:var(--ob-muted);font-size:10px}.ob-save-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:190px;min-height:44px}.ob-save-btn svg{width:17px;height:17px}
+.ob-requests-panel{position:sticky;top:14px;max-height:calc(100vh - 28px);display:flex;flex-direction:column}.ob-requests-head{margin-bottom:12px}.ob-count-badge{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:0 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand-strong);border:1px solid var(--brand-border);font-size:10px;font-weight:900;white-space:nowrap}.ob-request-guide{display:flex;gap:8px;align-items:flex-start;padding:10px 11px;margin-bottom:12px;border:1px solid #e3e9ec;border-radius:13px;background:#f8fafb;color:#687780;font-size:9.5px;line-height:1.55}.ob-request-guide svg{width:17px;height:17px;flex:0 0 17px;color:var(--brand-strong)}
+.online-booking-requests{display:grid;gap:10px;overflow:auto;padding-inline-end:2px;min-height:90px}.online-request-card{padding:14px;border:1px solid var(--ob-line);border-radius:17px;background:#fff;transition:.16s ease}.online-request-card:hover{border-color:#cfdde2;box-shadow:0 8px 24px rgba(15,35,43,.05)}.online-request-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.online-request-person{display:flex;align-items:center;gap:10px;min-width:0}.online-request-avatar{width:40px;height:40px;display:grid;place-items:center;flex:0 0 40px;border-radius:13px;background:var(--brand-soft);color:var(--brand-strong);border:1px solid var(--brand-border);font-size:13px;font-weight:900}.online-request-person>div{min-width:0}.online-request-head strong{display:block;color:var(--heading);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.online-request-head small{display:block;margin-top:4px;color:var(--ob-muted);font-size:10px;direction:ltr;text-align:right}.online-request-time{display:inline-flex;align-items:center;min-height:30px;padding:0 9px;border-radius:10px;background:#f5f8f9;color:var(--brand-strong);font-size:9.5px;font-weight:850;white-space:nowrap}.online-request-note{margin-top:10px;padding:9px 10px;border-radius:11px;background:#f8fafb;color:#60717a;font-size:10px;line-height:1.6}.online-request-note::before{content:"ملاحظة المريض";display:block;margin-bottom:3px;color:#9aa5ab;font-size:8.5px;font-weight:850}.online-request-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:11px}.online-request-actions .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:39px;padding:8px 10px}.online-request-actions .btn svg{width:15px;height:15px}.online-request-actions .whatsapp-btn{grid-column:1/-1;background:#edf9f3!important;border-color:#d1ecdc!important;color:#19714b!important}.online-request-actions .whatsapp-btn:disabled{opacity:.45;cursor:not-allowed}.online-request-hint{display:block;margin-top:7px;color:#909da4;font-size:8.8px;line-height:1.5}
+.refresh-btn{width:40px;height:40px!important;border-radius:12px!important;background:var(--brand-soft-2)!important;border:1px solid var(--brand-border)!important;color:var(--brand-strong)!important;box-shadow:none!important}.refresh-btn:hover{background:var(--brand-soft)!important;color:var(--brand-strong)!important}.refresh-btn svg{width:18px!important;height:18px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.9!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.doctor-booking-link{display:grid;gap:11px}.doctor-booking-link h3{margin:4px 0 5px}.doctor-booking-link p{margin:0;font-size:11px}
+  .clinic-chat-panel{margin-top:16px;overflow:hidden}.clinic-chat-head{align-items:flex-start}.clinic-chat-head p{margin:4px 0 0}
+  .clinic-chat-messages{height:300px;overflow:auto;display:flex;flex-direction:column;gap:9px;padding:14px;background:#f8fafc;border:1px solid var(--line);border-radius:15px;scroll-behavior:smooth}
+  .chat-empty{margin:auto;text-align:center;color:var(--muted);font-size:12px}
+  .chat-message{max-width:min(76%,620px);padding:10px 12px;border-radius:15px 15px 5px 15px;background:#fff;border:1px solid var(--line);box-shadow:0 3px 10px rgba(15,23,42,.035);align-self:flex-start}
+  .chat-message.own{align-self:flex-end;background:var(--brand-soft);border-color:var(--brand-border);border-radius:15px 15px 15px 5px}
+  .chat-message-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:5px;font-size:10.5px;color:var(--muted)}
+  .chat-message-head strong{color:var(--brand-strong);font-size:11px}.chat-message-body{font-size:13px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+  .clinic-chat-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;margin-top:10px}.clinic-chat-form input{min-height:44px;border:1px solid var(--line-strong);border-radius:13px;padding:10px 13px;background:#fff;outline:none}.clinic-chat-form input:focus{border-color:var(--brand-mid);box-shadow:0 0 0 4px rgba(var(--brand-rgb),.10)}
+  .prescription-panel{margin-top:16px}
+  .prescription-panel .panel-head{align-items:flex-start}
+  .prescription-panel-headcopy p{margin:4px 0 0}
+  .prescription-list{display:grid;gap:9px}
+  .prescription-list-item{display:grid;grid-template-columns:46px minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:16px;background:#fff;padding:12px 13px}
+  .prescription-rx-mark{width:42px;height:42px;border-radius:13px;background:var(--brand-soft);color:var(--brand-strong);display:grid;place-items:center;font-family:Georgia,"Times New Roman",serif;font-size:18px;font-style:italic;font-weight:900}
+  .prescription-list-copy{min-width:0}
+  .prescription-list-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .prescription-list-title strong{font-size:13px;color:var(--heading)}
+  .prescription-list-title span{font-size:10.5px;color:var(--muted);white-space:nowrap}
+  .prescription-list-copy small{display:block;margin-top:3px;color:var(--muted);font-size:10.5px}
+  .prescription-list-copy p{margin:5px 0 0;color:#42525b;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prescription-list-actions{display:flex;gap:6px;align-items:center}
+  .prescription-editor-card{width:min(1040px,96vw);max-height:92vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 28px 90px rgba(15,35,43,.22);padding:22px}
+  .prescription-editor-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}
+  .prescription-editor-head h2{margin:4px 0 0;font-size:23px;color:var(--heading)}
+  .prescription-form-grid{display:grid;grid-template-columns:1.2fr .6fr;gap:12px}
+  .prescription-form-grid .full{grid-column:1/-1}
+  .rx-medication-section{margin-top:16px;border:1px solid var(--line);border-radius:18px;background:#fbfcfd;padding:14px}
+  .rx-medication-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}
+  .rx-medication-head h3{margin:0;font-size:14px}
+  .rx-medication-head p{margin:3px 0 0;font-size:10.5px;color:var(--muted)}
+  .rx-medication-rows{display:grid;gap:9px}
+  .rx-med-row{display:grid;grid-template-columns:1.35fr .8fr 1fr .75fr 1.35fr 34px;gap:8px;align-items:end;background:#fff;border:1px solid #e5ebee;border-radius:14px;padding:10px}
+  .rx-med-row label{min-width:0}
+  .rx-med-row label span{display:block;margin-bottom:5px;color:#697985;font-size:9.5px;font-weight:750}
+  .rx-med-row input{width:100%;min-height:38px;border:1px solid var(--line-strong);border-radius:10px;padding:8px 9px;background:#fff;outline:none;font:inherit;font-size:11.5px}
+  .rx-med-row input:focus{border-color:var(--brand-mid);box-shadow:0 0 0 3px rgba(var(--brand-rgb),.09)}
+  .rx-remove-med{width:34px;height:34px;border:0;border-radius:10px;background:#fff2f2;color:#b42318;font-size:20px;cursor:pointer}
+  .prescription-notes-field{margin-top:13px}
+  .prescription-editor-actions{position:sticky;bottom:-22px;display:flex;justify-content:flex-end;gap:8px;margin:18px -22px -22px;padding:13px 22px;background:rgba(255,255,255,.96);border-top:1px solid var(--line);backdrop-filter:blur(10px)}
+  @media(max-width:900px){.rx-med-row{grid-template-columns:1fr 1fr}.rx-med-instructions{grid-column:1/-1}.rx-remove-med{grid-column:1/-1;width:100%}.prescription-form-grid{grid-template-columns:1fr}.prescription-form-grid .full{grid-column:auto}}
+  @media(max-width:700px){.prescription-list-item{grid-template-columns:42px minmax(0,1fr)}.prescription-list-actions{grid-column:1/-1;justify-content:flex-end}.prescription-list-title{align-items:flex-start;flex-direction:column;gap:2px}.prescription-editor-card{width:100%;max-height:calc(100vh - 20px);border-radius:18px;padding:16px}.prescription-editor-actions{bottom:-16px;margin:16px -16px -16px;padding:12px 16px;flex-direction:column-reverse}.prescription-editor-actions .btn{width:100%}.rx-med-row{grid-template-columns:1fr}}
+  .print-template-panel{margin-top:16px}
+  .print-template-panel .panel-head{align-items:flex-start}
+  .print-template-summary{display:flex;align-items:center;justify-content:space-between;gap:16px;border:1px solid var(--line);border-radius:16px;background:#fbfcfd;padding:14px}
+  .print-template-summary strong{display:block;color:var(--heading);font-size:15px}
+  .print-template-summary p{margin:3px 0 0;color:var(--muted);font-size:11px}
+  .report-template-card{width:min(1180px,97vw);max-height:94vh;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 28px 90px rgba(15,35,43,.22);display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+  .report-template-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 22px 16px;border-bottom:1px solid var(--line)}
+  .report-template-head h2{margin:4px 0 0;font-size:23px;color:var(--heading)}
+  .report-template-body{display:grid;grid-template-columns:320px minmax(0,1fr);min-height:0}
+  .report-template-list{padding:14px;border-left:1px solid var(--line);overflow:auto;display:grid;gap:8px;align-content:start;background:#fbfcfd}
+  .report-template-choice{width:100%;border:1px solid var(--line);border-radius:14px;background:#fff;padding:11px;display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;text-align:right;cursor:pointer;transition:.15s}
+  .report-template-choice:hover{border-color:var(--brand-mid);transform:translateY(-1px)}
+  .report-template-choice.selected{border-color:var(--brand);box-shadow:0 0 0 3px rgba(var(--brand-rgb),.10);background:var(--brand-soft)}
+  .template-choice-number{width:32px;height:32px;border-radius:10px;background:#edf2f4;color:#5d6d76;display:grid;place-items:center;font-size:10px;font-weight:900}
+  .report-template-choice.selected .template-choice-number{background:var(--brand);color:#fff}
+  .template-choice-copy strong{display:block;color:var(--heading);font-size:12px}
+  .template-choice-copy small{display:block;margin-top:2px;color:var(--muted);font-size:10px;line-height:1.45}
+  .report-template-preview-wrap{min-width:0;min-height:0;overflow:hidden;padding:16px;background:#e9eef0;display:grid;grid-template-rows:auto minmax(0,1fr)}
+  .report-template-preview-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:10px}
+  .report-template-preview-meta strong{display:block;font-size:15px;color:var(--heading)}
+  .report-template-preview-meta p{margin:2px 0 0;font-size:11px;color:#687780}
+  .report-template-preview-frame{width:100%;height:100%;min-height:590px;border:0;border-radius:14px;background:#dfe6e9}
+  .report-template-actions{display:flex;justify-content:flex-end;gap:8px;padding:14px 22px;border-top:1px solid var(--line);background:#fff}
+  @media(max-width:960px){.report-template-body{grid-template-columns:1fr}.report-template-list{grid-template-columns:repeat(2,minmax(0,1fr));border-left:0;border-bottom:1px solid var(--line);max-height:220px}.report-template-preview-frame{min-height:520px}}
+  @media(max-width:650px){.report-template-card{width:100%;max-height:calc(100vh - 20px);border-radius:18px}.report-template-list{grid-template-columns:1fr}.report-template-preview-wrap{padding:10px}.report-template-preview-frame{min-height:440px}.print-template-summary{align-items:flex-start;flex-direction:column}.report-template-actions{flex-direction:column-reverse}.report-template-actions .btn{width:100%}}
+  .doctor-mode .dashboard-quick-actions{display:none!important}
+
+@media(max-width:1220px){.ob-layout{grid-template-columns:1fr}.ob-requests-panel{position:static;max-height:none}.online-booking-requests{overflow:visible}.ob-policy-grid{grid-template-columns:1fr 1fr}.booking-hours-grid{grid-template-columns:1fr}}
+@media(max-width:780px){.clinic-chat-messages{height:260px}.chat-message{max-width:90%}.clinic-chat-form{grid-template-columns:1fr}.clinic-chat-form .btn{width:100%}.ob-page-head{align-items:flex-start;flex-direction:column;padding:20px}.ob-head-status{justify-content:flex-start}.ob-overview-grid{grid-template-columns:1fr}.ob-fields-grid{grid-template-columns:1fr}.ob-policy-grid{grid-template-columns:1fr}.ob-live-link{align-items:stretch;flex-direction:column}.ob-link-actions{width:100%}.ob-icon-action{flex:1}.ob-link-meta{align-items:flex-start;flex-direction:column}.ob-slug-input{grid-template-columns:1fr}.ob-slug-input>span{padding:9px 12px 0}.booking-hour-row{grid-template-columns:1fr auto 1fr}.booking-day-toggle{grid-column:1/-1}.ob-save-bar{align-items:stretch;flex-direction:column}.ob-save-btn{width:100%}.online-request-actions{grid-template-columns:1fr}.online-request-actions .whatsapp-btn{grid-column:auto}}
+@media(max-width:520px){.ob-page-head{padding:17px}.ob-head-icon{width:46px;height:46px;flex-basis:46px}.ob-head-main h2{font-size:20px}.ob-card,.ob-requests-panel{padding:17px}.ob-overview-card{padding:14px}.ob-section-title{gap:9px}.ob-section-icon{width:36px;height:36px;flex-basis:36px}.ob-live-link-value>span:last-child{font-size:10.5px}.online-request-head{flex-direction:column}.online-request-time{align-self:flex-start}}
+
+/* Offline booking safety net */
+.offline-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:14px 0 0;padding:13px 16px;border:1px solid #f0c36a;background:#fff9eb;border-radius:16px;color:#6f4b00;box-shadow:0 10px 28px rgba(83,59,11,.07)}
+.offline-bar.hidden{display:none!important}.offline-bar-copy{display:flex;align-items:center;gap:11px;min-width:0}.offline-signal{width:10px;height:10px;border-radius:50%;background:#e49a00;box-shadow:0 0 0 5px rgba(228,154,0,.12);flex:0 0 auto}.offline-bar strong{display:block;color:#513800}.offline-bar small{display:block;margin-top:2px;color:#85651e}.offline-bar-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.offline-count{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 9px;border-radius:999px;background:#fff;color:#765100;border:1px solid #edd494;font-weight:800}
+.offline-queue-panel{border-color:#ead49a;background:linear-gradient(180deg,#fffdf7 0%,#fff 100%)}.offline-queue-panel.hidden{display:none!important}.offline-queue-list{display:grid;gap:10px}.offline-booking-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px;border:1px solid var(--border);background:#fff;border-radius:15px}.offline-booking-main{min-width:0}.offline-booking-main strong{display:block;font-size:15px}.offline-booking-meta{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:5px;color:var(--muted);font-size:12px}.offline-booking-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.offline-pending-badge{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;background:#fff3cd;color:#775600;font-weight:800;font-size:11px}.offline-money{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;background:#e8f7ef;color:#17613c;font-weight:900;font-size:11px}.offline-error-text{margin-top:5px;color:#a43c32;font-size:12px}.offline-empty{padding:16px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:14px;background:rgba(255,255,255,.7)}
+#staffApp.offline-limited .staff-nav button:not([data-staff-page="appointments"]),#staffApp.offline-limited #staffMobileNav button:not([data-staff-page="appointments"]){display:none!important}#staffApp.offline-limited .appointment-toolbar,#staffApp.offline-limited .appointment-list-panel{display:none!important}#staffApp.offline-limited #liveStatus{background:#fff3cd;color:#775600;border-color:#eed083}#staffApp.offline-limited #staffRefresh{opacity:.45;pointer-events:none}
+@media(max-width:720px){.offline-bar{align-items:flex-start;flex-direction:column}.offline-bar-actions{width:100%}.offline-bar-actions .btn{flex:1}.offline-booking-row{grid-template-columns:1fr}.offline-booking-actions{justify-content:flex-start}}
+
+  /* Native desktop selection */
+  body *:not(input):not(textarea){-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+  input,textarea{-webkit-user-select:text;user-select:text}
+
+  /* Organized medical tools workspace */
+  .tools-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 24px;margin-bottom:16px}
+  .tools-hero h3{margin:3px 0 5px;font-size:22px;color:var(--heading)}
+  .tools-hero p{margin:0;color:var(--muted);font-size:12px}
+  .tools-hero-badge{width:58px;height:58px;border-radius:17px;background:var(--brand-soft);color:var(--brand-strong);display:grid;place-items:center;font:italic 900 24px Georgia,"Times New Roman",serif;border:1px solid var(--brand-border)}
+  .medical-tools-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.55fr);gap:16px;align-items:start}
+  .medical-tools-page .prescription-panel,.medical-tools-page .print-template-panel{margin-top:0}
+  .medical-tools-page .print-template-panel{position:sticky;top:112px}
+
+  /* Compact chat launcher + right drawer */
+  .staff-chat-launch{position:relative;height:40px;display:inline-flex;align-items:center;gap:7px;padding:0 11px;border:1px solid var(--brand-border);border-radius:12px;background:#fff;color:var(--brand-strong);font:inherit;font-size:11px;font-weight:850;cursor:pointer;box-shadow:0 4px 14px rgba(var(--brand-rgb),.06);transition:.16s}
+  .staff-chat-launch:hover{background:var(--brand-soft-2);border-color:var(--brand-mid)}
+  .staff-chat-launch svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .staff-chat-unread{position:absolute;top:-6px;left:-6px;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:#d92d20;color:#fff;border:2px solid #fff;display:grid;place-items:center;font-size:9px;font-weight:900}
+  .staff-chat-scrim{position:fixed;inset:0;background:rgba(10,24,30,.22);backdrop-filter:blur(1px);z-index:125;opacity:0;visibility:hidden;pointer-events:none;transition:.2s}
+  .staff-chat-scrim.open{opacity:1;visibility:visible;pointer-events:auto}
+  .staff-chat-drawer{position:fixed;top:0;right:0;bottom:0;width:min(390px,94vw);z-index:130;background:#fff;border-left:1px solid var(--line);box-shadow:-24px 0 60px rgba(13,28,35,.16);display:grid;grid-template-rows:auto minmax(0,1fr) auto;transform:translateX(105%);visibility:hidden;transition:transform .22s ease,visibility .22s}
+  .staff-chat-drawer.open{transform:translateX(0);visibility:visible}
+  .staff-chat-drawer-head{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:11px;align-items:center;padding:16px;border-bottom:1px solid var(--line)}
+  .staff-chat-avatar{width:42px;height:42px;border-radius:13px;background:var(--brand-soft);color:var(--brand-strong);display:grid;place-items:center}
+  .staff-chat-avatar svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .staff-chat-drawer-title{min-width:0}.staff-chat-drawer-title .eyebrow{font-size:9px;margin:0 0 2px}.staff-chat-drawer-title strong{display:block;font-size:13px;color:var(--heading)}.staff-chat-drawer-title small{display:block;margin-top:2px;color:var(--muted);font-size:10px}
+  .staff-chat-head-actions{display:flex;align-items:center;gap:6px}.staff-chat-head-actions .live-pill{font-size:9px;padding:5px 7px}.staff-chat-head-actions .icon-btn{width:34px;height:34px}
+  .staff-chat-messages{height:auto!important;border:0!important;border-radius:0!important;background:#f7f9fa!important;padding:15px!important}
+  .staff-chat-messages .chat-message{max-width:84%;box-shadow:none}
+  .staff-chat-form{margin:0!important;padding:12px;border-top:1px solid var(--line);background:#fff}
+  body.chat-drawer-open{overflow:hidden}
+
+  @media(max-width:1050px){.medical-tools-grid{grid-template-columns:1fr}.medical-tools-page .print-template-panel{position:static}}
+  @media(max-width:780px){.staff-chat-launch span{display:none}.staff-chat-launch{width:40px;padding:0;justify-content:center}.staff-chat-drawer{width:min(360px,100vw)}.tools-hero{padding:18px}.tools-hero-badge{width:48px;height:48px}.medical-tools-grid{gap:12px}}
+
+  .staff-chat-form{grid-template-columns:minmax(0,1fr) auto!important}
+  .staff-chat-form .btn{width:auto!important;min-width:72px}
+  @media(max-width:560px){.staff-chat-form{grid-template-columns:minmax(0,1fr) auto!important}.staff-chat-form .btn{width:auto!important}}
+
+  /* MEDICA Sonar module */
+  .feature-hidden{display:none!important}
+  .ultrasound-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 24px;margin-bottom:16px}
+  .ultrasound-hero h3{margin:3px 0 5px;font-size:22px;color:var(--heading)}.ultrasound-hero p{margin:0;color:var(--muted);font-size:12px}
+  .ultrasound-kpis{margin-bottom:16px}.ultrasound-archive-panel{margin-top:0}.ultrasound-filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ultrasound-filters .search{min-width:190px}
+  .ultrasound-list{display:grid;gap:11px}.ultrasound-card{padding:15px;border:1px solid var(--border);border-radius:16px;background:#fff;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center}
+  .ultrasound-card-head{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ultrasound-card-head strong{font-size:14px;color:var(--heading)}.ultrasound-meta{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:7px;color:var(--muted);font-size:11px}
+  .ultrasound-diagnosis{margin-top:7px;font-size:12px;color:var(--text);line-height:1.65}.ultrasound-measurements{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.ultrasound-measurements span{padding:4px 7px;border:1px solid var(--brand-border);background:var(--brand-soft-2);border-radius:999px;font-size:10px;color:var(--brand-strong);font-weight:800}
+  .ultrasound-editor-card{width:min(920px,94vw);max-height:92vh;overflow:auto;background:#fff;border-radius:22px;box-shadow:0 24px 80px rgba(10,26,34,.22);padding:20px}
+  .ultrasound-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.ultrasound-form-grid .full{grid-column:1/-1}.ultrasound-section{margin:15px 0;padding:14px;border:1px solid var(--border);border-radius:16px;background:#fafcfc}
+  .ultrasound-measure-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:10px}.ultrasound-section .section-title{display:flex;gap:8px;align-items:center}
+  .ultrasound-image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:14px}.ultrasound-image-card{position:relative;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#f5f7f8;min-height:105px}.ultrasound-image-card img{width:100%;height:120px;object-fit:cover;display:block}.ultrasound-image-card button{position:absolute;top:6px;left:6px}
+  .ultrasound-patient-history{display:grid;gap:9px}.ultrasound-history-row{padding:11px;border:1px solid var(--border);border-radius:13px;background:#fff}.ultrasound-history-row-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.ultrasound-history-row small{display:block;color:var(--muted);margin-top:4px}
+  @media(max-width:780px){.ultrasound-hero{align-items:flex-start;flex-direction:column}.ultrasound-hero .btn{width:100%}.ultrasound-card{grid-template-columns:1fr}.ultrasound-form-grid{grid-template-columns:1fr}.ultrasound-measure-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ultrasound-filters{width:100%}.ultrasound-filters .search{width:100%}}
+
+</style>
+  <script type="module" crossorigin src="./assets/index-C5wl6y5-.js"></script>
+
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./medica-icon.svg" />
+  <link rel="stylesheet" href="./mobile.css" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Medica" />
 </head>
 <body>
-  <a href="https://kpnlechlpdpoivrafehl.supabase.co/storage/v1/object/public/medica-web/index.html">فتح Medica</a>
+  <section id="authView" class="center-shell login-shell">
+    <div class="login-frame">
+      <aside class="login-showcase" aria-hidden="true">
+        <div class="login-showcase-brand"><img class="medica-app-logo medica-app-logo-dark" src="./medica-icon.svg" alt="Medica"><strong>Medica</strong></div>
+        <div class="login-showcase-copy">
+          <span>إدارة عيادتك بوضوح</span>
+          <h2><span>كل ما تحتاجه</span><strong>لإدارة عيادتك</strong></h2>
+          <p>المواعيد حركة المرضى السجل المالي والعمل عند انقطاع الإنترنت — بتجربة بسيطة للطبيب والسكرتير</p>
+        </div>
+        <div class="login-feature-list">
+          <div><i>01</i><span><b>استقبال أسرع</b><small>حجز ووصول ودخول المريض بخطوات واضحة</small></span></div>
+          <div><i>02</i><span><b>تحديث لحظي</b><small>الطبيب والسكرتير يشوفون التغييرات مباشرة</small></span></div>
+          <div><i>03</i><span><b>وضع طوارئ</b><small>استمرار عمل السكرتير/السكرتيرة حتى عند انقطاع الإنترنت</small></span></div>
+        </div>
+        <div class="login-showcase-foot"><span></span> نظام إدارة عيادات مصمم للعمل اليومي</div>
+      </aside>
+      <div class="auth-card login-card">
+        <div class="login-mobile-brand brand"><img class="medica-app-logo" src="./medica-icon.svg" alt="Medica"><div>Medica</div></div>
+        <div id="loginBox">
+          <span class="login-kicker">دخول إلى Medica</span>
+          <h1>مرحباً بعودتك</h1>
+          <p class="login-subtitle">ادخل بحساب العيادة للمتابعة من حيث توقفت</p>
+          <div id="authNetworkState" class="auth-network-pill"><i></i><span>جاري فحص الاتصال</span></div>
+          <label class="field login-field"><span>البريد الإلكتروني</span><input id="loginEmail" type="email" autocomplete="username" placeholder="name@clinic.com" /></label>
+          <label class="field login-field"><span>كلمة المرور</span><input id="loginPassword" type="password" autocomplete="current-password" placeholder="••••••••" /></label>
+          <button id="loginBtn" class="btn primary w100 login-submit">تسجيل الدخول</button>
+          <p id="loginMsg" class="muted login-message"></p>
+          <div class="login-footnote">الحسابات تُدار من مدير المنصة لحماية بيانات العيادة</div>
+        </div>
+        <div id="bootstrapBox" class="hidden">
+          <span class="login-kicker">إعداد النظام</span>
+          <h1>تهيئة الأدمن لأول مرة</h1>
+          <p class="login-subtitle">هذه الصفحة تعمل مرة واحدة فقط على المشروع الجديد</p>
+          <label class="field"><span>رمز التهيئة</span><input id="setupToken" type="password" /></label>
+          <label class="field"><span>اسم الأدمن</span><input id="setupName" /></label>
+          <label class="field"><span>رقم الهاتف</span><input id="setupPhone" inputmode="tel" /></label>
+          <label class="field"><span>البريد</span><input id="setupEmail" type="email" /></label>
+          <label class="field"><span>كلمة المرور</span><input id="setupPassword" type="password" minlength="8" /></label>
+          <button id="bootstrapBtn" class="btn primary w100 login-submit">إنشاء حساب الأدمن</button>
+          <p id="bootstrapMsg" class="muted"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section id="blockedView" class="center-shell hidden">
+    <div class="auth-card">
+      <div class="brand"><div>Medica</div></div>
+      <h1 id="blockedTitle">الحساب غير متاح</h1>
+      <p id="blockedText" class="muted"></p>
+      <button id="blockedLogout" class="btn outline w100">تسجيل خروج</button>
+    </div>
+  </section>
+
+  <section id="onboardingView" class="onboard-layout hidden">
+    <div class="overlay-card">
+      <div class="brand"><img id="onboardBrandLogo" class="clinic-brand-logo" src="./medica-icon.svg" alt="Medica"><div id="onboardBrandName">Medica</div></div>
+      <h2 style="margin-bottom:4px">أكمل بياناتك</h2>
+      <p id="onboardRoleText" class="muted"></p>
+      <form id="onboardingForm" class="form-grid">
+        <label class="field"><span>الاسم الكامل</span><input id="onboardName" required /></label>
+        <label class="field"><span>رقم الهاتف</span><input id="onboardPhone" inputmode="tel" /></label>
+        <div id="doctorOnboardingFields" class="full hidden">
+          <div class="section-title">بيانات العيادة</div>
+          <div class="form-grid">
+            <label class="field"><span>اسم العيادة</span><input id="onboardClinicName" required /></label>
+            <label class="field"><span>رقم العيادة</span><input id="onboardClinicPhone" inputmode="tel" /></label>
+            <label class="field"><span>العنوان</span><input id="onboardClinicAddress" /></label>
+            <label class="field"><span>سعر الكشف الافتراضي</span><input id="onboardDefaultFee" type="number" min="0" /></label>
+          </div>
+        </div>
+        <div class="full"><button class="btn primary" type="submit">حفظ والدخول للنظام</button></div>
+      </form>
+      <p id="onboardingMsg" class="muted"></p>
+    </div>
+  </section>
+
+  <div id="adminApp" class="app hidden">
+    <aside class="sidebar">
+      <div class="brand"><img class="medica-app-logo" src="./medica-icon.svg" alt="Medica"><div>Medica Admin</div></div>
+      <nav class="nav">
+        <button data-admin-page="adminDashboard" class="active">الرئيسية</button>
+        <button data-admin-page="adminClinics">العيادات والحسابات</button>
+        <button data-admin-page="adminCreate">إنشاء عيادة</button>
+      </nav>
+      <div class="side-bottom"><div id="adminEmail" class="muted"></div><button id="adminLogout" class="btn outline w100" style="margin-top:10px">تسجيل خروج</button></div>
+    </aside>
+    <main class="main">
+      <div class="topbar"><div><h2 id="adminPageTitle">الرئيسية</h2><div class="muted">لوحة مدير النظام</div></div><button id="adminRefresh" class="icon-btn refresh-btn" type="button" aria-label="إعادة تحميل"><svg class="refresh-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.54 6.14L3 15"/><path d="M3 21v-6h6"/><path d="M3 12a9 9 0 0 1 15.54-6.14L21 9"/><path d="M21 3v6h-6"/></svg></button></div>
+
+      <section id="adminDashboard" class="page">
+        <div class="grid-cards">
+          <div class="stat"><span>كل العيادات</span><strong id="adminClinicsCount">0</strong></div>
+          <div class="stat"><span>العيادات الفعالة</span><strong id="adminActiveCount">0</strong></div>
+          <div class="stat"><span>حسابات الأطباء والسكرتارية</span><strong id="adminUsersCount">0</strong></div>
+          <div class="stat"><span>حسابات تجريبية</span><strong id="adminTrialCount">0</strong></div>
+          <div class="stat"><span>عيادات موقوفة</span><strong id="adminPausedCount">0</strong></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h3>أحدث العيادات</h3><button class="btn light small" data-admin-goto="adminCreate">+ عيادة جديدة</button></div><div id="adminRecentClinics" class="list"></div></div>
+      </section>
+
+      <section id="adminClinics" class="page hidden">
+        <div class="panel">
+          <div class="panel-head"><h3>العيادات والحسابات</h3><input id="adminClinicSearch" class="search" placeholder="بحث باسم العيادة أو البريد" /></div>
+          <div id="adminClinicsList" class="list"></div>
+        </div>
+      </section>
+
+      <section id="adminCreate" class="page hidden">
+        <div class="split">
+          <div class="panel">
+            <h3>إنشاء عيادة وحساب الطبيب</h3>
+            <form id="createClinicForm" class="form-grid">
+              <label class="field"><span>اسم العيادة</span><input id="createClinicName" required /></label>
+              <label class="field"><span>نوع الحساب</span><select id="createAccountMode"><option value="permanent">دائم</option><option value="trial">تجريبي</option></select></label>
+              <label class="field"><span>نوع العيادة</span><select id="createClinicType"><option value="standard">عيادة عادية</option><option value="sonar">عيادة / مركز سونار</option></select></label>
+              <label class="field"><span>سعر الكشف الافتراضي</span><input id="createDefaultFee" type="number" min="0" value="25000" /></label>
+              <div class="full sep"></div>
+              <label class="field"><span>اسم الطبيب (اختياري يكمله لاحقاً)</span><input id="createDoctorName" /></label>
+              <label class="field"><span>هاتف الطبيب</span><input id="createDoctorPhone" inputmode="tel" /></label>
+              <label class="field"><span>إيميل الطبيب</span><input id="createDoctorEmail" type="email" required /></label>
+              <label class="field"><span>كلمة مرور مؤقتة</span><input id="createDoctorPassword" type="text" minlength="8" required /></label>
+              <div class="full sep"></div>
+              <div class="full"><div class="section-title">السكرتير/السكرتيرة — اختياري</div></div>
+              <label class="field"><span>الاسم</span><input id="createSecretaryName" /></label>
+              <label class="field"><span>الإيميل</span><input id="createSecretaryEmail" type="email" /></label>
+              <label class="field"><span>كلمة مرور مؤقتة</span><input id="createSecretaryPassword" type="text" minlength="8" /></label>
+              <div class="field"><span>&nbsp;</span><button id="generatePasswords" type="button" class="btn light">توليد كلمات مرور</button></div>
+              <div class="full"><button class="btn primary" type="submit">إنشاء العيادة والحسابات</button></div>
+            </form>
+            <p id="createClinicMsg" class="muted"></p>
+          </div>
+          <div class="panel">
+            <h3>بيانات التسليم</h3>
+            <p class="muted">بعد الإنشاء تظهر بيانات الدخول هنا حتى تسلمها للطبيب والسكرتير</p>
+            <div id="createdCredentials" class="empty">لم يتم إنشاء عيادة بعد</div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <nav class="mobile-nav" id="adminMobileNav">
+      <button data-admin-page="adminDashboard" class="active">الرئيسية</button><button data-admin-page="adminClinics">العيادات</button><button data-admin-page="adminCreate">إضافة</button>
+    </nav>
+  </div>
+
+  <div id="staffApp" class="app hidden">
+    <aside class="sidebar premium-sidebar">
+      <div class="brand clinic-brand">
+        <img id="staffBrandLogo" class="clinic-brand-logo" src="./medica-icon.svg" alt="Medica">
+        <div class="clinic-brand-copy"><strong id="staffBrandName">Medica</strong><small id="staffBrandSubtitle">إدارة العيادة</small></div>
+      </div>
+      <div class="nav-section-label">مساحة العمل</div>
+      <nav class="nav staff-nav">
+        <button data-staff-page="dashboard" class="active"><span>الرئيسية</span></button>
+        <button data-staff-page="medicalTools"><span>الوصفات والمطبوعات</span></button>
+        <button data-staff-page="ultrasound" class="sonar-only"><span>فحوصات السونار</span></button>
+        <button data-staff-page="queue" class="secretary-only"><span>الانتظار</span></button>
+        <button data-staff-page="appointments" class="secretary-only"><span>حجوزات العيادة</span></button>
+        <button data-staff-page="onlineBookings" class="secretary-only"><span>الحجوزات الأونلاين</span></button>
+        <button data-staff-page="patients" class="secretary-only"><span>المرضى</span></button>
+        <button data-staff-page="accounts" class="secretary-only"><span>المالية</span></button>
+        <button data-staff-page="settings" class="secretary-only"><span>الإعدادات</span></button>
+      </nav>
+      <div class="side-bottom">
+        <div class="side-profile"><div><strong id="staffIdentity"></strong><small id="staffRoleSide"></small></div></div>
+        <button id="staffLogout" class="btn sidebar-logout w100" type="button">تسجيل الخروج</button>
+      </div>
+    </aside>
+
+    <main class="main premium-main">
+      <header class="topbar premium-topbar">
+        <div class="page-heading"><h2 id="staffPageTitle">الرئيسية</h2><div id="staffPageSubtitle" class="page-subtitle"></div></div>
+        <div class="topbar-meta"><button id="staffChatToggle" class="staff-chat-launch" type="button" aria-label="فتح المحادثة" title="محادثة الطبيب والسكرتير">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v10H9l-5 4v-14Z"/><path d="M8 9h8M8 12.5h5"/></svg>
+          <span>محادثة</span><b id="staffChatUnread" class="staff-chat-unread hidden">0</b>
+        </button><span id="staffDateLabel" class="date-pill"></span><span id="staffRolePill" class="role-pill"></span><span id="liveStatus" class="live-pill"><i></i> مباشر</span><button id="staffRefresh" class="icon-btn refresh-btn" type="button" aria-label="إعادة تحميل" title="إعادة تحميل"><svg class="refresh-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.35 5.66"/><path d="M20 4v7h-7"/></svg></button></div>
+      </header>
+
+      <div id="offlineBar" class="offline-bar hidden secretary-only" role="status" aria-live="polite">
+        <div class="offline-bar-copy"><span class="offline-signal"></span><div><strong id="offlineStatusTitle">لا يوجد اتصال بالإنترنت</strong><small id="offlineStatusText">يمكنك إضافة الحجوزات وسيتم رفعها تلقائياً عند عودة الاتصال</small></div></div>
+        <div class="offline-bar-actions"><span id="offlineQueueCount" class="offline-count hidden">0</span><button id="offlineAddBookingBtn" class="btn primary small" type="button">إضافة حجز بدون إنترنت</button></div>
+      </div>
+
+      <section id="dashboard" class="page workspace-page">
+        <div class="dashboard-hero premium-card">
+          <div class="hero-copy"><span class="eyebrow">Medica</span><h3 id="dashboardGreeting">إدارة يوم العيادة</h3><p id="staffClinicName"></p></div>
+          <div id="dashboardFocus" class="focus-card"></div>
+        </div>
+        <div id="dashboardQuickActions" class="dashboard-quick-actions"></div>
+        <div class="grid-cards dashboard-kpis">
+          <div class="stat"><span id="dashLabel1">حجوزات اليوم</span><strong id="todayBookings">0</strong></div>
+          <div class="stat"><span id="dashLabel2">المكتملون اليوم</span><strong id="arrivedCount">0</strong></div>
+          <div class="stat"><span id="dashLabel3">دخل اليوم</span><strong id="todayIncome">0 د.ع</strong></div>
+          <div class="stat"><span id="dashLabel4">صافي اليوم</span><strong id="todayNet">0 د.ع</strong></div>
+        </div>
+        <div class="dashboard-workgrid">
+          <div class="panel service-panel"><div class="panel-head"><div><span class="eyebrow" id="todayEyebrow">اليوم</span><h3 id="todayPanelTitle">المواعيد القادمة</h3></div><button class="text-link secretary-only" type="button" data-staff-goto="appointments">عرض الحجوزات</button></div><div id="todayList" class="list service-list"></div></div>
+          <div class="panel compact-panel"><div class="panel-head"><div><span class="eyebrow">النشاط</span><h3>المكتملون اليوم</h3></div><span id="dashboardCompletedLabel" class="count-pill"></span></div><div id="dashboardCompletedList" class="list compact-list"></div></div>
+        </div>
+      </section>
+
+      <section id="medicalTools" class="page hidden workspace-page medical-tools-page">
+        <div class="tools-hero premium-card">
+          <div><span class="eyebrow">أدوات العيادة</span><h3>الوصفات والمطبوعات</h3><p>قسم مستقل للوصفات الطبية واختيار تصميم التقارير والوصفات.</p></div>
+          <div class="tools-hero-badge">Rx</div>
+        </div>
+
+        <div class="medical-tools-grid">
+          <div class="panel prescription-panel">
+            <div class="panel-head">
+              <div class="prescription-panel-headcopy"><span class="eyebrow">الوصفات</span><h3>الوصفات الطبية</h3><p class="muted">إنشاء الوصفة، تعديلها وطباعتها من مكان واحد.</p></div>
+              <div class="toolbar"><span id="prescriptionCountLabel" class="count-pill"></span><button id="newPrescriptionBtn" class="btn primary small" type="button">وصفة جديدة</button></div>
+            </div>
+            <div id="recentPrescriptions" class="prescription-list"></div>
+          </div>
+
+          <div class="panel print-template-panel">
+            <div class="panel-head">
+              <div><span class="eyebrow">المطبوعات</span><h3>تصميم التقارير والوصفات</h3><p class="muted">اختار الشكل المناسب للعيادة واستعرضه قبل التطبيق.</p></div>
+              <button id="openReportTemplatePickerBtn" class="btn outline small" type="button">اختيار التصميم</button>
+            </div>
+            <div class="print-template-summary">
+              <div><span class="eyebrow">التصميم الحالي</span><strong id="currentReportTemplateName">طبي نظيف</strong><p id="currentReportTemplateDesc">واضح ومتوازن للعيادات العامة</p></div>
+              <span class="count-pill">10 تصاميم</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="queue" class="page hidden workspace-page">
+        <div class="queue-overview premium-card">
+          <div><span class="eyebrow">سير المريض</span><h3>الانتظار والدخول</h3></div>
+          <div class="queue-metrics">
+            <div><span>بانتظار الطبيب</span><strong id="queueWaitingCount">0</strong></div>
+            <div><span>طلبات الإدخال</span><strong id="queueInServiceCount">0</strong></div>
+            <div><span>اكتمل اليوم</span><strong id="queueDoneCount">0</strong></div>
+          </div>
+        </div>
+        <div id="queueRequestAlert" class="entry-alert hidden"></div>
+        <div class="queue-layout premium-queue-layout">
+          <div class="panel queue-current-panel"><div class="panel-head"><div><span class="eyebrow">الآن</span><h3>داخل عند الطبيب</h3></div><span class="live-dot-label"><i></i> مباشر</span></div><div id="queueCurrentList" class="list"></div></div>
+          <div class="panel"><div class="panel-head"><div><span class="eyebrow">بالترتيب</span><h3>المنتظرون</h3></div><span id="queueWaitingLabel" class="count-pill"></span></div><div id="queueWaitingList" class="list queue-list"></div></div>
+        </div>
+        <details class="panel completed-drawer">
+          <summary><span>المكتملون اليوم</span><span id="queueCompletedLabel" class="count-pill"></span></summary>
+          <div id="queueCompletedList" class="list compact-list details-list"></div>
+        </details>
+      </section>
+
+      <section id="appointments" class="page hidden secretary-only workspace-page">
+
+        <div id="offlineQueuePanel" class="panel offline-queue-panel hidden">
+          <div class="panel-head"><div><span class="eyebrow">وضع الطوارئ</span><h3>حركة المرضى المحفوظة على هذا الجهاز</h3></div><div class="toolbar"><span id="offlinePanelCount" class="count-pill"></span><button id="offlineSyncBtn" class="btn outline small hidden" type="button">مزامنة الآن</button><button id="offlineAddBookingInlineBtn" class="btn primary small" type="button">إضافة حجز</button></div></div>
+          <div id="offlineBookingsList" class="offline-queue-list"></div>
+        </div>
+        <div class="booking-shell panel premium-booking">
+          <div class="panel-head booking-head"><div><span class="eyebrow">حجز جديد</span><h3>موعد المريض</h3></div></div>
+          <form id="appointmentForm" class="booking-form premium-booking-form">
+            <div class="booking-section patient-booking-section">
+              <div class="booking-section-title"><span class="step-dot">1</span><strong>بيانات المريض</strong></div>
+              <div class="patient-lookup-wrap"><label class="field booking-name-field"><span>اسم المريض</span><input id="apptPatientName" autocomplete="off" placeholder="اسم المريض" required /></label><input id="apptPatientId" type="hidden" /><div id="patientSuggestions" class="patient-suggestions hidden"></div></div>
+              <label class="field"><span>رقم الهاتف</span><input id="apptPatientPhone" inputmode="tel" autocomplete="tel" placeholder="07xx xxx xxxx" /></label>
+              <div id="apptPatientHint" class="patient-match-hint full hidden"></div>
+            </div>
+            <div class="booking-section appointment-booking-section">
+              <div class="booking-section-title"><span class="step-dot">2</span><strong>تفاصيل الموعد</strong></div>
+              <label class="field"><span>التاريخ</span><input id="apptDate" type="date" required /></label>
+              <div class="field booking-period-field"><span>الفترة</span><div class="period-options" role="radiogroup" aria-label="فترة الموعد"><label class="period-option"><input type="radio" name="apptPeriod" value="morning" checked required /><span>صباحاً</span></label><label class="period-option"><input type="radio" name="apptPeriod" value="evening" required /><span>مساءً</span></label></div></div>
+              <label class="field"><span>الساعة</span><select id="apptTime" required aria-label="ساعة الموعد"></select></label>
+              <label class="field"><span>نوع الزيارة</span><select id="visitType"><option value="كشف">كشف</option><option value="مراجعة">مراجعة</option><option value="إجراء">إجراء</option><option value="استشارة">استشارة</option></select></label>
+              <input id="visitFee" type="hidden" />
+              <label class="field full"><span>ملاحظة <small>اختياري</small></span><textarea id="apptNotes" rows="2" placeholder="ملاحظة مختصرة"></textarea></label>
+            </div>
+            <div class="booking-submit full"><button class="btn primary booking-save" type="submit">حفظ الحجز</button></div>
+          </form>
+        </div>
+        <div class="appointment-toolbar panel premium-toolbar">
+          <div class="date-nav"><button id="prevDayBtn" class="icon-btn" type="button" title="اليوم السابق">‹</button><button id="filterTodayBtn" class="btn light" type="button">اليوم</button><button id="filterTomorrowBtn" class="btn outline" type="button">غداً</button><label class="compact-date"><input id="appointmentFilterDate" type="date" /></label><button id="nextDayBtn" class="icon-btn" type="button" title="اليوم التالي">›</button><button id="filterAllBtn" class="btn outline" type="button">كل الحجوزات</button></div>
+          <div class="appointment-mini-stats"><span><b id="apptBookedCount">0</b> محجوز</span><span><b id="apptArrivedCount">0</b> بالانتظار/داخل</span><span><b id="apptCompletedCount">0</b> مكتمل</span></div>
+        </div>
+        <div class="panel appointment-list-panel"><div class="panel-head"><div><span class="eyebrow">الجدول</span><h3>الحجوزات</h3></div><div class="toolbar"><span id="appointmentCountLabel" class="count-pill"></span><button id="printAppointmentsBtn" class="btn outline small" type="button">طباعة</button></div></div><div id="appointmentsList" class="appointment-list"></div></div>
+      </section>
+
+      <section id="onlineBookings" class="page hidden secretary-only workspace-page online-booking-page">
+        <div class="ob-page-head premium-card">
+          <div class="ob-head-main">
+            <span class="ob-head-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
+            </span>
+            <div>
+              <span class="eyebrow">الحجز الإلكتروني</span>
+              <h2>إدارة حجوزات المرضى أونلاين</h2>
+              <p>رابط العيادة، أوقات الدوام، إعدادات الحجز وطلبات المرضى مرتبة بمكان واحد بدون زحمة.</p>
+            </div>
+          </div>
+          <div class="ob-head-status">
+            <span id="onlineBookingStateBadge" class="ob-status-chip active"><i></i> الحجز فعال</span>
+            <span id="onlineWhatsAppBadge" class="ob-status-chip warn"><i></i> واتساب غير مضاف</span>
+          </div>
+        </div>
+
+        <div class="ob-overview-grid">
+          <article class="ob-overview-card">
+            <span class="ob-overview-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1.1l2-2A5 5 0 0 0 12 4l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"/></svg>
+            </span>
+            <div><span>رابط الحجز</span><strong id="onlineLinkSummary">جاهز للمشاركة</strong><small>الرابط العام الخاص بالعيادة</small></div>
+          </article>
+          <article class="ob-overview-card">
+            <span class="ob-overview-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+            </span>
+            <div><span>طلبات جديدة</span><strong id="onlineRequestsSummary">0</strong><small>بانتظار مراجعة السكرتير/ة</small></div>
+          </article>
+          <article class="ob-overview-card">
+            <span class="ob-overview-icon whatsapp" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.7-5.1A9 9 0 1 1 21 15Z"/></svg>
+            </span>
+            <div><span>واتساب العيادة</span><strong id="onlineWhatsAppSummary">غير مضاف</strong><small>لإرسال تأكيد الحجز للمريض</small></div>
+          </article>
+        </div>
+
+        <div class="ob-layout">
+          <form id="bookingSettingsForm" class="ob-main-stack">
+            <section class="panel ob-card ob-link-card">
+              <div class="ob-section-head">
+                <div class="ob-section-title">
+                  <span class="ob-section-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1.1l2-2A5 5 0 0 0 12 4l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"/></svg>
+                  </span>
+                  <div><h3>رابط حجز المرضى</h3><p>هذا هو الرابط الذي ترسله للمريض حتى يختار الموعد المتاح.</p></div>
+                </div>
+              </div>
+
+              <div class="ob-live-link">
+                <div class="ob-live-link-value">
+                  <span class="ob-inline-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1.1l2-2A5 5 0 0 0 12 4l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"/></svg>
+                  </span>
+                  <span id="bookingPublicUrl" dir="ltr">https://bookmedica.online/</span>
+                </div>
+                <div class="ob-link-actions">
+                  <button id="copyBookingLinkBtn" class="ob-icon-action" type="button" title="نسخ الرابط" aria-label="نسخ رابط الحجز">
+                    <svg viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                  </button>
+                  <button id="openBookingLinkBtn" class="ob-icon-action" type="button" title="فتح الرابط" aria-label="فتح رابط الحجز">
+                    <svg viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="ob-link-meta">
+                <div>
+                  <strong>تخصيص الرابط</strong>
+                  <span id="bookingSlugChangesRemaining">متبقي 2 من 2</span>
+                </div>
+                <button id="editBookingSlugBtn" class="btn outline ob-edit-link-btn" type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>
+                  <span>تغيير الرابط</span>
+                </button>
+              </div>
+
+              <div id="bookingSlugEditPanel" class="ob-slug-edit hidden">
+                <div class="ob-slug-edit-head">
+                  <div><strong>اختيار رابط جديد</strong><small>يمكن تغيير رابط كل عيادة مرتين فقط. الحفظ يستهلك محاولة فقط إذا تغير الرابط فعلاً.</small></div>
+                  <button id="cancelBookingSlugEditBtn" class="ob-text-btn" type="button">إلغاء</button>
+                </div>
+                <div class="ob-slug-input">
+                  <span dir="ltr">bookmedica.online/</span>
+                  <input id="bookingPublicSlug" maxlength="40" autocomplete="off" spellcheck="false" placeholder="clinic-name" aria-label="اسم رابط الحجز" />
+                </div>
+                <div class="ob-slug-preview"><span>معاينة</span><strong id="bookingSlugPreview" dir="ltr">bookmedica.online/clinic-name</strong></div>
+                <small id="bookingSlugRuleHint" class="ob-field-hint">3–40 حرفاً: أحرف إنجليزية صغيرة، أرقام وشرطة - فقط.</small>
+              </div>
+            </section>
+
+            <section class="panel ob-card">
+              <div class="ob-section-head">
+                <div class="ob-section-title">
+                  <span class="ob-section-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                  </span>
+                  <div><h3>التواصل وموقع العيادة</h3><p>المعلومات المستخدمة مع المريض بعد إرسال طلب الحجز.</p></div>
+                </div>
+              </div>
+              <div class="ob-fields-grid">
+                <label class="field ob-field-card">
+                  <span class="ob-field-label"><svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> رابط Google Maps <small>اختياري</small></span>
+                  <input id="bookingGoogleMapsUrl" type="url" inputmode="url" dir="ltr" placeholder="https://maps.app.goo.gl/..." autocomplete="url" />
+                  <small>يظهر للمريض للوصول إلى العيادة بسهولة.</small>
+                </label>
+                <label class="field ob-field-card">
+                  <span class="ob-field-label"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.7-5.1A9 9 0 1 1 21 15Z"/></svg> رقم واتساب العيادة</span>
+                  <input id="bookingWhatsAppNumber" inputmode="tel" dir="ltr" placeholder="0770 000 0000 أو +9647700000000" autocomplete="tel" />
+                  <small>يديره السكرتير/ة ويُستخدم عند تأكيد الطلب.</small>
+                </label>
+              </div>
+              <div class="ob-info-note">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                <div><strong>تأكيد واتساب سريع</strong><span>عند اختيار «تأكيد وفتح واتساب» يثبت Medica الموعد أولاً ثم يفتح رسالة التأكيد جاهزة للمريض.</span></div>
+              </div>
+            </section>
+
+            <section class="panel ob-card">
+              <div class="ob-section-head">
+                <div class="ob-section-title">
+                  <span class="ob-section-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 16h6"/></svg>
+                  </span>
+                  <div><h3>سياسة الحجز</h3><p>حدد كيف ومتى يستطيع المريض إرسال طلب حجز.</p></div>
+                </div>
+              </div>
+              <div class="ob-policy-grid">
+                <label class="ob-toggle-card">
+                  <input id="bookingEnabled" type="checkbox" />
+                  <span class="ob-toggle-ui"></span>
+                  <span><strong>استقبال طلبات الحجز</strong><small>إيقافه يخفي المواعيد مؤقتاً بدون حذف الرابط.</small></span>
+                </label>
+                <label class="field ob-select-card"><span>مدة الموعد</span><select id="bookingSlotMinutes"><option value="10">10 دقائق</option><option value="15">15 دقيقة</option><option value="20">20 دقيقة</option><option value="30">30 دقيقة</option><option value="45">45 دقيقة</option><option value="60">60 دقيقة</option></select></label>
+                <label class="field ob-select-card"><span>أقل وقت قبل الحجز</span><select id="bookingMinNotice"><option value="0">بدون حد</option><option value="60">ساعة</option><option value="120">ساعتان</option><option value="180">3 ساعات</option><option value="360">6 ساعات</option><option value="720">12 ساعة</option><option value="1440">يوم</option></select></label>
+                <label class="field ob-select-card"><span>الحجز متاح لمدة</span><select id="bookingWindowDays"><option value="7">7 أيام</option><option value="14">14 يوم</option><option value="30">30 يوم</option><option value="60">60 يوم</option></select></label>
+              </div>
+            </section>
+
+            <section class="panel ob-card ob-hours-card">
+              <div class="ob-section-head">
+                <div class="ob-section-title">
+                  <span class="ob-section-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                  </span>
+                  <div><h3>الدوام الأسبوعي</h3><p>فعّل أيام العمل وحدد بداية ونهاية الدوام. الأيام المغلقة لا تظهر للمريض.</p></div>
+                </div>
+              </div>
+              <div id="bookingHoursGrid" class="booking-hours-grid"></div>
+              <div class="ob-save-bar">
+                <span class="booking-save-hint">الحفظ يطبق إعدادات الحجز، التواصل وأوقات الدوام معاً.</span>
+                <button class="btn primary ob-save-btn" type="submit">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+                  <span>حفظ إعدادات الحجز</span>
+                </button>
+              </div>
+            </section>
+          </form>
+
+          <aside class="panel ob-requests-panel">
+            <div class="ob-section-head ob-requests-head">
+              <div class="ob-section-title">
+                <span class="ob-section-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 7L9 5l-3 7H2"/></svg>
+                </span>
+                <div><h3>طلبات المرضى</h3><p>طلبات الحجز الجديدة التي تحتاج قرار السكرتير/ة.</p></div>
+              </div>
+              <span id="onlineRequestsCount" class="ob-count-badge">0 طلب</span>
+            </div>
+            <div class="ob-request-guide">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+              <span>راجع الوقت ثم أكّد الطلب أو ارفضه. خيار واتساب يفتح رسالة التأكيد جاهزة بعد تثبيت الموعد.</span>
+            </div>
+            <div id="onlineBookingRequestsList" class="online-booking-requests"></div>
+          </aside>
+        </div>
+      </section>
+
+
+      <section id="ultrasound" class="page hidden workspace-page sonar-only">
+        <div class="ultrasound-hero premium-card">
+          <div><span class="eyebrow">MEDICA SONAR</span><h3>فحوصات وتقارير السونار</h3><p>تقارير الفحوصات والقياسات والصور محفوظة داخل ملف المريض.</p></div>
+          <button id="newUltrasoundExamBtn" class="btn primary" type="button">+ فحص جديد</button>
+        </div>
+        <div class="grid-cards ultrasound-kpis">
+          <div class="stat"><span>فحوصات اليوم</span><strong id="ultrasoundTodayCount">0</strong></div>
+          <div class="stat"><span>هذا الشهر</span><strong id="ultrasoundMonthCount">0</strong></div>
+          <div class="stat"><span>فحوصات الحمل</span><strong id="ultrasoundPregnancyCount">0</strong></div>
+          <div class="stat"><span>الصور المحفوظة</span><strong id="ultrasoundImagesCount">0</strong></div>
+        </div>
+        <div class="panel ultrasound-archive-panel">
+          <div class="panel-head">
+            <div><span class="eyebrow">الأرشيف</span><h3>الفحوصات السابقة</h3></div>
+            <div class="ultrasound-filters">
+              <input id="ultrasoundSearch" class="search" placeholder="بحث بالمريض أو نوع الفحص أو التشخيص" />
+              <select id="ultrasoundTypeFilter" class="search">
+                <option value="">كل أنواع الفحوصات</option>
+                <option value="حمل">الحمل</option><option value="البطن">البطن</option><option value="الحوض">الحوض</option>
+                <option value="دوبلر">الدوبلر</option><option value="الغدة الدرقية">الغدة الدرقية</option>
+                <option value="الثدي">الثدي</option><option value="الكلى والمسالك">الكلى والمسالك</option><option value="أخرى">أخرى</option>
+              </select>
+            </div>
+          </div>
+          <div id="ultrasoundExamList" class="ultrasound-list"></div>
+        </div>
+      </section>
+
+      <section id="patients" class="page hidden workspace-page">
+        <div class="patients-toolbar premium-card"><div><span class="eyebrow">دليل المرضى</span><h3>البحث والسجل</h3></div><div class="patient-search-box"><input id="patientSearch" class="search" placeholder="ابحث بالاسم أو رقم الهاتف" /><span id="patientsCountLabel" class="count-pill"></span></div></div>
+        <div class="panel patients-list-panel"><div id="patientsList" class="patient-grid"></div></div>
+      </section>
+
+      <section id="accounts" class="page hidden secretary-only workspace-page">
+        <div class="finance-toolbar premium-card"><div><span class="eyebrow">المالية</span><h3>ملخص التشغيل</h3></div><label class="field compact-field"><span>الشهر</span><input id="financeMonth" type="month" /></label></div>
+        <div class="grid-cards finance-grid">
+          <div class="stat"><span>دخل الشهر</span><strong id="monthIncome">0 د.ع</strong></div>
+          <div class="stat"><span>مصاريف التشغيل</span><strong id="monthExpenses">0 د.ع</strong></div>
+          <div class="stat"><span>صافي التشغيل</span><strong id="monthNet">0 د.ع</strong></div>
+          <div class="stat"><span>الرواتب المدفوعة</span><strong id="monthSalaryPaid">0 د.ع</strong></div>
+        </div>
+        <div class="action-dock">
+          <button id="addExpenseBtn" class="btn primary" type="button">تسجيل مصروف</button>
+          <button class="btn outline" type="button" data-staff-page="employees">الموظفون والرواتب</button>
+          <button class="btn outline" type="button" data-staff-page="reports">التقارير</button>
+          <button id="printFinanceBtn" class="btn ghost" type="button">طباعة الملخص</button>
+        </div>
+        <div class="hidden"><strong id="monthCommitments">0 د.ع</strong><strong id="accountTodayIncome">0 د.ع</strong></div>
+        <div class="finance-service-grid">
+          <div class="panel"><div class="panel-head"><div><span class="eyebrow">الحركات</span><h3>آخر الدفعات</h3></div></div><div id="paymentsList" class="list compact-list"></div></div>
+          <div class="panel"><div class="panel-head"><div><span class="eyebrow">الحركات</span><h3>آخر المصروفات</h3></div></div><div id="expensesList" class="list compact-list"></div></div>
+        </div>
+        <div class="panel obligations-panel"><div class="panel-head"><div><span class="eyebrow">ثابتة شهرياً</span><h3>الالتزامات</h3></div><div class="toolbar"><span id="recurringCount" class="count-pill"></span><button id="addRecurringExpenseBtn" class="btn outline small" type="button">إضافة التزام</button></div></div><div id="recurringExpensesList" class="list"></div></div>
+      </section>
+
+      <section id="employees" class="page hidden secretary-only workspace-page">
+        <div class="subpage-head"><button class="btn ghost" type="button" data-staff-page="accounts">العودة للمالية</button><div class="toolbar"><button id="addEmployeeBtn" class="btn primary" type="button">إضافة موظف</button><button id="printPayrollBtn" class="btn outline" type="button">طباعة كشف الرواتب</button></div></div>
+        <div class="grid-cards">
+          <div class="stat"><span>الموظفون الفعالون</span><strong id="employeesActiveCount">0</strong></div>
+          <div class="stat"><span>إجمالي الرواتب</span><strong id="payrollMonthlyTotal">0 د.ع</strong></div>
+          <div class="stat"><span>مدفوع هذا الشهر</span><strong id="salaryPaidTotal">0 د.ع</strong></div>
+          <div class="stat"><span>المتبقي</span><strong id="salaryDueTotal">0 د.ع</strong></div>
+        </div>
+        <div class="panel"><div class="panel-head"><div><span class="eyebrow">الفريق</span><h3>الموظفون والرواتب</h3></div><label class="field compact-field"><span>شهر الرواتب</span><input id="salaryMonth" type="month" /></label></div><div id="employeesList" class="employee-grid"></div></div>
+      </section>
+
+      <section id="reports" class="page hidden secretary-only workspace-page">
+        <div class="subpage-head"><button class="btn ghost" type="button" data-staff-page="accounts">العودة للمالية</button><button id="printReportBtn" class="btn primary" type="button">طباعة التقرير</button></div>
+        <div class="finance-toolbar premium-card"><div><span class="eyebrow">التقارير</span><h3>أداء العيادة</h3></div><label class="field compact-field"><span>الشهر</span><input id="reportMonth" type="month" /></label></div>
+        <div class="grid-cards finance-grid report-kpis">
+          <div class="stat"><span>الحجوزات</span><strong id="reportAppointments">0</strong></div><div class="stat"><span>الدخل</span><strong id="reportIncome">0 د.ع</strong></div><div class="stat"><span>المصاريف</span><strong id="reportExpenses">0 د.ع</strong></div><div class="stat"><span>الرواتب</span><strong id="reportSalaries">0 د.ع</strong></div><div class="stat"><span>صافي التشغيل</span><strong id="reportNet">0 د.ع</strong></div><div class="stat"><span>زيارات مكتملة</span><strong id="reportCompleted">0</strong></div>
+        </div>
+        <div class="split report-grid"><div class="panel"><div class="panel-head"><h3>توزيع المصاريف</h3></div><div id="expenseBreakdown" class="report-breakdown"></div></div><div class="panel"><div class="panel-head"><h3>حالات الحجوزات</h3></div><div id="appointmentBreakdown" class="report-breakdown"></div></div></div>
+      </section>
+
+      <section id="settings" class="page hidden secretary-only workspace-page">
+        <div class="settings-grid premium-settings">
+          <div class="panel"><div class="panel-head"><div><span class="eyebrow">الحساب</span><h3>بياناتي</h3></div></div><form id="profileForm" class="form-grid"><label class="field"><span>الاسم</span><input id="profileName" required /></label><label class="field"><span>الهاتف</span><input id="profilePhone" /></label><div class="full"><button class="btn primary" type="submit">حفظ البيانات</button></div></form><div class="sep"></div><h3>كلمة المرور</h3><form id="passwordForm" class="form-grid"><label class="field"><span>كلمة المرور الجديدة</span><input id="newPassword" type="password" minlength="8" required /></label><label class="field"><span>تأكيد كلمة المرور</span><input id="confirmPassword" type="password" minlength="8" required /></label><div class="full"><button class="btn outline" type="submit">تغيير كلمة المرور</button></div></form></div>
+          <div class="panel secretary-only" id="clinicSettingsPanel"><div class="panel-head"><div><span class="eyebrow">الهوية</span><h3>بيانات العيادة</h3></div></div><div class="brand-preview"><img id="clinicLogoPreview" class="hidden" alt="شعار العيادة"><div><strong id="clinicBrandPreviewName">اسم العيادة</strong><div id="clinicBrandPreviewTagline" class="muted"></div></div></div><form id="clinicForm" class="form-grid"><label class="field"><span>اسم العيادة</span><input id="clinicNameInput" required /></label><label class="field"><span>الاختصاص</span><input id="clinicSpecialtyInput" /></label><label class="field"><span>اسم الطبيب</span><input id="doctorNameInput" /></label><label class="field"><span>الهاتف</span><input id="clinicPhoneInput" /></label><label class="field"><span>سعر الكشف الافتراضي</span><input id="defaultFeeInput" type="number" min="0" /></label><div class="field full brand-color-field"><span>لون الهوية</span><div class="brand-color-shell"><div class="brand-color-top"><div><strong>ألوان العيادة</strong><small>معاينة مباشرة ويصل التغيير للسكرتير بعد الحفظ</small></div><div class="brand-custom-color"><input id="brandColorInput" type="color" value="#0e9384" aria-label="اختيار لون الهوية" /><input id="brandColorHex" type="text" value="#0E9384" maxlength="7" spellcheck="false" aria-label="رمز لون الهوية" /></div></div><div id="brandPresetGrid" class="brand-preset-grid" aria-label="ألوان مقترحة"><button class="brand-swatch" type="button" data-brand-preset="#0E9384" style="--preset:#0E9384;background-color:#0E9384!important" aria-label="فيروزي طبي"></button><button class="brand-swatch" type="button" data-brand-preset="#0F766E" style="--preset:#0F766E;background-color:#0F766E!important" aria-label="أخضر داكن"></button><button class="brand-swatch" type="button" data-brand-preset="#2563EB" style="--preset:#2563EB;background-color:#2563EB!important" aria-label="أزرق"></button><button class="brand-swatch" type="button" data-brand-preset="#1D4ED8" style="--preset:#1D4ED8;background-color:#1D4ED8!important" aria-label="أزرق داكن"></button><button class="brand-swatch" type="button" data-brand-preset="#4F46E5" style="--preset:#4F46E5;background-color:#4F46E5!important" aria-label="نيلي"></button><button class="brand-swatch" type="button" data-brand-preset="#7C3AED" style="--preset:#7C3AED;background-color:#7C3AED!important" aria-label="بنفسجي"></button><button class="brand-swatch" type="button" data-brand-preset="#BE123C" style="--preset:#BE123C;background-color:#BE123C!important" aria-label="وردي داكن"></button><button class="brand-swatch" type="button" data-brand-preset="#B45309" style="--preset:#B45309;background-color:#B45309!important" aria-label="عنبر"></button></div><div class="brand-color-preview" aria-label="معاينة الهوية"><div class="brand-preview-nav"><i></i><i></i><i></i></div><div class="brand-preview-body"><span class="eyebrow">معاينة الهوية</span><strong>واجهة واضحة ومتناسقة</strong><div class="brand-preview-actions"><span class="preview-primary">زر رئيسي</span><span class="preview-soft">حالة نشطة</span></div></div></div></div></div><label class="field full"><span>وصف قصير</span><input id="clinicTaglineInput" /></label><label class="field full"><span>العنوان</span><input id="clinicAddressInput" /></label><label class="field full"><span>شعار العيادة</span><input id="clinicLogoFile" type="file" accept="image/png,image/jpeg,image/webp" /></label><div class="full"><button id="clinicSaveBtn" class="btn primary" type="submit">حفظ بيانات العيادة</button></div></form>
+            <div class="sep"></div>
+            <div class="doctor-booking-link">
+              <div><span class="eyebrow">الحجز الإلكتروني</span><h3>رابط الحجز للمرضى</h3><p class="muted">هذا الرابط خاص بعيادتك ويمكن مشاركته مع المرضى</p></div>
+              <div class="booking-link-row"><input id="doctorBookingPublicUrl" readonly /><button id="copyDoctorBookingLinkBtn" class="btn outline small" type="button">نسخ الرابط</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="staffChatScrim" class="staff-chat-scrim" aria-hidden="true"></div>
+    <aside id="staffChatDrawer" class="staff-chat-drawer" aria-label="محادثة الطبيب والسكرتير">
+      <div class="staff-chat-drawer-head">
+        <div class="staff-chat-avatar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v10H9l-5 4v-14Z"/><path d="M8 9h8M8 12.5h5"/></svg>
+        </div>
+        <div class="staff-chat-drawer-title"><span class="eyebrow">تواصل داخلي</span><strong>الطبيب والسكرتير/ة</strong><small>محادثة خاصة بالعيادة</small></div>
+        <div class="staff-chat-head-actions"><span id="clinicChatStatus" class="live-pill"><i></i> مباشر</span><button id="staffChatClose" class="icon-btn" type="button" aria-label="إغلاق">×</button></div>
+      </div>
+      <div id="clinicChatMessages" class="clinic-chat-messages staff-chat-messages" aria-live="polite"></div>
+      <form id="clinicChatForm" class="clinic-chat-form staff-chat-form">
+        <input id="clinicChatInput" type="text" maxlength="1000" autocomplete="off" placeholder="اكتب رسالة..." aria-label="رسالة للمحادثة" />
+        <button id="clinicChatSend" class="btn primary" type="submit">إرسال</button>
+      </form>
+    </aside>
+
+    <nav class="mobile-nav" id="staffMobileNav"><button data-staff-page="dashboard" class="active">الرئيسية</button><button data-staff-page="medicalTools">الوصفات</button><button data-staff-page="ultrasound" class="sonar-only">السونار</button><button data-staff-page="queue" class="secretary-only">الانتظار</button><button data-staff-page="appointments" class="secretary-only">حجوزات العيادة</button><button data-staff-page="onlineBookings" class="secretary-only">أونلاين</button><button data-staff-page="patients" class="secretary-only">المرضى</button><button data-staff-page="accounts" class="secretary-only">المالية</button><button data-staff-page="settings" class="secretary-only">الإعدادات</button></nav>
+  </div>
+
+
+  <div id="reportTemplateModal" class="dialog-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="reportTemplateModalTitle">
+    <div class="report-template-card">
+      <div class="report-template-head">
+        <div><span class="eyebrow">تصميم المطبوعات</span><h2 id="reportTemplateModalTitle">اختر التصميم</h2><p class="muted">اختار التصميم من اليمين وشوف المعاينة الحقيقية قبل التطبيق.</p></div>
+        <button id="closeReportTemplatePicker" class="icon-btn" type="button" aria-label="إغلاق">×</button>
+      </div>
+      <div class="report-template-body">
+        <div id="reportTemplateGrid" class="report-template-list"></div>
+        <div class="report-template-preview-wrap">
+          <div class="report-template-preview-meta"><div><strong id="reportTemplatePreviewName">طبي نظيف</strong><p id="reportTemplatePreviewDesc">واضح ومتوازن للعيادات العامة</p></div><span class="count-pill">معاينة فعلية</span></div>
+          <iframe id="reportTemplatePreviewFrame" class="report-template-preview-frame" title="معاينة تصميم الطباعة" src="about:blank"></iframe>
+        </div>
+      </div>
+      <div class="report-template-actions">
+        <button id="cancelReportTemplateBtn" class="btn ghost" type="button">إلغاء</button>
+        <button id="applyReportTemplateBtn" class="btn primary" type="button">تطبيق التصميم</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="prescriptionModal" class="dialog-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="prescriptionModalTitle">
+    <div class="prescription-editor-card">
+      <div class="prescription-editor-head">
+        <div><span class="eyebrow">MEDICA Rx</span><h2 id="prescriptionModalTitle">وصفة طبية جديدة</h2><p class="muted">أدخل بيانات المريض والأدوية، ثم احفظ الوصفة أو اطبعها مباشرة.</p></div>
+        <button id="closePrescriptionModal" class="icon-btn" type="button" aria-label="إغلاق">×</button>
+      </div>
+      <form id="prescriptionForm">
+        <input id="prescriptionId" type="hidden" />
+        <div class="prescription-form-grid">
+          <label class="field"><span>المريض</span><select id="prescriptionPatient" required></select></label>
+          <label class="field"><span>تاريخ الوصفة</span><input id="prescriptionDate" type="date" required /></label>
+          <label class="field full"><span>التشخيص <small>اختياري</small></span><input id="prescriptionDiagnosis" placeholder="تشخيص مختصر" /></label>
+        </div>
+        <div class="rx-medication-section">
+          <div class="rx-medication-head"><div><h3>الأدوية</h3><p>أضف الدواء والجرعة والتكرار والمدة والتعليمات.</p></div><button id="addPrescriptionMedicationBtn" class="btn outline small" type="button">+ إضافة دواء</button></div>
+          <div id="prescriptionMedicationRows" class="rx-medication-rows"></div>
+        </div>
+        <label class="field prescription-notes-field"><span>ملاحظات إضافية <small>اختياري</small></span><textarea id="prescriptionNotes" rows="3" placeholder="أي تعليمات عامة للمريض"></textarea></label>
+        <div class="prescription-editor-actions">
+          <button id="cancelPrescriptionBtn" class="btn ghost" type="button">إلغاء</button>
+          <button class="btn outline" type="submit" data-after="save">حفظ الوصفة</button>
+          <button class="btn primary" type="submit" data-after="print">حفظ وطباعة</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <div id="ultrasoundExamModal" class="dialog-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="ultrasoundExamModalTitle">
+    <div class="ultrasound-editor-card">
+      <div class="prescription-editor-head">
+        <div><span class="eyebrow">MEDICA SONAR</span><h2 id="ultrasoundExamModalTitle">فحص سونار جديد</h2><p class="muted">أدخل بيانات الفحص والنتائج والقياسات وأرفق صور السونار عند الحاجة.</p></div>
+        <button id="closeUltrasoundExamModal" class="icon-btn" type="button" aria-label="إغلاق">×</button>
+      </div>
+      <form id="ultrasoundExamForm">
+        <input id="ultrasoundExamId" type="hidden" />
+        <div class="ultrasound-form-grid">
+          <label class="field"><span>المريض</span><select id="ultrasoundPatient" required></select></label>
+          <label class="field"><span>تاريخ الفحص</span><input id="ultrasoundExamDate" type="date" required /></label>
+          <label class="field full"><span>نوع الفحص</span><input id="ultrasoundExamType" list="ultrasoundExamTypes" required placeholder="مثال: الحمل أو البطن" /></label>
+          <datalist id="ultrasoundExamTypes"><option value="حمل"></option><option value="البطن"></option><option value="الحوض"></option><option value="دوبلر"></option><option value="الغدة الدرقية"></option><option value="الثدي"></option><option value="الكلى والمسالك"></option><option value="أخرى"></option></datalist>
+        </div>
+        <div class="ultrasound-section">
+          <div class="section-title">بيانات الحمل والقياسات <span class="muted">تُملأ عند الحاجة فقط</span></div>
+          <div class="ultrasound-measure-grid">
+            <label class="field"><span>GA عمر الحمل</span><input id="ultrasoundGA" placeholder="مثال 12w 3d" /></label>
+            <label class="field"><span>EDD موعد الولادة المتوقع</span><input id="ultrasoundEDD" type="date" /></label>
+            <label class="field"><span>CRL</span><input id="ultrasoundCRL" placeholder="mm" /></label>
+            <label class="field"><span>BPD</span><input id="ultrasoundBPD" placeholder="mm" /></label>
+            <label class="field"><span>HC</span><input id="ultrasoundHC" placeholder="mm" /></label>
+            <label class="field"><span>AC</span><input id="ultrasoundAC" placeholder="mm" /></label>
+            <label class="field"><span>FL</span><input id="ultrasoundFL" placeholder="mm" /></label>
+            <label class="field"><span>EFW</span><input id="ultrasoundEFW" placeholder="g" /></label>
+          </div>
+        </div>
+        <div class="ultrasound-form-grid">
+          <label class="field full"><span>النتائج والمشاهدات</span><textarea id="ultrasoundFindings" rows="4" placeholder="نتائج الفحص"></textarea></label>
+          <label class="field full"><span>التشخيص / الانطباع</span><textarea id="ultrasoundDiagnosis" rows="3" placeholder="التشخيص أو الانطباع الطبي"></textarea></label>
+          <label class="field full"><span>ملاحظات إضافية</span><textarea id="ultrasoundNotes" rows="2"></textarea></label>
+          <label class="field full"><span>صور السونار</span><input id="ultrasoundImagesInput" type="file" accept="image/jpeg,image/png,image/webp" multiple /><small class="muted">JPG أو PNG أو WebP بحد أقصى 10MB للصورة</small></label>
+        </div>
+        <div id="ultrasoundExistingImages" class="ultrasound-image-grid"></div>
+        <div class="prescription-editor-actions">
+          <button id="cancelUltrasoundExamBtn" class="btn ghost" type="button">إلغاء</button>
+          <button class="btn primary" type="submit">حفظ تقرير السونار</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="patientRecordModal" class="dialog-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="patient-record-card">
+      <div class="patient-record-head">
+        <div><span class="eyebrow">سجل المريض</span><h2 id="recordPatientName">المريض</h2><div id="recordPatientContact" class="muted"></div></div>
+        <div class="toolbar"><button id="newPrescriptionForPatientBtn" class="btn primary small" type="button">وصفة جديدة</button><button id="printPatientRecordBtn" class="btn outline small" type="button">طباعة الملف</button><button id="closePatientRecord" class="icon-btn" type="button" aria-label="إغلاق">×</button></div>
+      </div>
+      <div id="patientRecordStats" class="patient-record-stats"></div>
+      <div class="patient-record-grid">
+        <div class="record-block"><div class="record-block-head"><h3>بيانات المريض</h3><button id="recordEditPatient" class="btn outline small secretary-only" type="button">تعديل البيانات</button></div><div id="patientRecordDetails" class="detail-grid"></div></div>
+        <div class="record-block"><div class="record-block-head"><h3>تاريخ الحجوزات</h3><span id="patientVisitsCount" class="muted"></span></div><div id="patientRecordTimeline" class="patient-timeline"></div></div>
+        <div id="patientUltrasoundBlock" class="record-block sonar-only"><div class="record-block-head"><div><h3>أرشيف فحوصات السونار</h3><span id="patientUltrasoundCount" class="muted"></span></div><button id="newPatientUltrasoundBtn" class="btn primary small" type="button">فحص جديد</button></div><div id="patientUltrasoundTimeline" class="ultrasound-patient-history"></div></div>
+        <div class="record-block secretary-only"><div class="record-block-head"><div><h3>ملخص الحساب</h3><span id="patientBalanceLabel" class="muted"></span></div></div><div id="patientLedger" class="ledger"></div></div>
+        <div class="record-block secretary-only"><div class="record-block-head"><div><h3>سجل الزيارات الطبي</h3></div></div><div id="patientClinicalTimeline"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastStack" aria-live="polite" aria-atomic="true"></div>
+  <div id="uiDialog" class="dialog-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="dialog-card">
+      <h3 id="dialogTitle">تنبيه</h3>
+      <p id="dialogText"></p>
+      <div id="dialogSummary" class="dialog-summary hidden"></div><div id="dialogFields" class="dialog-fields"></div>
+      <div class="dialog-actions">
+        <button id="dialogPrimary" class="btn primary">تأكيد</button>
+        <button id="dialogSecondary" class="btn outline">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./pwa.js" defer></script>
 </body>
 </html>
