@@ -1,9 +1,10 @@
-const CACHE_NAME = 'medica-mobile-v2'
+const CACHE_NAME = 'medica-mobile-v3'
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
   './mobile.css',
+  './mobile-v3.css',
   './pwa.js',
   './assets/index-C5wl6y5-.js',
   './medica-icon.svg',
@@ -31,7 +32,7 @@ self.addEventListener('activate', event => {
 
 async function networkFirst(request) {
   try {
-    const response = await fetch(request)
+    const response = await fetch(request, { cache: 'no-store' })
     if (response && response.ok) {
       const cache = await caches.open(CACHE_NAME)
       cache.put(request, response.clone()).catch(() => undefined)
@@ -45,14 +46,15 @@ async function networkFirst(request) {
   }
 }
 
-async function staleWhileRevalidate(request) {
-  const cache = await caches.open(CACHE_NAME)
-  const cached = await cache.match(request)
-  const networkPromise = fetch(request).then(response => {
-    if (response && response.ok) cache.put(request, response.clone()).catch(() => undefined)
-    return response
-  }).catch(() => null)
-  return cached || networkPromise || Response.error()
+async function cacheFirst(request) {
+  const cached = await caches.match(request)
+  if (cached) return cached
+  const response = await fetch(request)
+  if (response && response.ok) {
+    const cache = await caches.open(CACHE_NAME)
+    cache.put(request, response.clone()).catch(() => undefined)
+  }
+  return response
 }
 
 self.addEventListener('fetch', event => {
@@ -62,13 +64,13 @@ self.addEventListener('fetch', event => {
   const url = new URL(request.url)
   if (url.origin !== self.location.origin) return
 
-  if (request.mode === 'navigate') {
+  if (request.mode === 'navigate' || request.destination === 'style' || request.destination === 'script') {
     event.respondWith(networkFirst(request))
     return
   }
 
-  if (['script', 'style', 'image', 'font'].includes(request.destination)) {
-    event.respondWith(staleWhileRevalidate(request))
+  if (['image', 'font'].includes(request.destination)) {
+    event.respondWith(cacheFirst(request))
     return
   }
 
