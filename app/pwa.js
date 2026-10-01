@@ -6,9 +6,26 @@
 
   document.documentElement.classList.add('web-mobile')
 
+  const styleVersion = '20261001-v3'
+  const ensureMobileStyle = () => {
+    let link = document.getElementById('medicaMobileV3')
+    if (!link) {
+      link = document.createElement('link')
+      link.id = 'medicaMobileV3'
+      link.rel = 'stylesheet'
+      document.head.appendChild(link)
+    }
+    const href = `./mobile-v3.css?v=${styleVersion}`
+    if (!link.href.includes(`mobile-v3.css?v=${styleVersion}`)) link.href = href
+  }
+  ensureMobileStyle()
+
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => undefined)
+    window.addEventListener('load', async () => {
+      try {
+        const registration = await navigator.serviceWorker.register('./sw.js?v=3', { scope: './' })
+        registration.update().catch(() => undefined)
+      } catch {}
     })
   }
 
@@ -27,6 +44,7 @@
   }
 
   function ensureMobileTools() {
+    ensureMobileStyle()
     const staffApp = document.getElementById('staffApp')
     if (!staffApp || staffApp.classList.contains('hidden')) return
     const topbar = staffApp.querySelector('.premium-topbar, .topbar')
@@ -99,6 +117,7 @@
   const observer = new MutationObserver(() => ensureMobileTools())
 
   window.addEventListener('DOMContentLoaded', () => {
+    ensureMobileStyle()
     ensureMobileTools()
     observer.observe(document.body, { attributes: true, childList: true, subtree: true })
   })
