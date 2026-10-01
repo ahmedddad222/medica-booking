@@ -1,0 +1,12 @@
+/* Medica Mobile V17 — no login flash on session restore */
+@media (max-width:820px){
+  html:not(.mobile-auth-ready) #authView{
+    visibility:hidden!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  html.session-checking #authView{
+    display:none!important;
+  }
+}
