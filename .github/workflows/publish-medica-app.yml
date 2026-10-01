@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'deploy_bundle2/**'
+      - 'deploy_binary/**'
       - '.github/workflows/publish-medica-app.yml'
   workflow_dispatch:
 
@@ -20,11 +20,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Decode and publish Medica web app
+      - name: Assemble and publish Medica web app
         shell: bash
         run: |
           set -euo pipefail
-          base64 --ignore-garbage -d deploy_bundle2/medica-web-final.zip.b64 > /tmp/medica-web-final.zip
+          cat deploy_binary/part-* > /tmp/medica-web-final.zip
           unzip -tq /tmp/medica-web-final.zip
           rm -rf app
           mkdir -p app
@@ -33,7 +33,7 @@ jobs:
           test -f app/assets/index-C5wl6y5-.js
           test -f app/manifest.webmanifest
           test -f app/sw.js
-          rm -rf deploy_bundle2
+          rm -rf deploy_binary deploy_bundle2
           rm -f .github/workflows/publish-medica-app.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
