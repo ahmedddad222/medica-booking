@@ -1,4 +1,4 @@
-const CACHE_NAME = 'medica-mobile-v17'
+const CACHE_NAME = 'medica-mobile-v18'
 const APP_SHELL = [
   './',
   './index.html',
