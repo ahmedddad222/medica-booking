@@ -32,7 +32,7 @@
     name:'اسم العيادة', doctor_name:'اسم الطبيب', phone:'الهاتف', address:'العنوان',
     default_visit_fee:'سعر الكشف', active:'الحالة', logo_path:'الشعار',
     brand_color:'لون الهوية', tagline:'الوصف', specialty:'التخصص',
-    account_mode:'نوع الحساب', report_template:'قالب التقرير', clinic_type:'نوع العيادة',
+    account_mode:'نوع الحساب', subscription_expires_at:'انتهاء الاشتراك السنوي', report_template:'قالب التقرير', clinic_type:'نوع العيادة',
     role:'الدور', full_name:'الاسم', onboarding_completed:'إكمال البيانات',
     patient_id:'المريض', starts_at:'موعد الحجز', visit_type:'نوع الزيارة',
     status:'الحالة', visit_fee:'أجرة الزيارة', notes:'ملاحظات',
