@@ -132,15 +132,27 @@
   function updateAnnualStat(){
     const grid=document.querySelector('#adminDashboard .grid-cards')
     if(!grid) return
-    let stat=document.getElementById('adminAnnualCount')
+
+    const existing=[...grid.querySelectorAll('.admin-annual-stat')]
+    let stat=existing[0]||null
+    existing.slice(1).forEach(el=>el.remove())
+
     if(!stat){
       stat=document.createElement('div')
       stat.className='stat admin-annual-stat'
+      stat.id='adminAnnualCount'
       stat.innerHTML='<span>اشتراكات سنوية</span><strong id="adminAnnualCountValue">0</strong>'
       grid.appendChild(stat)
+    }else{
+      stat.id='adminAnnualCount'
     }
+
     const annual=[...clinicMap.values()].filter(c=>(c.account_mode||'permanent')==='annual')
-    const target=document.getElementById('adminAnnualCountValue')
+    let target=stat.querySelector('#adminAnnualCountValue')
+    if(!target){
+      stat.innerHTML='<span>اشتراكات سنوية</span><strong id="adminAnnualCountValue">0</strong>'
+      target=stat.querySelector('#adminAnnualCountValue')
+    }
     if(target) target.textContent=String(annual.length)
   }
 
