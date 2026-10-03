@@ -78,6 +78,8 @@
       #adminApp .admin-subscription-actions button{min-height:34px;padding:7px 10px;border-radius:10px;border:1px solid #dce5ef;background:#fff;color:#334155;font:inherit;font-size:10.5px;font-weight:850;cursor:pointer}
       #adminApp .admin-subscription-actions button.active{background:#0f172a;color:#fff;border-color:#0f172a}
       #adminApp .admin-subscription-actions .renew{background:#eef2ff;color:#4338ca;border-color:#dfe3ff}
+      #adminApp .admin-quick-annual{background:linear-gradient(135deg,#4f46e5,#4338ca)!important;color:#fff!important;border-color:#4338ca!important;box-shadow:0 8px 18px rgba(79,70,229,.18)!important}
+      #adminApp .admin-quick-renew{background:#eef2ff!important;color:#4338ca!important;border-color:#dfe3ff!important;box-shadow:none!important}
       #adminApp .admin-subscription-actions button:disabled{opacity:.55;cursor:not-allowed}
       #adminApp .admin-annual-stat{background:linear-gradient(180deg,#fff,#f7f7ff)!important}
       #adminApp .admin-annual-stat::before{background:#6366f1!important;box-shadow:0 0 0 5px #eef2ff!important}
@@ -206,6 +208,37 @@
         ${mode==='annual'?'<button type="button" class="renew" data-renew-annual>+ تجديد سنة</button>':''}
       </div>
     `
+
+    const toolbar=card.querySelector('.panel-head .toolbar')
+    if(toolbar){
+      toolbar.querySelector('.admin-quick-annual')?.remove()
+      const quick=document.createElement('button')
+      quick.type='button'
+      quick.className='btn small admin-quick-annual'
+      quick.textContent=mode==='annual'?'تجديد سنة':'تحويل إلى سنوي'
+      if(mode==='annual') quick.classList.add('admin-quick-renew')
+      quick.addEventListener('click',async()=>{
+        const question=mode==='annual'
+          ? `تجديد اشتراك "${clinic.name}" سنة إضافية؟`
+          : `تحويل "${clinic.name}" إلى اشتراك سنوي لمدة سنة؟`
+        if(!confirm(question)) return
+        quick.disabled=true
+        try{
+          if(mode==='annual'){
+            await callAdmin('renew_annual_subscription',{clinic_id:String(clinic.id)})
+            toast('تمت إضافة سنة كاملة للاشتراك')
+          }else{
+            await callAdmin('set_clinic_account_mode',{clinic_id:String(clinic.id),account_mode:'annual'})
+            toast('تم تحويل العيادة إلى اشتراك سنوي لمدة سنة')
+          }
+          await refreshAll()
+        }catch(err){
+          toast(err?.message||'تعذر تحديث الاشتراك')
+          quick.disabled=false
+        }
+      })
+      toolbar.prepend(quick)
+    }
 
     box.querySelectorAll('[data-sub-mode]').forEach(btn=>{
       btn.addEventListener('click',async()=>{
