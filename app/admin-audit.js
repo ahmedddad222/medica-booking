@@ -145,6 +145,15 @@
       #adminAudit .presence-state.online::before{background:#10b981;box-shadow:0 0 0 4px rgba(16,185,129,.12)}
       #adminAudit .presence-state.offline{background:#f3f5f7;color:#64748b}
       #adminAudit .presence-state.offline::before{background:#94a3b8}
+      #adminAudit .presence-clinic-group{border:1px solid #e2e8f0;border-radius:18px;background:#fff;overflow:hidden;box-shadow:0 8px 22px rgba(15,23,42,.04)}
+      #adminAudit .presence-clinic-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;background:#f8fbff;border-bottom:1px solid #e8eef5}
+      #adminAudit .presence-clinic-head>div{display:grid;gap:2px}
+      #adminAudit .presence-clinic-head strong{color:#0f172a;font-size:14px;font-weight:900}
+      #adminAudit .presence-clinic-head small,#adminAudit .presence-clinic-head span{color:#64748b;font-size:10.5px;font-weight:700}
+      #adminAudit .presence-users{display:grid}
+      #adminAudit .presence-clinic-group .presence-card{border:0;border-bottom:1px solid #edf1f5;border-radius:0;box-shadow:none}
+      #adminAudit .presence-clinic-group .presence-card:last-child{border-bottom:0}
+
       @media(max-width:900px){
         #adminAudit .audit-toolbar{grid-template-columns:1fr 1fr}
         #adminAudit .audit-toolbar .audit-search{grid-column:1/-1}
@@ -312,32 +321,65 @@
     const status=document.getElementById('presenceStatus')
     if(!list || !status) return
     const clinic=document.getElementById('auditClinic')?.value||''
-    const filtered=presenceRows.filter(x=>!clinic || x.clinic_id===clinic).sort((a,b)=>{if(a.is_online!==b.is_online)return a.is_online?-1:1;return new Date(b.last_seen_at||0)-new Date(a.last_seen_at||0)})
+    const filtered=presenceRows.filter(x=>!clinic || x.clinic_id===clinic)
     const online=filtered.filter(x=>x.is_online).length
     document.getElementById('presenceOnlineCount').textContent=`${online} متصل الآن`
     document.getElementById('presenceTotalCount').textContent=`${filtered.length} حساب`
-    status.textContent=filtered.length?'الحالة تتحدث كل 10 ثواني — الأوقات بتوقيت بغداد، وآخر فتح يعتمد على Heartbeat الفعلي.':'لا توجد حسابات مطابقة'
-    list.innerHTML=filtered.map(user=>{
-      const name=user.full_name||user.email||'مستخدم'
-      const role=roleLabels[user.role]||user.role||'—'
-      const lastOpened=user.last_opened_at
-      const openedLabel='آخر فتح Medica'
-      const auditSeen=rows.find(r=>r.actor_user_id===user.user_id)?.occurred_at; const lastSeen=(!user.last_seen_at||new Date(auditSeen||0)>new Date(user.last_seen_at||0))?(auditSeen||user.last_seen_at):user.last_seen_at
-      return `
-        <div class="presence-card">
-          <div class="presence-head">
-            <div>
-              <div class="presence-name">${esc(name)}</div>
-              <div class="presence-meta"><span>${esc(role)}</span><span>${esc(user.clinic_name||'بدون عيادة')}</span><span>${esc(user.email||'')}</span></div>
+    status.textContent=filtered.length?'الحالة تتحدث كل 10 ثواني — كل عيادة مجمعة مع الطبيب والسكرتير، والأوقات بتوقيت بغداد.':'لا توجد حسابات مطابقة'
+
+    const groups=new Map()
+    filtered.forEach(user=>{
+      const key=user.clinic_id||'no-clinic'
+      if(!groups.has(key)) groups.set(key,{name:user.clinic_name||'بدون عيادة',users:[]})
+      groups.get(key).users.push(user)
+    })
+
+    const roleOrder={doctor:1,owner:1,secretary:2}
+    const groupList=[...groups.values()].sort((a,b)=>String(a.name).localeCompare(String(b.name),'ar'))
+
+    list.innerHTML=groupList.map(group=>{
+      group.users.sort((a,b)=>{
+        if(a.is_online!==b.is_online) return a.is_online?-1:1
+        const roleDiff=(roleOrder[a.role]||9)-(roleOrder[b.role]||9)
+        if(roleDiff) return roleDiff
+        const aSeen=new Date(a.last_seen_at||0).getTime()
+        const bSeen=new Date(b.last_seen_at||0).getTime()
+        return bSeen-aSeen
+      })
+
+      const groupOnline=group.users.filter(x=>x.is_online).length
+      const usersHtml=group.users.map(user=>{
+        const name=user.full_name||user.email||'مستخدم'
+        const role=roleLabels[user.role]||user.role||'—'
+        const lastOpened=user.last_opened_at
+        const auditSeen=rows.find(r=>r.actor_user_id===user.user_id)?.occurred_at
+        const lastSeen=(!user.last_seen_at||new Date(auditSeen||0)>new Date(user.last_seen_at||0))?(auditSeen||user.last_seen_at):user.last_seen_at
+        return `
+          <div class="presence-card">
+            <div class="presence-head">
+              <div>
+                <div class="presence-name">${esc(name)}</div>
+                <div class="presence-meta"><span class="badge brand">${esc(role)}</span><span>${esc(user.email||'')}</span></div>
+              </div>
+              <span class="presence-state ${user.is_online?'online':'offline'}">${user.is_online?'متصل الآن':'غير متصل'}</span>
             </div>
-            <span class="presence-state ${user.is_online?'online':'offline'}">${user.is_online?'متصل الآن':'غير متصل'}</span>
+            <div class="presence-times">
+              <span><strong>آخر فتح Medica:</strong> ${lastOpened?`${esc(fmtDate(lastOpened))} — ${esc(relativeTime(lastOpened))}`:'بانتظار أول فتح بعد التحديث'}</span>
+              <span><strong>آخر نشاط:</strong> ${esc(lastSeen?fmtDate(lastSeen):'لم يسجل نشاط بعد')}${lastSeen?` — ${esc(relativeTime(lastSeen))}`:''}</span>
+              <span><strong>الجهاز:</strong> ${esc(clientLabel(user.client_type))}${user.last_page?` • القسم: ${esc(user.last_page)}`:''}</span>
+            </div>
           </div>
-          <div class="presence-times">
-            <span><strong>${openedLabel}:</strong> ${lastOpened?`${esc(fmtDate(lastOpened))} — ${esc(relativeTime(lastOpened))}`:'بانتظار أول فتح بعد التحديث'}</span>
-            <span><strong>آخر نشاط:</strong> ${esc(lastSeen?fmtDate(lastSeen):'لم يسجل نشاط بعد')}${lastSeen?` — ${esc(relativeTime(lastSeen))}`:''}</span>
-            <span><strong>الجهاز:</strong> ${esc(clientLabel(user.client_type))}${user.last_page?` • القسم: ${esc(user.last_page)}`:''}</span>
+        `
+      }).join('')
+
+      return `
+        <section class="presence-clinic-group">
+          <div class="presence-clinic-head">
+            <div><strong>${esc(group.name)}</strong><small>${group.users.length} حساب</small></div>
+            <span>${groupOnline ? `${groupOnline} متصل الآن` : 'لا يوجد متصل الآن'}</span>
           </div>
-        </div>
+          <div class="presence-users">${usersHtml}</div>
+        </section>
       `
     }).join('') || '<div class="audit-empty">لا توجد حسابات مطابقة</div>'
   }
