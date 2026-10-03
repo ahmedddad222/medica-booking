@@ -153,7 +153,7 @@
       stat.innerHTML='<span>اشتراكات سنوية</span><strong id="adminAnnualCountValue">0</strong>'
       target=stat.querySelector('#adminAnnualCountValue')
     }
-    if(target) target.textContent=String(annual.length)
+    if(target && target.textContent!==String(annual.length)) target.textContent=String(annual.length)
   }
 
   function correctOriginalBadge(container,clinic){
@@ -365,11 +365,9 @@
 
     const adminList=document.getElementById('adminClinicsList')
     const recent=document.getElementById('adminRecentClinics')
-    const dashboard=document.getElementById('adminDashboard')
     const observer=new MutationObserver(()=>setTimeout(decorate,60))
     if(adminList) observer.observe(adminList,{childList:true,subtree:true})
     if(recent) observer.observe(recent,{childList:true,subtree:true})
-    if(dashboard) observer.observe(dashboard,{childList:true,subtree:true})
 
     document.getElementById('adminRefresh')?.addEventListener('click',()=>{
       lastLoaded=0
