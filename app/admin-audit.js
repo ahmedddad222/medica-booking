@@ -57,7 +57,10 @@
   const actionLabels = {INSERT:'إضافة',UPDATE:'تعديل',DELETE:'حذف'}
 
   let rows = []
+  let presenceRows = []
   let loadedOnce = false
+  let presenceLoaded = false
+  let presenceTimer = null
 
   function esc(value=''){
     return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))
@@ -128,10 +131,25 @@
       #adminAudit .audit-arrow{text-align:center;color:#94a3b8;padding-top:8px}
       #adminAudit .audit-empty{padding:34px;text-align:center;color:var(--muted)}
       #adminAudit .audit-error{padding:14px;border:1px solid #f3cbd0;background:#fff2f3;color:#9f3841;border-radius:14px}
+      #adminAudit .presence-panel{margin-bottom:16px}
+      #adminAudit .presence-summary{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+      #adminAudit .presence-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+      #adminAudit .presence-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:14px;box-shadow:var(--shadow-sm)}
+      #adminAudit .presence-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+      #adminAudit .presence-name{font-weight:900;color:var(--heading);font-size:15px}
+      #adminAudit .presence-meta{display:flex;gap:6px 10px;flex-wrap:wrap;margin-top:6px;color:var(--muted);font-size:11px}
+      #adminAudit .presence-times{display:grid;gap:5px;margin-top:11px;padding-top:10px;border-top:1px solid #eef2f6;color:#475569;font-size:11px;line-height:1.6}
+      #adminAudit .presence-state{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:850;white-space:nowrap}
+      #adminAudit .presence-state::before{content:"";width:8px;height:8px;border-radius:50%}
+      #adminAudit .presence-state.online{background:#eaf9f3;color:#087a5a}
+      #adminAudit .presence-state.online::before{background:#10b981;box-shadow:0 0 0 4px rgba(16,185,129,.12)}
+      #adminAudit .presence-state.offline{background:#f3f5f7;color:#64748b}
+      #adminAudit .presence-state.offline::before{background:#94a3b8}
       @media(max-width:900px){
         #adminAudit .audit-toolbar{grid-template-columns:1fr 1fr}
         #adminAudit .audit-toolbar .audit-search{grid-column:1/-1}
         #adminAudit .audit-kpis{grid-template-columns:1fr 1fr}
+        #adminAudit .presence-list{grid-template-columns:1fr}
       }
       @media(max-width:600px){
         #adminAudit .audit-toolbar{grid-template-columns:1fr}
@@ -171,6 +189,15 @@
     section.id=PAGE_ID
     section.className='page hidden'
     section.innerHTML=`
+      <div class="panel presence-panel">
+        <div class="panel-head">
+          <div><h3>حالة الأطباء والسكرتارية</h3><div class="muted">آخر فتح للتطبيق وآخر نشاط، والحالة تتحدث تلقائياً.</div></div>
+          <button id="presenceReload" class="btn light small" type="button">تحديث الحالة</button>
+        </div>
+        <div class="presence-summary"><span id="presenceOnlineCount" class="badge ok">0 متصل الآن</span><span id="presenceTotalCount" class="badge">0 حساب</span></div>
+        <div id="presenceStatus" class="muted" style="margin-top:10px">جاري تحميل حالة المستخدمين...</div>
+        <div id="presenceList" class="presence-list"></div>
+      </div>
       <div class="audit-kpis">
         <div class="audit-kpi"><span>السجلات المحملة</span><strong id="auditCount">0</strong></div>
         <div class="audit-kpi"><span>تعديلات</span><strong id="auditUpdateCount">0</strong></div>
@@ -198,10 +225,11 @@
       document.getElementById('auditTable')?.appendChild(o)
     })
 
+    document.getElementById('presenceReload')?.addEventListener('click',loadPresence)
     document.getElementById('auditReload')?.addEventListener('click',loadAudit)
     document.getElementById('auditApply')?.addEventListener('click',renderAudit)
     document.getElementById('auditSearch')?.addEventListener('input',renderAudit)
-    document.getElementById('auditClinic')?.addEventListener('change',renderAudit)
+    document.getElementById('auditClinic')?.addEventListener('change',()=>{renderAudit();renderPresence()})
     document.getElementById('auditAction')?.addEventListener('change',renderAudit)
     document.getElementById('auditTable')?.addEventListener('change',renderAudit)
 
@@ -224,7 +252,94 @@
     const title=document.getElementById('adminPageTitle')
     if(title) title.textContent='سجل التعديلات'
     window.scrollTo({top:0,behavior:'smooth'})
+    if(!presenceLoaded) loadPresence()
     if(!loadedOnce) loadAudit()
+    clearInterval(presenceTimer)
+    presenceTimer=setInterval(()=>{
+      if(!document.getElementById(PAGE_ID)?.classList.contains('hidden')) loadPresence(true)
+    },30000)
+  }
+
+  async function callAdminAction(action){
+    const token=sessionToken()
+    if(!token) throw new Error('تعذر قراءة جلسة الأدمن. أعد تسجيل الدخول.')
+    const res=await fetch(`${SUPABASE_URL}/functions/v1/admin-api`,{
+      method:'POST',
+      headers:{
+        apikey:SUPABASE_KEY,
+        Authorization:`Bearer ${token}`,
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({action})
+    })
+    const data=await res.json().catch(()=>({}))
+    if(!res.ok || data?.error) throw new Error(data?.error || `تعذر تحميل البيانات (${res.status})`)
+    return data
+  }
+
+  function clientLabel(value){
+    return ({'desktop-app':'تطبيق الكمبيوتر','desktop-web':'متصفح الكمبيوتر','mobile-web':'متصفح الهاتف','mobile-pwa':'تطبيق الهاتف'})[value] || '—'
+  }
+
+  function relativeTime(value){
+    if(!value) return '—'
+    const diff=Math.max(0,Date.now()-new Date(value).getTime())
+    const sec=Math.floor(diff/1000)
+    if(sec<60) return `منذ ${sec} ثانية`
+    const min=Math.floor(sec/60)
+    if(min<60) return `منذ ${min} دقيقة`
+    const hr=Math.floor(min/60)
+    if(hr<24) return `منذ ${hr} ساعة`
+    return fmtDate(value)
+  }
+
+  async function loadPresence(silent=false){
+    const status=document.getElementById('presenceStatus')
+    if(!status) return
+    if(!silent) status.textContent='جاري تحميل حالة المستخدمين...'
+    try{
+      const data=await callAdminAction('presence')
+      presenceRows=Array.isArray(data?.staff)?data.staff:[]
+      presenceLoaded=true
+      renderPresence()
+    }catch(err){
+      status.innerHTML=`<div class="audit-error">${esc(err?.message||'تعذر تحميل حالة المستخدمين')}</div>`
+    }
+  }
+
+  function renderPresence(){
+    const list=document.getElementById('presenceList')
+    const status=document.getElementById('presenceStatus')
+    if(!list || !status) return
+    const clinic=document.getElementById('auditClinic')?.value||''
+    const filtered=presenceRows.filter(x=>!clinic || x.clinic_id===clinic)
+    const online=filtered.filter(x=>x.is_online).length
+    document.getElementById('presenceOnlineCount').textContent=`${online} متصل الآن`
+    document.getElementById('presenceTotalCount').textContent=`${filtered.length} حساب`
+    status.textContent=filtered.length?'الحالة تتحدث كل 30 ثانية — يعتبر المستخدم متصلاً إذا كان التطبيق نشطاً خلال آخر دقيقتين.':'لا توجد حسابات مطابقة'
+    list.innerHTML=filtered.map(user=>{
+      const name=user.full_name||user.email||'مستخدم'
+      const role=roleLabels[user.role]||user.role||'—'
+      const lastOpened=user.last_opened_at || user.last_sign_in_at
+      const openedLabel=user.last_opened_at?'آخر فتح للتطبيق':'آخر تسجيل دخول قبل تفعيل المتابعة'
+      const lastSeen=user.last_seen_at
+      return `
+        <div class="presence-card">
+          <div class="presence-head">
+            <div>
+              <div class="presence-name">${esc(name)}</div>
+              <div class="presence-meta"><span>${esc(role)}</span><span>${esc(user.clinic_name||'بدون عيادة')}</span><span>${esc(user.email||'')}</span></div>
+            </div>
+            <span class="presence-state ${user.is_online?'online':'offline'}">${user.is_online?'متصل الآن':'غير متصل'}</span>
+          </div>
+          <div class="presence-times">
+            <span><strong>${openedLabel}:</strong> ${esc(fmtDate(lastOpened))}${lastOpened?` — ${esc(relativeTime(lastOpened))}`:''}</span>
+            <span><strong>آخر نشاط:</strong> ${esc(lastSeen?fmtDate(lastSeen):'لم يسجل نشاط بعد')}${lastSeen?` — ${esc(relativeTime(lastSeen))}`:''}</span>
+            <span><strong>الجهاز:</strong> ${esc(clientLabel(user.client_type))}${user.last_page?` • القسم: ${esc(user.last_page)}`:''}</span>
+          </div>
+        </div>
+      `
+    }).join('') || '<div class="audit-empty">لا توجد حسابات مطابقة</div>'
   }
 
   async function loadAudit(){
@@ -268,6 +383,7 @@
     const current=select.value
     const map=new Map()
     rows.forEach(r=>{ if(r.clinic_id) map.set(r.clinic_id,r.clinic_name||r.clinic_id) })
+    presenceRows.forEach(r=>{ if(r.clinic_id) map.set(r.clinic_id,r.clinic_name||r.clinic_id) })
     select.innerHTML='<option value="">كل العيادات</option>'
     ;[...map.entries()].sort((a,b)=>String(a[1]).localeCompare(String(b[1]),'ar')).forEach(([id,name])=>{
       const o=document.createElement('option');o.value=id;o.textContent=name;select.appendChild(o)
