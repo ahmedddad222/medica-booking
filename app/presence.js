@@ -69,11 +69,11 @@
 
   function schedule(){
     clearInterval(heartbeatTimer)
-    heartbeatTimer=setInterval(touchPresence,45000)
+    heartbeatTimer=setInterval(touchPresence,15000)
     clearInterval(retryTimer)
     retryTimer=setInterval(()=>{
       if(!openedSent) touchPresence()
-    },8000)
+    },5000)
   }
 
   function boot(){
