@@ -320,8 +320,8 @@
     list.innerHTML=filtered.map(user=>{
       const name=user.full_name||user.email||'مستخدم'
       const role=roleLabels[user.role]||user.role||'—'
-      const lastOpened=user.last_opened_at || user.last_sign_in_at
-      const openedLabel=user.last_opened_at?'آخر فتح للتطبيق':'آخر تسجيل دخول قبل تفعيل المتابعة'
+      const lastOpened=user.last_opened_at
+      const openedLabel='آخر فتح Medica'
       const lastSeen=user.last_seen_at
       return `
         <div class="presence-card">
@@ -333,7 +333,7 @@
             <span class="presence-state ${user.is_online?'online':'offline'}">${user.is_online?'متصل الآن':'غير متصل'}</span>
           </div>
           <div class="presence-times">
-            <span><strong>${openedLabel}:</strong> ${esc(fmtDate(lastOpened))}${lastOpened?` — ${esc(relativeTime(lastOpened))}`:''}</span>
+            <span><strong>${openedLabel}:</strong> ${lastOpened?`${esc(fmtDate(lastOpened))} — ${esc(relativeTime(lastOpened))}`:'بانتظار أول فتح بعد التحديث'}</span>
             <span><strong>آخر نشاط:</strong> ${esc(lastSeen?fmtDate(lastSeen):'لم يسجل نشاط بعد')}${lastSeen?` — ${esc(relativeTime(lastSeen))}`:''}</span>
             <span><strong>الجهاز:</strong> ${esc(clientLabel(user.client_type))}${user.last_page?` • القسم: ${esc(user.last_page)}`:''}</span>
           </div>
