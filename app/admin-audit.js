@@ -257,7 +257,7 @@
     clearInterval(presenceTimer)
     presenceTimer=setInterval(()=>{
       if(!document.getElementById(PAGE_ID)?.classList.contains('hidden')) loadPresence(true)
-    },30000)
+    },10000)
   }
 
   async function callAdminAction(action){
@@ -312,11 +312,11 @@
     const status=document.getElementById('presenceStatus')
     if(!list || !status) return
     const clinic=document.getElementById('auditClinic')?.value||''
-    const filtered=presenceRows.filter(x=>!clinic || x.clinic_id===clinic)
+    const filtered=presenceRows.filter(x=>!clinic || x.clinic_id===clinic).sort((a,b)=>{if(a.is_online!==b.is_online)return a.is_online?-1:1;return new Date(b.last_seen_at||0)-new Date(a.last_seen_at||0)})
     const online=filtered.filter(x=>x.is_online).length
     document.getElementById('presenceOnlineCount').textContent=`${online} متصل الآن`
     document.getElementById('presenceTotalCount').textContent=`${filtered.length} حساب`
-    status.textContent=filtered.length?'الحالة تتحدث كل 30 ثانية — يعتبر المستخدم متصلاً إذا كان التطبيق نشطاً خلال آخر دقيقتين.':'لا توجد حسابات مطابقة'
+    status.textContent=filtered.length?'الحالة تتحدث كل 10 ثواني — الأوقات بتوقيت بغداد، وآخر فتح يعتمد على Heartbeat الفعلي.':'لا توجد حسابات مطابقة'
     list.innerHTML=filtered.map(user=>{
       const name=user.full_name||user.email||'مستخدم'
       const role=roleLabels[user.role]||user.role||'—'
