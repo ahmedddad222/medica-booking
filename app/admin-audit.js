@@ -322,7 +322,7 @@
       const role=roleLabels[user.role]||user.role||'—'
       const lastOpened=user.last_opened_at
       const openedLabel='آخر فتح Medica'
-      const lastSeen=user.last_seen_at
+      const auditSeen=rows.find(r=>r.actor_user_id===user.user_id)?.occurred_at; const lastSeen=(!user.last_seen_at||new Date(auditSeen||0)>new Date(user.last_seen_at||0))?(auditSeen||user.last_seen_at):user.last_seen_at
       return `
         <div class="presence-card">
           <div class="presence-head">
