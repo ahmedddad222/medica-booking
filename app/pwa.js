@@ -264,7 +264,7 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
       try {
-        const registration = await navigator.serviceWorker.register('./sw.js?v=24', { scope:'./' })
+        const registration = await navigator.serviceWorker.register('./sw.js?v=25', { scope:'./' })
         registration.update().catch(() => undefined)
       } catch {}
     })
