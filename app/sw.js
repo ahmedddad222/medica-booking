@@ -1,4 +1,4 @@
-const CACHE_NAME = 'medica-mobile-v20'
+const CACHE_NAME = 'medica-mobile-v21'
 const APP_SHELL = [
   './',
   './index.html',
@@ -10,7 +10,7 @@ const APP_SHELL = [
   './mobile-v13.css',
   './mobile-v15.css',
   './mobile-v17.css',
-  './pwa.js',\n  './admin-audit.js',
+  './pwa.js',\n  './admin-audit.js',\n  './presence.js',
   './assets/index-C5wl6y5-.js',
   './medica-icon.svg',
   './print.html',
