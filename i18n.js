@@ -6,20 +6,37 @@ var CORR={"حجز موعد لكتروني":"حجز موعد إلكتروني","�
 var STORAGE_KEY='medica_language';
 var current=(localStorage.getItem(STORAGE_KEY)||'ar').toLowerCase();
 if(!['ar','en','ku'].includes(current)) current='ar';
-var originalText=new WeakMap();
-var originalAttrs=new WeakMap();
+
 var AR_RE=/[\u0600-\u06FF]/;
 var ATTRS=['placeholder','title','aria-label'];
 var AR_MONTHS={ 'كانون الثاني':'January','شباط':'February','آذار':'March','نيسان':'April','أيار':'May','حزيران':'June','تموز':'July','آب':'August','أيلول':'September','تشرين الأول':'October','تشرين الثاني':'November','كانون الأول':'December' };
-var KU_MONTHS={ 'كانون الثاني':'کانوونی دووەم','شباط':'شوبات','آذار':'ئازار','نيسان':'نیسان','أيار':'ئایار','حزيران':'حوزەیران','تموز':'تەمموز','آب':'ئاب','أيلول':'ئەیلوول','تشرين الأول':'تشرینی یەکەم','تشرين الثاني':'تشرینی دووەم','كانون الأول':'کانوونی یەکەم' };
+var KU_MONTHS={ 'كانون الثاني':'کانوونی دووەم','شباط':'شوبات','آذار':'ئازار','نيسان':'نیسان','أيار':'ئایار','حزيران':'حوزەیران','تموز':'تەمموز','آب':'ئاب','أيلول':'ئەیلوول','تشرين الأول':'تشرینی یەکەم','تشرين الثاني':'کانوونی یەکەم' };
+
+var originalText=new WeakMap();
+var lastRenderedText=new WeakMap();
+var trackedText=new Set();
+var originalAttrs=new WeakMap();
+var lastRenderedAttrs=new WeakMap();
+var trackedAttrElements=new Set();
+var observer=null;
+var hostObserver=null;
+var initialized=false;
+var switcher=null;
+var menuOpen=false;
+var titleOriginal=document.title;
 
 function normalizeCore(s){ return String(s==null?'':s).replace(/\s+/g,' ').trim(); }
 function arabicDigitsToLatin(s){ return String(s).replace(/[٠-٩]/g,function(d){return String('٠١٢٣٤٥٦٧٨٩'.indexOf(d));}); }
 function correctArabic(s){ return CORR[s]||s; }
 
 function dynamicTranslate(s,lang){
-  var x=s, m, out;
+  var x=s,m;
   function val(enText,kuText){ return lang==='en'?enText:kuText; }
+
+  if((m=x.match(/^المرضى:\s*(\d+)$/))) return val('Patients: '+m[1],'نەخۆشان: '+m[1]);
+  if((m=x.match(/^الحجوزات:\s*(\d+)$/))) return val('Bookings: '+m[1],'نۆرەکان: '+m[1]);
+  if((m=x.match(/^مرضى:\s*(\d+)\s*•\s*حجوزات:\s*(\d+)$/))) return val('Patients: '+m[1]+' • Bookings: '+m[2],'نەخۆشان: '+m[1]+' • نۆرەکان: '+m[2]);
+
   if((m=x.match(/^(\d+)\s+مريض$/))) return m[1]+' '+val('patients','نەخۆش');
   if((m=x.match(/^(\d+)\s+زيارة$/))) return m[1]+' '+val('visits','سەردان');
   if((m=x.match(/^(\d+)\s+حجز$/))) return m[1]+' '+val('bookings','نۆرە');
@@ -28,20 +45,28 @@ function dynamicTranslate(s,lang){
   if((m=x.match(/^(\d+)\s+طلب$/))) return m[1]+' '+val('requests','داواکاری');
   if((m=x.match(/^(\d+)\s+فعال$/))) return m[1]+' '+val('active','چالاک');
   if((m=x.match(/^(\d+)\s+سنة$/))) return m[1]+' '+val('years','ساڵ');
-  if((m=x.match(/^(\d+)\s+دقائق?$/))) return m[1]+' '+val('minutes','خولەک');
-  if((m=x.match(/^(\d+)\s+أيام?$/))) return m[1]+' '+val('days','ڕۆژ');
+  if((m=x.match(/^(\d+)\s+(?:دقيقة|دقائق)$/))) return m[1]+' '+val('minutes','خولەک');
+  if((m=x.match(/^(\d+)\s+(?:يوم|أيام)$/))) return m[1]+' '+val('days','ڕۆژ');
   if((m=x.match(/^(\d+)\s+ساعة$/))) return m[1]+' '+val('hours','کاتژمێر');
+  if((m=x.match(/^(\d+)\s+صورة$/))) return m[1]+' '+val('images','وێنە');
+  if((m=x.match(/^(\d+)\s*د$/))) return m[1]+' '+val('min','خولەک');
+  if((m=x.match(/^(\d+)\s*س\s+(\d+)\s*د$/))) return val(m[1]+' h '+m[2]+' min',m[1]+' کاتژمێر '+m[2]+' خولەک');
+  if((m=x.match(/^(\d{1,2}:\d{2})\s*(ص|م)$/))) return m[1]+' '+(lang==='en'?(m[2]==='ص'?'AM':'PM'):(m[2]==='ص'?'پ.ن':'د.ن'));
+
   if((m=x.match(/^متبقي\s+(\d+)\s+من\s+2$/))) return val(m[1]+' of 2 changes remaining',m[1]+' لە 2 گۆڕانکاری ماوە');
   if((m=x.match(/^(\d+)\s+بانتظار المزامنة$/))) return val(m[1]+' waiting to sync',m[1]+' چاوەڕوانی هاوکاتکردن');
   if((m=x.match(/^(\d+)\s+حالة بانتظار المزامنة$/))) return val(m[1]+' items waiting to sync',m[1]+' دۆخ چاوەڕوانی هاوکاتکردن');
   if((m=x.match(/^تمت مزامنة\s+(\d+)\s+حالة$/))) return val(m[1]+' items synced',m[1]+' دۆخ هاوکات کران');
   if((m=x.match(/^جاري رفع\s+(\d+)\s+حالة إلى Medica…?$/))) return val('Syncing '+m[1]+' items to Medica…','هاوکاتکردنی '+m[1]+' دۆخ بۆ Medica…');
+
   if((m=x.match(/^حجوزات اليوم\s+—\s+(.+)$/))) return val('Today’s bookings — '+m[1],'نۆرەکانی ئەمڕۆ — '+m[1]);
   if((m=x.match(/^حجوزات\s+(.+)$/))) return val('Bookings '+m[1],'نۆرەکان '+m[1]);
   if((m=x.match(/^مرحباً د\s+(.+)$/))) return val('Welcome Dr. '+m[1],'بەخێربێیت د. '+m[1]);
   if((m=x.match(/^مرحباً\s+(.+)$/))) return val('Welcome '+m[1],'بەخێربێیت '+m[1]);
+
   if((m=x.match(/^المتبقي\s+(.+)$/))) return val('Remaining: '+m[1],'ماوە: '+m[1]);
   if((m=x.match(/^مدفوع للشهر:\s*(.+)$/))) return val('Paid this month: '+m[1],'دراو بۆ ئەم مانگە: '+m[1]);
+  if((m=x.match(/^مدفوع\s+(\d{4}-\d{2}):\s*(.+)$/))) return val('Paid '+m[1]+': '+m[2],'دراو '+m[1]+': '+m[2]);
   if((m=x.match(/^الراتب:\s*(.+)$/))) return val('Salary: '+m[1],'مووچە: '+m[1]);
   if((m=x.match(/^استحقاق يوم\s+(.+)$/))) return val('Due day '+m[1],'ڕۆژی شایستەبوون '+m[1]);
   if((m=x.match(/^آخر زيارة\s+(.+)$/))) return val('Last visit '+m[1],'دوایین سەردان '+m[1]);
@@ -51,11 +76,15 @@ function dynamicTranslate(s,lang){
   if((m=x.match(/^رصيد للمريض\s+(.+)$/))) return val('Patient credit '+m[1],'باڵانسی نەخۆش '+m[1]);
   if((m=x.match(/^راتب\s+(.+)$/))) return val('Salary — '+m[1],'مووچە — '+m[1]);
   if((m=x.match(/^المتبقي لهذا الشهر\s+(.+)$/))) return val('Remaining this month: '+m[1],'ماوەی ئەم مانگە: '+m[1]);
+  if((m=x.match(/^دفع\s+(.+)$/))) return val('Pay '+m[1],'پارەدان '+m[1]);
+
   if((m=x.match(/^طلب إدخال:\s*(.+)$/))) return val('Entry request: '+m[1],'داواکاری چوونەژوورەوە: '+m[1]);
+  if((m=x.match(/^طلب إدخال جديد(?:\s*\((\d+)\))?\s*—\s*(.+)$/))) return val('New entry request'+(m[1]?' ('+m[1]+')':'')+' — '+m[2],'داواکاری نوێی چوونەژوورەوە'+(m[1]?' ('+m[1]+')':'')+' — '+m[2]);
   if((m=x.match(/^إنهاء زيارة\s+(.+)$/))) return val('Complete visit — '+m[1],'تەواوکردنی سەردان — '+m[1]);
   if((m=x.match(/^إدخال\s+(.+)$/))) return val('Call in '+m[1],'بانگهێشتکردنی '+m[1]);
   if((m=x.match(/^تسجيل وصول\s+(.+)$/))) return val('Mark arrived — '+m[1],'تۆمارکردنی گەیشتن — '+m[1]);
   if((m=x.match(/^موعد\s+(.+)$/))) return val('Appointment '+m[1],'نۆرە '+m[1]);
+
   if((m=x.match(/^تم تغيير كلمة المرور:\s*(.+)$/))) return val('Password changed: '+m[1],'وشەی نهێنی گۆڕدرا: '+m[1]);
   if((m=x.match(/^تم إنشاء الحساب:\s*(.+)$/))) return val('Account created: '+m[1],'هەژمار دروستکرا: '+m[1]);
   if((m=x.match(/^تم تأكيد حجزك في\s+(.+)\.$/))) return val('Your booking at '+m[1]+' is confirmed.','نۆرەکەت لە '+m[1]+' پشتڕاست کرایەوە.');
@@ -66,11 +95,14 @@ function dynamicTranslate(s,lang){
   if((m=x.match(/^راجع وقت الدوام ليوم\s+(.+)$/))) return val('Check working hours for '+m[1],'کاتەکانی کار بۆ '+m[1]+' بپشکنە');
   if((m=x.match(/^بداية دوام\s+(.+)$/))) return val('Start time '+m[1],'دەستپێکی کار '+m[1]);
   if((m=x.match(/^نهاية دوام\s+(.+)$/))) return val('End time '+m[1],'کۆتایی کار '+m[1]);
+
   if((m=x.match(/^([\d٠-٩,.]+)\s*د\.ع$/))) return lang==='en'?arabicDigitsToLatin(m[1])+' IQD':arabicDigitsToLatin(m[1])+' د.ع';
   return null;
 }
 
+var MONTH_RE=/(كانون|شباط|آذار|نيسان|أيار|حزيران|تموز|آب|أيلول|تشرين)/;
 function monthTranslate(s,lang){
+  if(!MONTH_RE.test(s)) return s;
   var map=lang==='en'?AR_MONTHS:KU_MONTHS, out=s;
   Object.keys(map).sort(function(a,b){return b.length-a.length;}).forEach(function(k){ out=out.split(k).join(map[k]); });
   return out;
@@ -80,12 +112,12 @@ function translateCore(core,lang){
   var corrected=correctArabic(core);
   if(lang==='ar') return corrected;
   var dict=lang==='en'?EN:KU;
-  if(dict[corrected]) return dict[corrected];
-  if(dict[core]) return dict[core];
+  if(Object.prototype.hasOwnProperty.call(dict,corrected)) return dict[corrected];
+  if(Object.prototype.hasOwnProperty.call(dict,core)) return dict[core];
   var dyn=dynamicTranslate(corrected,lang);
-  if(dyn) return dyn;
+  if(dyn!=null) return dyn;
   var out=monthTranslate(corrected,lang);
-  if(out!==corrected) return lang==='en'?arabicDigitsToLatin(out):arabicDigitsToLatin(out);
+  if(out!==corrected) return arabicDigitsToLatin(out);
   if(lang==='en' && /[٠-٩]/.test(out)) out=arabicDigitsToLatin(out);
   return out;
 }
@@ -99,126 +131,369 @@ function translateString(value,lang){
   return lead+translateCore(normalizeCore(core),lang)+tail;
 }
 
-function skip(el){
-  return !!(el && el.closest && el.closest('[data-medica-no-i18n]'));
+function ignoredElement(el){
+  if(!el || el.nodeType!==1) return false;
+  var tag=el.tagName;
+  if(tag==='SCRIPT'||tag==='STYLE'||tag==='NOSCRIPT'||tag==='TEMPLATE') return true;
+  if(tag==='SVG'||el.ownerSVGElement) return true;
+  if(el.hasAttribute('data-medica-no-i18n')) return true;
+  return false;
 }
 
-function applyText(node){
-  if(!node || node.nodeType!==3 || skip(node.parentElement)) return;
-  if(!originalText.has(node)) originalText.set(node,node.nodeValue);
+function ignoredText(node){
+  var p=node&&node.parentElement;
+  if(!p) return true;
+  if(ignoredElement(p)) return true;
+  return !!p.closest('script,style,noscript,template,svg,[data-medica-no-i18n]');
+}
+
+function attrStore(el,map){
+  var v=map.get(el);
+  if(!v){v={};map.set(el,v);}
+  return v;
+}
+
+function renderTextNode(node){
+  if(!node||node.nodeType!==3||!node.isConnected) return;
   var orig=originalText.get(node);
-  if(!AR_RE.test(orig) && current!=='ar') return;
+  if(orig==null) return;
   var next=translateString(orig,current);
+  lastRenderedText.set(node,next);
   if(node.nodeValue!==next) node.nodeValue=next;
 }
 
-function applyAttrs(el){
-  if(!el || el.nodeType!==1 || skip(el)) return;
+function registerTextNode(node){
+  if(!node||node.nodeType!==3||ignoredText(node)) return;
+  var value=node.nodeValue||'';
+  if(!originalText.has(node)){
+    if(!AR_RE.test(value)) return;
+    originalText.set(node,value);
+    trackedText.add(node);
+  }
+  renderTextNode(node);
+}
+
+function renderAttrs(el){
+  if(!el||el.nodeType!==1||!el.isConnected||ignoredElement(el)) return;
   var store=originalAttrs.get(el);
-  if(!store){ store={}; originalAttrs.set(el,store); }
-  ATTRS.forEach(function(attr){
-    if(!el.hasAttribute(attr)) return;
-    if(!(attr in store)) store[attr]=el.getAttribute(attr);
-    var orig=store[attr], next=translateString(orig,current);
+  if(!store) return;
+  var last=attrStore(el,lastRenderedAttrs);
+  Object.keys(store).forEach(function(attr){
+    var next=translateString(store[attr],current);
+    last[attr]=next;
     if(el.getAttribute(attr)!==next) el.setAttribute(attr,next);
   });
 }
 
-function walk(root){
+function registerAttrs(el){
+  if(!el||el.nodeType!==1||ignoredElement(el)) return;
+  var store=originalAttrs.get(el);
+  var found=false;
+  ATTRS.forEach(function(attr){
+    if(!el.hasAttribute(attr)) return;
+    var value=el.getAttribute(attr)||'';
+    if(store && Object.prototype.hasOwnProperty.call(store,attr)){found=true;return;}
+    if(!AR_RE.test(value)) return;
+    if(!store){store={};originalAttrs.set(el,store);}
+    store[attr]=value;
+    found=true;
+  });
+  if(found){trackedAttrElements.add(el);renderAttrs(el);}
+}
+
+function registerSubtree(root){
   if(!root) return;
-  if(root.nodeType===3){applyText(root);return;}
+  if(root.nodeType===3){registerTextNode(root);return;}
   if(root.nodeType!==1 && root.nodeType!==9 && root.nodeType!==11) return;
-  if(root.nodeType===1) applyAttrs(root);
-  var walker=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT);
+  if(root.nodeType===1){
+    if(ignoredElement(root)) return;
+    registerAttrs(root);
+  }
+  var walker=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT,{
+    acceptNode:function(n){
+      if(n.nodeType===1 && ignoredElement(n)) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
   var n;
   while((n=walker.nextNode())){
-    if(n.nodeType===3) applyText(n); else applyAttrs(n);
+    if(n.nodeType===3) registerTextNode(n);
+    else registerAttrs(n);
   }
 }
 
-var titleOriginal=document.title;
+function renderAll(){
+  trackedText.forEach(function(node){
+    if(!node.isConnected){trackedText.delete(node);return;}
+    renderTextNode(node);
+  });
+  trackedAttrElements.forEach(function(el){
+    if(!el.isConnected){trackedAttrElements.delete(el);return;}
+    renderAttrs(el);
+  });
+}
+
+function handleCharacterData(node){
+  if(!node||node.nodeType!==3||ignoredText(node)) return;
+  var now=node.nodeValue||'';
+  var last=lastRenderedText.get(node);
+  if(last!=null && now===last) return;
+
+  if(originalText.has(node)){
+    if(current==='ar' || AR_RE.test(now)){
+      originalText.set(node,now);
+      renderTextNode(node);
+    }
+    return;
+  }
+  if(AR_RE.test(now)) registerTextNode(node);
+}
+
+function handleAttrMutation(el,attr){
+  if(!el||!ATTRS.includes(attr)||ignoredElement(el)) return;
+  var now=el.getAttribute(attr)||'';
+  var last=lastRenderedAttrs.get(el);
+  if(last && last[attr]===now) return;
+  var store=originalAttrs.get(el);
+
+  if(store && Object.prototype.hasOwnProperty.call(store,attr)){
+    if(current==='ar' || AR_RE.test(now)){
+      store[attr]=now;
+      renderAttrs(el);
+    }
+    return;
+  }
+  if(AR_RE.test(now)) registerAttrs(el);
+}
+
 function applyTitle(){
-  var base=titleOriginal;
-  if(document.title && AR_RE.test(document.title) && document.title!==translateString(base,current)) titleOriginal=document.title;
+  if(!titleOriginal || AR_RE.test(document.title)) titleOriginal=document.title||titleOriginal;
   document.title=translateString(titleOriginal,current);
 }
 
 function updateDirection(){
   var rtl=current!=='en';
-  document.documentElement.lang=current==='ku'?'ckb':current;
-  document.documentElement.dir=rtl?'rtl':'ltr';
-  document.body && document.body.setAttribute('dir',rtl?'rtl':'ltr');
-  document.documentElement.classList.toggle('medica-lang-en',current==='en');
-  document.documentElement.classList.toggle('medica-lang-ku',current==='ku');
+  var root=document.documentElement;
+  root.lang=current==='ku'?'ckb':current;
+  root.dir=rtl?'rtl':'ltr';
+  root.classList.toggle('medica-lang-en',current==='en');
+  root.classList.toggle('medica-lang-ku',current==='ku');
+  root.classList.toggle('medica-lang-ar',current==='ar');
+}
+
+function currentLanguageName(){
+  return current==='en'?'English':current==='ku'?'کوردی':'العربية';
+}
+function currentLanguageCode(){
+  return current==='en'?'EN':current==='ku'?'KU':'AR';
 }
 
 function injectStyle(){
   if(document.getElementById('medica-i18n-style')) return;
   var style=document.createElement('style');
   style.id='medica-i18n-style';
-  style.textContent='.medica-lang-switch{position:fixed;z-index:2147483000;top:max(12px,env(safe-area-inset-top));inset-inline-end:14px;display:flex;align-items:center;gap:4px;padding:5px;background:rgba(255,255,255,.96);border:1px solid rgba(15,23,42,.12);border-radius:999px;box-shadow:0 10px 30px rgba(15,23,42,.14);backdrop-filter:blur(10px);font-family:Inter,"Segoe UI",Tahoma,Arial,sans-serif;direction:ltr}.medica-lang-switch .medica-lang-globe{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#effaf8;color:#0e9384;font-size:16px}.medica-lang-switch button{appearance:none;border:0;background:transparent;color:#334155;font:700 12px/1 Inter,"Segoe UI",Tahoma,Arial,sans-serif;padding:8px 10px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:.18s ease}.medica-lang-switch button:hover{background:#f1f5f9}.medica-lang-switch button.active{background:var(--brand,#0e9384);color:#fff;box-shadow:0 4px 12px rgba(14,147,132,.22)}.medica-lang-switch button:focus-visible{outline:3px solid rgba(14,147,132,.25);outline-offset:2px}@media(max-width:520px){.medica-lang-switch{top:max(8px,env(safe-area-inset-top));inset-inline-end:8px;padding:4px;gap:2px}.medica-lang-switch .medica-lang-globe{width:27px;height:27px}.medica-lang-switch button{padding:7px 8px;font-size:11px}}html.medica-lang-en body,html.medica-lang-en input,html.medica-lang-en textarea,html.medica-lang-en select{font-family:Inter,"Segoe UI",Arial,sans-serif}html.medica-lang-ku body,html.medica-lang-ku input,html.medica-lang-ku textarea,html.medica-lang-ku select{font-family:"Noto Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif}';
+  style.setAttribute('data-medica-no-i18n','true');
+  style.textContent=[
+    '.medica-lang-switch{position:relative;z-index:2147482000;display:inline-flex;direction:ltr;flex:0 0 auto;font-family:Inter,"Segoe UI",Tahoma,Arial,sans-serif}',
+    '.medica-lang-trigger{height:38px;min-width:122px;padding:0 10px 0 9px;display:inline-flex;align-items:center;gap:7px;border:1px solid #dfe6ec;border-radius:12px;background:#fff;color:#243443;box-shadow:0 4px 14px rgba(15,23,42,.055);cursor:pointer;font:800 11.5px/1 Inter,"Segoe UI",Tahoma,Arial,sans-serif;transition:border-color .16s,box-shadow .16s,background .16s,transform .16s}',
+    '.medica-lang-trigger:hover{border-color:#cbd8df;box-shadow:0 7px 20px rgba(15,23,42,.085);transform:translateY(-1px)}',
+    '.medica-lang-trigger:focus-visible{outline:3px solid rgba(14,147,132,.17);outline-offset:2px}',
+    '.medica-lang-icon{width:24px;height:24px;display:grid;place-items:center;border-radius:8px;background:var(--brand-soft,#e9f8f5);color:var(--brand,#0e9384);font-size:13px;flex:0 0 auto}',
+    '.medica-lang-label{min-width:48px;text-align:start}.medica-lang-label-short{display:none}',
+    '.medica-lang-chevron{width:14px;height:14px;opacity:.56;transition:transform .16s;margin-inline-start:auto}',
+    '.medica-lang-switch.open .medica-lang-chevron{transform:rotate(180deg)}',
+    '.medica-lang-menu{position:absolute;top:calc(100% + 8px);inset-inline-end:0;width:210px;padding:6px;border:1px solid rgba(15,23,42,.10);border-radius:16px;background:rgba(255,255,255,.985);box-shadow:0 20px 50px rgba(15,23,42,.16);backdrop-filter:blur(16px);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-5px) scale(.985);transform-origin:top right;transition:opacity .14s,transform .14s,visibility .14s}',
+    '.medica-lang-switch.open .medica-lang-menu{opacity:1;visibility:visible;pointer-events:auto;transform:none}',
+    '.medica-lang-option{width:100%;min-height:46px;display:grid;grid-template-columns:34px minmax(0,1fr) 20px;align-items:center;gap:9px;padding:6px 8px;border:0;border-radius:11px;background:transparent;color:#22303a;cursor:pointer;text-align:start;font-family:Inter,"Segoe UI",Tahoma,Arial,sans-serif}',
+    '.medica-lang-option:hover{background:#f4f8f8}.medica-lang-option.active{background:var(--brand-soft-2,#f2fbf9);color:var(--brand-strong,#08786d)}',
+    '.medica-lang-code{width:31px;height:31px;display:grid;place-items:center;border-radius:9px;background:#f2f5f7;color:#5b6874;font-size:9.5px;font-weight:900;letter-spacing:.04em}',
+    '.medica-lang-option.active .medica-lang-code{background:var(--brand,#0e9384);color:#fff}',
+    '.medica-lang-copy{display:grid;gap:2px}.medica-lang-copy strong{font-size:11.5px;line-height:1.2}.medica-lang-copy small{font-size:9px;color:#87939d;font-weight:650;line-height:1.2}',
+    '.medica-lang-check{font-size:14px;color:var(--brand,#0e9384);opacity:0}.medica-lang-option.active .medica-lang-check{opacity:1}',
+    '.medica-lang-switch.is-topbar{margin-inline-start:2px}.medica-lang-switch.is-admin{margin-inline-start:auto;margin-inline-end:8px}',
+    '.medica-lang-switch.is-booking{margin-inline-start:auto}.medica-lang-switch.is-booking .medica-lang-trigger{height:31px;min-width:105px;border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:#eef8f9;box-shadow:none}.medica-lang-switch.is-booking .medica-lang-trigger:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.22)}.medica-lang-switch.is-booking .medica-lang-icon{width:21px;height:21px;border-radius:7px;background:rgba(255,255,255,.11);color:#fff}.medica-lang-switch.is-booking .medica-lang-menu{top:calc(100% + 7px)}',
+    '.medica-lang-switch.is-floating{position:fixed;top:max(14px,env(safe-area-inset-top));inset-inline-end:16px}.medica-lang-switch.is-floating .medica-lang-trigger{box-shadow:0 12px 34px rgba(15,23,42,.13)}',
+    'html.medica-lang-en body,html.medica-lang-en input,html.medica-lang-en textarea,html.medica-lang-en select{font-family:Inter,"Segoe UI",Arial,sans-serif}',
+    'html.medica-lang-ku body,html.medica-lang-ku input,html.medica-lang-ku textarea,html.medica-lang-ku select{font-family:"Noto Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif}',
+    'html.medica-lang-en .nav button{text-align:left}html.medica-lang-en .nav button::before{margin-left:0;margin-right:10px}html.medica-lang-en .nav button.active::after{right:auto;left:-16px}',
+    'html.medica-lang-en .premium-sidebar{border-left:0;border-right:1px solid rgba(255,255,255,.05)}html.medica-lang-en .staff-nav button.active::after{right:auto;left:-14px}',
+    '@media(max-width:760px){.medica-lang-switch.is-topbar .medica-lang-trigger{min-width:42px;width:42px;height:40px;padding:0;justify-content:center;border-radius:12px}.medica-lang-switch.is-topbar .medica-lang-icon{display:none}.medica-lang-switch.is-topbar .medica-lang-label{display:none}.medica-lang-switch.is-topbar .medica-lang-label-short{display:inline;font-size:10px;font-weight:950;letter-spacing:.05em}.medica-lang-switch.is-topbar .medica-lang-chevron{display:none}.medica-lang-switch.is-topbar .medica-lang-menu{width:194px;inset-inline-end:-4px}.medica-lang-switch.is-admin .medica-lang-trigger{min-width:42px;width:42px;height:40px;padding:0;justify-content:center}.medica-lang-switch.is-admin .medica-lang-icon,.medica-lang-switch.is-admin .medica-lang-label,.medica-lang-switch.is-admin .medica-lang-chevron{display:none}.medica-lang-switch.is-admin .medica-lang-label-short{display:inline;font-size:10px;font-weight:950}.medica-lang-switch.is-floating{top:max(8px,env(safe-area-inset-top));inset-inline-end:8px}.medica-lang-switch.is-floating .medica-lang-trigger{height:36px;min-width:96px}.medica-lang-menu{width:196px}}',
+    '@media(max-width:680px){.medica-lang-switch.is-booking .medica-lang-trigger{min-width:38px;width:38px;height:29px;padding:0;justify-content:center;border-radius:10px}.medica-lang-switch.is-booking .medica-lang-icon{display:none}.medica-lang-switch.is-booking .medica-lang-label{display:none}.medica-lang-switch.is-booking .medica-lang-label-short{display:inline;font-size:9px;font-weight:950;letter-spacing:.04em}.medica-lang-switch.is-booking .medica-lang-chevron{display:none}.medica-lang-switch.is-booking .medica-lang-menu{width:190px;inset-inline-end:-3px}.clinic-hero .hero-topline{justify-content:flex-start}.clinic-hero .hero-topline .product-mark{margin-inline-end:auto}}'
+  ].join('');
   document.head.appendChild(style);
 }
 
-function injectSwitcher(){
-  if(document.getElementById('medicaLangSwitch')) return;
-  var wrap=document.createElement('div');
-  wrap.id='medicaLangSwitch';
-  wrap.className='medica-lang-switch';
-  wrap.setAttribute('data-medica-no-i18n','true');
-  wrap.setAttribute('role','group');
-  wrap.setAttribute('aria-label','Language');
-  wrap.innerHTML='<span class="medica-lang-globe" aria-hidden="true">🌐</span><button type="button" data-lang="ar">العربية</button><button type="button" data-lang="en">English</button><button type="button" data-lang="ku">کوردی</button>';
-  wrap.addEventListener('click',function(e){
-    var b=e.target.closest('button[data-lang]');
-    if(!b) return;
-    setLanguage(b.getAttribute('data-lang'));
-  });
-  document.body.appendChild(wrap);
-  refreshSwitcher();
+function switcherMarkup(){
+  return '<button class="medica-lang-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Change language">'
+    +'<span class="medica-lang-icon" aria-hidden="true">文</span>'
+    +'<span class="medica-lang-label"></span><span class="medica-lang-label-short"></span>'
+    +'<svg class="medica-lang-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5.5 7.5 4.5 4.5 4.5-4.5"/></svg></button>'
+    +'<div class="medica-lang-menu" role="menu">'
+    +'<button class="medica-lang-option" type="button" data-lang="ar" role="menuitem"><span class="medica-lang-code">AR</span><span class="medica-lang-copy"><strong>العربية</strong><small>Arabic</small></span><span class="medica-lang-check">✓</span></button>'
+    +'<button class="medica-lang-option" type="button" data-lang="en" role="menuitem"><span class="medica-lang-code">EN</span><span class="medica-lang-copy"><strong>English</strong><small>English</small></span><span class="medica-lang-check">✓</span></button>'
+    +'<button class="medica-lang-option" type="button" data-lang="ku" role="menuitem"><span class="medica-lang-code">KU</span><span class="medica-lang-copy"><strong>کوردی</strong><small>Kurdî</small></span><span class="medica-lang-check">✓</span></button>'
+    +'</div>';
+}
+
+function setMenu(open){
+  menuOpen=!!open;
+  if(!switcher) return;
+  switcher.classList.toggle('open',menuOpen);
+  var trigger=switcher.querySelector('.medica-lang-trigger');
+  if(trigger) trigger.setAttribute('aria-expanded',menuOpen?'true':'false');
 }
 
 function refreshSwitcher(){
-  var wrap=document.getElementById('medicaLangSwitch');
-  if(!wrap) return;
-  wrap.querySelectorAll('button[data-lang]').forEach(function(b){
-    var active=b.getAttribute('data-lang')===current;
-    b.classList.toggle('active',active);
-    b.setAttribute('aria-pressed',active?'true':'false');
+  if(!switcher) return;
+  var label=switcher.querySelector('.medica-lang-label');
+  var shortLabel=switcher.querySelector('.medica-lang-label-short');
+  if(label) label.textContent=currentLanguageName();
+  if(shortLabel) shortLabel.textContent=currentLanguageCode();
+  switcher.querySelectorAll('.medica-lang-option').forEach(function(btn){
+    var active=btn.getAttribute('data-lang')===current;
+    btn.classList.toggle('active',active);
+    btn.setAttribute('aria-current',active?'true':'false');
   });
+}
+
+function isShown(el){
+  return !!(el && !el.classList.contains('hidden') && !el.hasAttribute('hidden'));
+}
+
+function placeSwitcher(){
+  if(!switcher||!document.body) return;
+  switcher.classList.remove('is-topbar','is-admin','is-booking','is-floating');
+
+  var staff=document.getElementById('staffApp');
+  var admin=document.getElementById('adminApp');
+  var booking=document.querySelector('.clinic-hero .hero-topline');
+
+  if(isShown(staff)){
+    var meta=staff.querySelector('.topbar-meta');
+    if(meta){
+      switcher.classList.add('is-topbar');
+      var chat=meta.querySelector('#staffChatToggle');
+      if(chat) meta.insertBefore(switcher,chat); else meta.prepend(switcher);
+      return;
+    }
+  }
+
+  if(isShown(admin)){
+    var adminTop=admin.querySelector('.topbar');
+    if(adminTop){
+      switcher.classList.add('is-admin');
+      var refresh=adminTop.querySelector('#adminRefresh');
+      if(refresh) adminTop.insertBefore(switcher,refresh); else adminTop.appendChild(switcher);
+      return;
+    }
+  }
+
+  if(booking){
+    switcher.classList.add('is-booking');
+    var availability=booking.querySelector('.availability');
+    if(availability) booking.insertBefore(switcher,availability); else booking.appendChild(switcher);
+    return;
+  }
+
+  switcher.classList.add('is-floating');
+  document.body.appendChild(switcher);
+}
+
+function injectSwitcher(){
+  switcher=document.getElementById('medicaLangSwitch');
+  if(!switcher){
+    switcher=document.createElement('div');
+    switcher.id='medicaLangSwitch';
+    switcher.className='medica-lang-switch';
+    switcher.setAttribute('data-medica-no-i18n','true');
+    switcher.innerHTML=switcherMarkup();
+
+    switcher.addEventListener('click',function(e){
+      var option=e.target.closest('.medica-lang-option[data-lang]');
+      if(option){ setLanguage(option.getAttribute('data-lang')); setMenu(false); return; }
+      if(e.target.closest('.medica-lang-trigger')){ setMenu(!menuOpen); }
+    });
+
+    document.addEventListener('click',function(e){
+      if(menuOpen && switcher && !switcher.contains(e.target)) setMenu(false);
+    },true);
+
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Escape') setMenu(false);
+    });
+  }
+  placeSwitcher();
+  refreshSwitcher();
+}
+
+function observeViewChanges(){
+  if(hostObserver) hostObserver.disconnect();
+  var roots=['authView','blockedView','onboardingView','adminApp','staffApp'].map(function(id){return document.getElementById(id);}).filter(Boolean);
+  if(!roots.length) return;
+  hostObserver=new MutationObserver(function(){ placeSwitcher(); });
+  roots.forEach(function(el){hostObserver.observe(el,{attributes:true,attributeFilter:['class','hidden']});});
 }
 
 function setLanguage(lang){
   if(!['ar','en','ku'].includes(lang)) return;
+  if(lang===current){refreshSwitcher();setMenu(false);return;}
+
   current=lang;
-  localStorage.setItem(STORAGE_KEY,current);
+  try{localStorage.setItem(STORAGE_KEY,current);}catch(e){}
   updateDirection();
-  walk(document.documentElement);
+  renderAll();
   applyTitle();
   refreshSwitcher();
-  window.dispatchEvent(new CustomEvent('medica:languagechange',{detail:{language:current,locale:current==='en'?'en-US':current==='ku'?'ckb-IQ':'ar-IQ'}}));
+  placeSwitcher();
+
+  try{
+    window.dispatchEvent(new CustomEvent('medica:languagechange',{
+      detail:{language:current,locale:current==='en'?'en-US':current==='ku'?'ckb-IQ':'ar-IQ'}
+    }));
+  }catch(e){}
+}
+
+function startObserver(){
+  if(observer) observer.disconnect();
+  observer=new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      if(m.type==='childList'){
+        m.addedNodes.forEach(function(n){registerSubtree(n);});
+        if(m.target && m.target.nodeName==='TITLE') applyTitle();
+      }else if(m.type==='characterData'){
+        handleCharacterData(m.target);
+      }else if(m.type==='attributes'){
+        handleAttrMutation(m.target,m.attributeName);
+      }
+    });
+  });
+  observer.observe(document.documentElement,{
+    childList:true,
+    subtree:true,
+    characterData:true,
+    attributes:true,
+    attributeFilter:ATTRS
+  });
 }
 
 function init(){
+  if(initialized) return;
+  initialized=true;
   injectStyle();
   updateDirection();
-  walk(document.documentElement);
+  registerSubtree(document.body||document.documentElement);
   applyTitle();
   injectSwitcher();
-  var observer=new MutationObserver(function(mutations){
-    mutations.forEach(function(m){
-      m.addedNodes && m.addedNodes.forEach(function(n){ walk(n); });
-      if(m.target && m.target.nodeName==='TITLE') applyTitle();
-    });
-  });
-  observer.observe(document.documentElement,{childList:true,subtree:true});
+  observeViewChanges();
+  startObserver();
 }
 
 window.MedicaI18n={
   setLanguage:setLanguage,
   getLanguage:function(){return current;},
   locale:function(){return current==='en'?'en-US':current==='ku'?'ckb-IQ':'ar-IQ';},
-  t:function(ar){return translateString(ar,current);}
+  t:function(ar){return translateString(ar,current);},
+  refresh:function(){registerSubtree(document.body||document.documentElement);renderAll();placeSwitcher();}
 };
 
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
