@@ -882,6 +882,26 @@ body.time-picker-open{overflow:hidden}
   .appointment-review{grid-template-columns:1fr 72px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* booking language slot */
+.booking-language-slot{
+  position:relative;
+  z-index:3;
+  min-height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  direction:ltr;
+  margin:-5px 0 14px;
+}
+.booking-language-slot:empty{min-height:0;margin:0}
+.booking-language-slot .medica-lang-switch{margin:0!important}
+@media(max-width:680px){
+  .booking-language-slot{
+    min-height:31px;
+    justify-content:center;
+    margin:-2px 0 12px;
+  }
+}
 </style>
 </head>
 <body>
@@ -891,6 +911,8 @@ body.time-picker-open{overflow:hidden}
       <span class="product-mark"><i></i> Medica • الحجز الإلكتروني</span>
       <span class="availability"><i></i> الحجز متاح</span>
     </div>
+
+    <div id="bookingLangSlot" class="booking-language-slot" data-medica-no-i18n="true"></div>
 
     <div class="clinic-main">
       <div class="identity">
@@ -1891,7 +1913,7 @@ function placeSwitcher(){
 
   var staff=document.getElementById('staffApp');
   var admin=document.getElementById('adminApp');
-  var booking=document.querySelector('.clinic-hero .hero-topline');
+  var booking=document.querySelector('#bookingLangSlot');
 
   if(isShown(staff)){
     var meta=staff.querySelector('.topbar-meta');
@@ -1915,8 +1937,7 @@ function placeSwitcher(){
 
   if(booking){
     switcher.classList.add('is-booking');
-    var availability=booking.querySelector('.availability');
-    if(availability) booking.insertBefore(switcher,availability); else booking.appendChild(switcher);
+    booking.appendChild(switcher);
     return;
   }
 
