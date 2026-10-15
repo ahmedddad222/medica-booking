@@ -388,7 +388,7 @@ function placeSwitcher(){
 
   var staff=document.getElementById('staffApp');
   var admin=document.getElementById('adminApp');
-  var booking=document.querySelector('.clinic-hero .hero-topline');
+  var booking=document.querySelector('#bookingLangSlot');
 
   if(isShown(staff)){
     var meta=staff.querySelector('.topbar-meta');
@@ -412,8 +412,7 @@ function placeSwitcher(){
 
   if(booking){
     switcher.classList.add('is-booking');
-    var availability=booking.querySelector('.availability');
-    if(availability) booking.insertBefore(switcher,availability); else booking.appendChild(switcher);
+    booking.appendChild(switcher);
     return;
   }
 
