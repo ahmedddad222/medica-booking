@@ -12,7 +12,7 @@ const APP_SHELL = [
   './mobile-v17.css',
   './mobile-admin-v23.css',
   './pwa.js',
-  './i18n.js',
+  '../i18n.js',
   './admin-audit.js',
   './presence.js',
   './admin-mobile.js',
