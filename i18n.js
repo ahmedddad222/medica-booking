@@ -222,6 +222,19 @@ function registerSubtree(root){
   }
 }
 
+function untrackSubtree(root){
+  if(!root) return;
+  if(root.nodeType===3){trackedText.delete(root);return;}
+  if(root.nodeType!==1 && root.nodeType!==11) return;
+  if(root.nodeType===1) trackedAttrElements.delete(root);
+  var walker=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT);
+  var n;
+  while((n=walker.nextNode())){
+    if(n.nodeType===3) trackedText.delete(n);
+    else trackedAttrElements.delete(n);
+  }
+}
+
 function renderAll(){
   trackedText.forEach(function(node){
     if(!node.isConnected){trackedText.delete(node);return;}
@@ -458,6 +471,7 @@ function startObserver(){
   observer=new MutationObserver(function(mutations){
     mutations.forEach(function(m){
       if(m.type==='childList'){
+        m.removedNodes.forEach(function(n){untrackSubtree(n);});
         m.addedNodes.forEach(function(n){registerSubtree(n);});
         if(m.target && m.target.nodeName==='TITLE') applyTitle();
       }else if(m.type==='characterData'){
