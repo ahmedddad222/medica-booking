@@ -894,7 +894,7 @@ body.time-picker-open{overflow:hidden}
         <div class="logo"><img id="clinicLogo" alt="شعار العيادة" hidden><span id="logoFallback">M</span></div>
         <div class="identity-copy">
           <h1 id="clinicName">Medica</h1>
-          <p id="clinicSubtitle" class="identity-subtitle">حجز موعد لكتروني</p>
+          <p id="clinicSubtitle" class="identity-subtitle">حجز موعد إلكتروني</p>
           <div id="doctorName" class="doctor"></div>
         </div>
       </div>
@@ -1017,7 +1017,7 @@ body.time-picker-open{overflow:hidden}
         <h3>معلومات العيادة</h3>
         <div class="side-clinic">
           <div class="side-logo"><img id="sideLogo" alt="" hidden><span id="sideLogoFallback">M</span></div>
-          <div><strong id="sideClinicName">Medica</strong><small id="sideDoctorName">حجز لكتروني</small></div>
+          <div><strong id="sideClinicName">Medica</strong><small id="sideDoctorName">حجز إلكتروني</small></div>
         </div>
         <div class="info-list">
           <div id="sideAddress" class="info-row" hidden>
@@ -1133,7 +1133,7 @@ body.time-picker-open{overflow:hidden}
     $('sideClinicName').textContent=c.name||'Medica';
     $('clinicSubtitle').textContent=c.specialty||c.tagline||'عيادة طبية';
     $('doctorName').textContent=c.doctor_name?'د. '+c.doctor_name:'';
-    $('sideDoctorName').textContent=c.doctor_name?'د. '+c.doctor_name:(c.specialty||c.tagline||'حجز لكتروني');
+    $('sideDoctorName').textContent=c.doctor_name?'د. '+c.doctor_name:(c.specialty||c.tagline||'حجز إلكتروني');
     document.title='حجز موعد | '+(c.name||'Medica');
 
     if(/^#[0-9a-f]{6}$/i.test(c.brand_color||'')){
@@ -1497,5 +1497,6 @@ body.time-picker-open{overflow:hidden}
   init()
 })();
 </script>
+<script src="/i18n.js"></script>
 </body>
 </html>
