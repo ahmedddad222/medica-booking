@@ -882,24 +882,24 @@ body.time-picker-open{overflow:hidden}
   .appointment-review{grid-template-columns:1fr 72px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-/* booking language slot */
+/* booking language control — intentionally outside the clinic header */
 .booking-language-slot{
   position:relative;
-  z-index:3;
-  min-height:34px;
+  z-index:12;
+  min-height:44px;
   display:flex;
   align-items:center;
   justify-content:flex-end;
   direction:ltr;
-  margin:-5px 0 14px;
+  margin:10px 2px -2px;
 }
 .booking-language-slot:empty{min-height:0;margin:0}
 .booking-language-slot .medica-lang-switch{margin:0!important}
 @media(max-width:680px){
   .booking-language-slot{
-    min-height:31px;
-    justify-content:center;
-    margin:-2px 0 12px;
+    min-height:42px;
+    justify-content:flex-end;
+    margin:8px var(--mobile-gutter) -3px;
   }
 }
 </style>
@@ -911,8 +911,6 @@ body.time-picker-open{overflow:hidden}
       <span class="product-mark"><i></i> Medica • الحجز الإلكتروني</span>
       <span class="availability"><i></i> الحجز متاح</span>
     </div>
-
-    <div id="bookingLangSlot" class="booking-language-slot" data-medica-no-i18n="true"></div>
 
     <div class="clinic-main">
       <div class="identity">
@@ -956,6 +954,8 @@ body.time-picker-open{overflow:hidden}
       </div>
     </div>
   </header>
+
+  <div id="bookingLangSlot" class="booking-language-slot booking-language-outside" data-medica-no-i18n="true"></div>
 
   <div class="content-grid">
     <main class="card booking-card">
@@ -1858,14 +1858,14 @@ function injectStyle(){
     '.medica-lang-copy{display:grid;gap:2px}.medica-lang-copy strong{font-size:11.5px;line-height:1.2}.medica-lang-copy small{font-size:9px;color:#87939d;font-weight:650;line-height:1.2}',
     '.medica-lang-check{font-size:14px;color:var(--brand,#0e9384);opacity:0}.medica-lang-option.active .medica-lang-check{opacity:1}',
     '.medica-lang-switch.is-topbar{margin-inline-start:2px}.medica-lang-switch.is-admin{margin-inline-start:auto;margin-inline-end:8px}',
-    '.medica-lang-switch.is-booking{margin-inline-start:auto}.medica-lang-switch.is-booking .medica-lang-trigger{height:31px;min-width:105px;border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:#eef8f9;box-shadow:none}.medica-lang-switch.is-booking .medica-lang-trigger:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.22)}.medica-lang-switch.is-booking .medica-lang-icon{width:21px;height:21px;border-radius:7px;background:rgba(255,255,255,.11);color:#fff}.medica-lang-switch.is-booking .medica-lang-menu{top:calc(100% + 7px)}',
+    '.medica-lang-switch.is-booking{margin:0}.medica-lang-switch.is-booking .medica-lang-trigger{height:36px;min-width:118px;border-color:#dce5ea;background:#fff;color:#243443;box-shadow:0 5px 16px rgba(15,23,42,.07)}.medica-lang-switch.is-booking .medica-lang-trigger:hover{background:#f8fbfb;border-color:#cbd8df}.medica-lang-switch.is-booking .medica-lang-icon{width:23px;height:23px;border-radius:8px;background:var(--brand-soft,#e9f8f5);color:var(--brand,#0e9384)}.medica-lang-switch.is-booking .medica-lang-menu{top:calc(100% + 7px)}',
     '.medica-lang-switch.is-floating{position:fixed;top:max(14px,env(safe-area-inset-top));inset-inline-end:16px}.medica-lang-switch.is-floating .medica-lang-trigger{box-shadow:0 12px 34px rgba(15,23,42,.13)}',
     'html.medica-lang-en body,html.medica-lang-en input,html.medica-lang-en textarea,html.medica-lang-en select{font-family:Inter,"Segoe UI",Arial,sans-serif}',
     'html.medica-lang-ku body,html.medica-lang-ku input,html.medica-lang-ku textarea,html.medica-lang-ku select{font-family:"Noto Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif}',
     'html.medica-lang-en .nav button{text-align:left}html.medica-lang-en .nav button::before{margin-left:0;margin-right:10px}html.medica-lang-en .nav button.active::after{right:auto;left:-16px}',
     'html.medica-lang-en .premium-sidebar{border-left:0;border-right:1px solid rgba(255,255,255,.05)}html.medica-lang-en .staff-nav button.active::after{right:auto;left:-14px}',
     '@media(max-width:760px){.medica-lang-switch.is-topbar .medica-lang-trigger{min-width:42px;width:42px;height:40px;padding:0;justify-content:center;border-radius:12px}.medica-lang-switch.is-topbar .medica-lang-icon{display:none}.medica-lang-switch.is-topbar .medica-lang-label{display:none}.medica-lang-switch.is-topbar .medica-lang-label-short{display:inline;font-size:10px;font-weight:950;letter-spacing:.05em}.medica-lang-switch.is-topbar .medica-lang-chevron{display:none}.medica-lang-switch.is-topbar .medica-lang-menu{width:194px;inset-inline-end:-4px}.medica-lang-switch.is-admin .medica-lang-trigger{min-width:42px;width:42px;height:40px;padding:0;justify-content:center}.medica-lang-switch.is-admin .medica-lang-icon,.medica-lang-switch.is-admin .medica-lang-label,.medica-lang-switch.is-admin .medica-lang-chevron{display:none}.medica-lang-switch.is-admin .medica-lang-label-short{display:inline;font-size:10px;font-weight:950}.medica-lang-switch.is-floating{top:max(8px,env(safe-area-inset-top));inset-inline-end:8px}.medica-lang-switch.is-floating .medica-lang-trigger{height:36px;min-width:96px}.medica-lang-menu{width:196px}}',
-    '@media(max-width:680px){.medica-lang-switch.is-booking .medica-lang-trigger{min-width:38px;width:38px;height:29px;padding:0;justify-content:center;border-radius:10px}.medica-lang-switch.is-booking .medica-lang-icon{display:none}.medica-lang-switch.is-booking .medica-lang-label{display:none}.medica-lang-switch.is-booking .medica-lang-label-short{display:inline;font-size:9px;font-weight:950;letter-spacing:.04em}.medica-lang-switch.is-booking .medica-lang-chevron{display:none}.medica-lang-switch.is-booking .medica-lang-menu{width:190px;inset-inline-end:-3px}.clinic-hero .hero-topline{justify-content:flex-start}.clinic-hero .hero-topline .product-mark{margin-inline-end:auto}}'
+    '@media(max-width:680px){.medica-lang-switch.is-booking .medica-lang-trigger{min-width:92px;width:auto;height:34px;padding:0 9px;justify-content:center;border-radius:11px}.medica-lang-switch.is-booking .medica-lang-icon{display:none}.medica-lang-switch.is-booking .medica-lang-label{display:inline;min-width:0;font-size:10.5px}.medica-lang-switch.is-booking .medica-lang-label-short{display:none}.medica-lang-switch.is-booking .medica-lang-chevron{display:block;width:12px;height:12px}.medica-lang-switch.is-booking .medica-lang-menu{width:190px;inset-inline-end:0}}'
   ].join('');
   document.head.appendChild(style);
 }
