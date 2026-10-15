@@ -24,6 +24,7 @@ var initialized=false;
 var switcher=null;
 var menuOpen=false;
 var titleOriginal=document.title;
+var renderedTitle='';
 
 function normalizeCore(s){ return String(s==null?'':s).replace(/\s+/g,' ').trim(); }
 function arabicDigitsToLatin(s){ return String(s).replace(/[٠-٩]/g,function(d){return String('٠١٢٣٤٥٦٧٨٩'.indexOf(d));}); }
@@ -134,7 +135,7 @@ function translateString(value,lang){
 function ignoredElement(el){
   if(!el || el.nodeType!==1) return false;
   var tag=el.tagName;
-  if(tag==='SCRIPT'||tag==='STYLE'||tag==='NOSCRIPT'||tag==='TEMPLATE') return true;
+  if(tag==='SCRIPT'||tag==='STYLE'||tag==='NOSCRIPT'||tag==='TEMPLATE'||tag==='TITLE') return true;
   if(tag==='SVG'||el.ownerSVGElement) return true;
   if(el.hasAttribute('data-medica-no-i18n')) return true;
   return false;
@@ -280,8 +281,16 @@ function handleAttrMutation(el,attr){
 }
 
 function applyTitle(){
-  if(!titleOriginal || AR_RE.test(document.title)) titleOriginal=document.title||titleOriginal;
-  document.title=translateString(titleOriginal,current);
+  var next=translateString(titleOriginal,current);
+  renderedTitle=next;
+  if(document.title!==next) document.title=next;
+}
+
+function captureTitleChange(){
+  var now=document.title||'';
+  if(now===renderedTitle) return;
+  titleOriginal=now;
+  applyTitle();
 }
 
 function updateDirection(){
@@ -453,11 +462,16 @@ function setLanguage(lang){
 
   current=lang;
   try{localStorage.setItem(STORAGE_KEY,current);}catch(e){}
+
+  // Pause DOM observation while hundreds of labels switch language.
+  // This prevents a mutation-feedback storm on slower phones/browsers.
+  if(observer) observer.disconnect();
   updateDirection();
   renderAll();
   applyTitle();
   refreshSwitcher();
   placeSwitcher();
+  startObserver();
 
   try{
     window.dispatchEvent(new CustomEvent('medica:languagechange',{
@@ -471,10 +485,11 @@ function startObserver(){
   observer=new MutationObserver(function(mutations){
     mutations.forEach(function(m){
       if(m.type==='childList'){
+        if(m.target && m.target.nodeName==='TITLE'){ captureTitleChange(); return; }
         m.removedNodes.forEach(function(n){untrackSubtree(n);});
         m.addedNodes.forEach(function(n){registerSubtree(n);});
-        if(m.target && m.target.nodeName==='TITLE') applyTitle();
       }else if(m.type==='characterData'){
+        if(m.target && m.target.parentElement && m.target.parentElement.nodeName==='TITLE'){ captureTitleChange(); return; }
         handleCharacterData(m.target);
       }else if(m.type==='attributes'){
         handleAttrMutation(m.target,m.attributeName);
