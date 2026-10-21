@@ -529,7 +529,7 @@
       <nav class="nav staff-nav">
         <button data-staff-page="dashboard" class="active"><span>الرئيسية</span></button>
         <button data-staff-page="medicalTools"><span>الوصفات والمطبوعات</span></button>
-        <button data-staff-page="ultrasound" class="sonar-only"><span>فحوصات السونار</span></button>
+        <button data-staff-page="ultrasound" class="sonar-only doctor-only"><span>فحوصات السونار</span></button>
         <button data-staff-page="queue" class="secretary-only"><span>الانتظار</span></button>
         <button data-staff-page="appointments" class="secretary-only"><span>حجوزات العيادة</span></button>
         <button data-staff-page="onlineBookings" class="secretary-only"><span>الحجوزات الأونلاين</span></button>
@@ -582,7 +582,7 @@
         </div>
 
         <div class="medical-tools-grid">
-          <div class="panel prescription-panel">
+          <div class="panel prescription-panel doctor-only">
             <div class="panel-head">
               <div class="prescription-panel-headcopy"><span class="eyebrow">الوصفات</span><h3>الوصفات الطبية</h3><p class="muted">إنشاء الوصفة، تعديلها وطباعتها من مكان واحد.</p></div>
               <div class="toolbar"><span id="prescriptionCountLabel" class="count-pill"></span><button id="newPrescriptionBtn" class="btn primary small" type="button">وصفة جديدة</button></div>
@@ -838,7 +838,7 @@
       </section>
 
 
-      <section id="ultrasound" class="page hidden workspace-page sonar-only">
+      <section id="ultrasound" class="page hidden workspace-page sonar-only doctor-only">
         <div class="ultrasound-hero premium-card">
           <div><span class="eyebrow">MEDICA SONAR</span><h3>فحوصات وتقارير السونار</h3><p>تقارير الفحوصات والقياسات والصور محفوظة داخل ملف المريض.</p></div>
           <button id="newUltrasoundExamBtn" class="btn primary" type="button">+ فحص جديد</button>
@@ -1041,15 +1041,15 @@
     <div class="patient-record-card">
       <div class="patient-record-head">
         <div><span class="eyebrow">سجل المريض</span><h2 id="recordPatientName">المريض</h2><div id="recordPatientContact" class="muted"></div></div>
-        <div class="toolbar"><button id="newPrescriptionForPatientBtn" class="btn primary small" type="button">وصفة جديدة</button><button id="printPatientRecordBtn" class="btn outline small" type="button">طباعة الملف</button><button id="closePatientRecord" class="icon-btn" type="button" aria-label="إغلاق">×</button></div>
+        <div class="toolbar"><button id="newPrescriptionForPatientBtn" class="btn primary small doctor-only" type="button">وصفة جديدة</button><button id="printPatientRecordBtn" class="btn outline small" type="button">طباعة الملف</button><button id="closePatientRecord" class="icon-btn" type="button" aria-label="إغلاق">×</button></div>
       </div>
       <div id="patientRecordStats" class="patient-record-stats"></div>
       <div class="patient-record-grid">
         <div class="record-block"><div class="record-block-head"><h3>بيانات المريض</h3><button id="recordEditPatient" class="btn outline small secretary-only" type="button">تعديل البيانات</button></div><div id="patientRecordDetails" class="detail-grid"></div></div>
         <div class="record-block"><div class="record-block-head"><h3>تاريخ الحجوزات</h3><span id="patientVisitsCount" class="muted"></span></div><div id="patientRecordTimeline" class="patient-timeline"></div></div>
-        <div id="patientUltrasoundBlock" class="record-block sonar-only"><div class="record-block-head"><div><h3>أرشيف فحوصات السونار</h3><span id="patientUltrasoundCount" class="muted"></span></div><button id="newPatientUltrasoundBtn" class="btn primary small" type="button">فحص جديد</button></div><div id="patientUltrasoundTimeline" class="ultrasound-patient-history"></div></div>
+        <div id="patientUltrasoundBlock" class="record-block sonar-only doctor-only"><div class="record-block-head"><div><h3>أرشيف فحوصات السونار</h3><span id="patientUltrasoundCount" class="muted"></span></div><button id="newPatientUltrasoundBtn" class="btn primary small" type="button">فحص جديد</button></div><div id="patientUltrasoundTimeline" class="ultrasound-patient-history"></div></div>
         <div class="record-block secretary-only"><div class="record-block-head"><div><h3>ملخص الحساب</h3><span id="patientBalanceLabel" class="muted"></span></div></div><div id="patientLedger" class="ledger"></div></div>
-        <div class="record-block secretary-only"><div class="record-block-head"><div><h3>سجل الزيارات الطبي</h3></div></div><div id="patientClinicalTimeline"></div></div>
+        <div class="record-block doctor-only"><div class="record-block-head"><div><h3>سجل الزيارات الطبي</h3></div></div><div id="patientClinicalTimeline"></div></div>
       </div>
     </div>
   </div>
