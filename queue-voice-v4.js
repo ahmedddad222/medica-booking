@@ -80,6 +80,23 @@
       voiceStatus('جاري تحميل محرك الصوت العربي...');
       var module=await import('/queue-nabra-bundle.js?v=7');
       if(!module.NabraTTS)throw Error('حزمة الصوت ناقصة');
+      // Probe each required resource separately to locate the exact network failure.
+      var tests=[
+        ['نموذج الصوت','https://huggingface.co/oddadmix/Nabra-7M-Distill-ONNX/resolve/main/onnx/model_fp16.onnx'],
+        ['بيانات الصوت','https://huggingface.co/oddadmix/Nabra-7M-Distill-ONNX/resolve/main/voices/af_msa.bin'],
+        ['ملف WebAssembly','https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/ort-wasm-simd-threaded.jsep.wasm']
+      ];
+      for(var j=0;j<tests.length;j++){
+        var target=tests[j];
+        voiceStatus('فحص تحميل '+target[0]+'...');
+        try{
+          var probe=await fetch(target[1],{method:'GET',headers:{Range:'bytes=0-0'},cache:'no-store'});
+          if(!probe.ok)throw Error('HTTP '+probe.status);
+          try{await probe.body?.cancel()}catch(e){}
+        }catch(probeError){
+          throw Error('فشل اتصال '+target[0]+': '+String(probeError.message||probeError)+' — '+target[1]);
+        }
+      }
       voice.engine=await module.NabraTTS.load({
         dtype:'fp16',device:'wasm',worker:false,
         onProgress:function(p){if(p.total>0)voiceStatus('تنزيل النموذج العربي: '+Math.round(100*p.loaded/p.total)+'٪')}
