@@ -370,7 +370,7 @@
   .admin-maintenance-actions .muted{margin:0;flex:1;min-width:220px}
   @media(max-width:700px){.admin-maintenance-actions .btn{width:100%}.admin-maintenance-actions .muted{min-width:100%}}
 </style>
-  <script type="module" crossorigin src="./assets/index-security-20261021.js?v=20261021-security2?v=27"></script>
+  <script type="module" crossorigin src="./assets/index-security-20261021.js?v=20261028-queue1"></script>
 
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./medica-icon.svg" />
@@ -379,6 +379,15 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Medica" />
+<style id="medica-queue-screen-style">
+  .queue-screen-card{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:14px 0;padding:18px 20px}
+  .queue-screen-copy{min-width:0}.queue-screen-copy h3{margin:3px 0 5px}.queue-screen-copy p{margin:0;color:var(--muted);font-size:12px;line-height:1.7;max-width:760px}
+  .queue-screen-url{display:inline-flex;max-width:100%;margin-top:11px;padding:8px 11px;border:1px solid var(--border);border-radius:11px;background:#f7fafb;color:#34505a;font-size:11px;direction:ltr;overflow:hidden}
+  .queue-screen-url span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .queue-screen-actions{display:flex;gap:8px;flex:0 0 auto}
+  .queue-card .queue-time strong{display:block;font-size:16px}.queue-card .queue-time small{display:block;font-size:9px;color:var(--muted);margin-top:2px}
+  @media(max-width:780px){.queue-screen-card{align-items:stretch;flex-direction:column}.queue-screen-actions{width:100%}.queue-screen-actions .btn{flex:1}}
+</style>
 </head>
 <body>
   <section id="authView" class="center-shell login-shell">
@@ -632,6 +641,18 @@
             <div><span>بانتظار الطبيب</span><strong id="queueWaitingCount">0</strong></div>
             <div><span>طلبات الإدخال</span><strong id="queueInServiceCount">0</strong></div>
             <div><span>اكتمل اليوم</span><strong id="queueDoneCount">0</strong></div>
+          </div>
+        </div>
+        <div class="panel queue-screen-card secretary-only">
+          <div class="queue-screen-copy">
+            <span class="eyebrow">شاشة المرضى</span>
+            <h3>شاشة الطابور والنداء الصوتي</h3>
+            <p>افتح هذا الرابط على تلفزيون أو شاشة الانتظار. يتحدث تلقائياً مع حركة الطابور ويعلن اسم المريض عند إدخاله للطبيب.</p>
+            <div class="queue-screen-url" dir="ltr"><span id="queueDisplayUrl">جاري تجهيز الرابط...</span></div>
+          </div>
+          <div class="queue-screen-actions">
+            <button id="copyQueueDisplayLinkBtn" class="btn outline small" type="button">نسخ الرابط</button>
+            <button id="openQueueDisplayLinkBtn" class="btn primary small" type="button">فتح شاشة الطابور</button>
           </div>
         </div>
         <div id="queueRequestAlert" class="entry-alert hidden"></div>
