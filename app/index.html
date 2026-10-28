@@ -370,7 +370,7 @@
   .admin-maintenance-actions .muted{margin:0;flex:1;min-width:220px}
   @media(max-width:700px){.admin-maintenance-actions .btn{width:100%}.admin-maintenance-actions .muted{min-width:100%}}
 </style>
-  <script type="module" crossorigin src="./assets/index-security-20261021.js?v=20261028-admin-queue3"></script>
+  <script type="module" crossorigin src="./assets/index-security-20261021.js?v=20261028-queue-dashboard4"></script>
 
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./medica-icon.svg" />
@@ -388,7 +388,9 @@
   .queue-card .queue-time strong{display:block;font-size:16px}.queue-card .queue-time small{display:block;font-size:9px;color:var(--muted);margin-top:2px}
   @media(max-width:780px){.queue-screen-card{align-items:stretch;flex-direction:column}.queue-screen-actions{width:100%}.queue-screen-actions .btn{flex:1}}
 </style>
-</head>
+<style id="medica-admin-queue-dashboard">
+#adminQueueScreens{direction:rtl}.qadm-hero{background:linear-gradient(125deg,#0b2530,#114d4b);color:#fff;border-radius:22px;padding:26px 28px;display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:18px;box-shadow:0 16px 42px #143e3924}.qadm-hero h2{font-size:26px;margin:7px 0}.qadm-hero p{color:#c5dcda;margin:0;font-size:13px}.qadm-eyebrow{font-size:10px;letter-spacing:1.5px;color:#81dcc9;font-weight:800}.qadm-live{background:#ffffff15;border:1px solid #ffffff25;padding:9px 14px;border-radius:999px;font-weight:700;font-size:12px;white-space:nowrap}.qadm-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:18px}.qadm-stat{background:#fff;border:1px solid #e3edec;border-radius:17px;padding:19px;display:flex;flex-direction:column;gap:8px;box-shadow:0 4px 14px #0a33330a}.qadm-stat span{font-size:12px;color:#64748b;font-weight:700}.qadm-stat strong{font-size:30px;color:#123b3b;line-height:1.1}.qadm-stat small{color:#8ca0a6;font-size:11px}.qadm-main{background:#fff;border:1px solid #e3edec;border-radius:19px;padding:21px}.qadm-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:19px;flex-wrap:wrap}.qadm-toolbar h3{margin:0 0 4px;font-size:18px}.qadm-toolbar p{margin:0;font-size:12px;color:#819398}.qadm-controls{display:flex;gap:9px;flex-wrap:wrap}.qadm-controls select,.qadm-controls input{min-height:42px;border-radius:11px;border:1px solid #dbe7e5;background:#fff;padding:8px 12px;color:#20383a;max-width:235px}.qadm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.qadm-card{border:1px solid #e0ebea;border-radius:17px;padding:19px;background:#fff;min-width:0;box-shadow:0 3px 14px #1a444008}.qadm-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.qadm-card h4{margin:0;font-size:16px;color:#153539}.qadm-pill{padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800}.qadm-pill.permanent{background:#e4f7ec;color:#15734a}.qadm-pill.trial{background:#e6f2ff;color:#285b9e}.qadm-pill.locked{background:#f3f4f6;color:#687788}.qadm-pill.off{background:#fcebea;color:#ab3d42}.qadm-note{color:#788d95;font-size:12px;margin:10px 0 15px;min-height:20px}.qadm-link{display:flex;align-items:center;gap:8px;background:#f5f9f9;border:1px solid #e3eeee;border-radius:11px;padding:10px;margin-bottom:13px}.qadm-link code{direction:ltr;display:block;font-size:11px;color:#265a5b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.qadm-actions{display:flex;gap:7px;flex-wrap:wrap}.qadm-actions .btn{font-size:11px;min-height:38px;padding:8px 12px}.qadm-empty{grid-column:1/-1;padding:25px;text-align:center;color:#829399}@media(max-width:1120px){.qadm-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.qadm-grid{grid-template-columns:1fr}}@media(max-width:560px){.qadm-hero{padding:20px;align-items:flex-start;flex-direction:column}.qadm-stats{gap:8px}.qadm-stat{padding:14px}.qadm-main{padding:13px}.qadm-controls{width:100%}.qadm-controls select,.qadm-controls input{flex:1;min-width:0}.qadm-card{padding:14px}}
+</style></head>
 <body>
   <section id="authView" class="center-shell login-shell">
     <div class="login-frame">
@@ -513,7 +515,11 @@
         </div>
       </section>
 
-      <section id="adminQueueScreens" class="page hidden"><div class="panel"><div class="panel-head"><div><h3>إدارة شاشات الطوابير</h3><p class="muted">منح تجربة 48 ساعة، تفعيل دائمي، وإيقاف فوري لكل عيادة</p></div><input id="adminQueueSearch" class="search" placeholder="البحث عن عيادة"></div><div class="grid-cards" style="margin:15px 0"><div class="stat"><span>دائمي</span><strong id="queueAdminPermanent">0</strong></div><div class="stat"><span>تجربة سارية</span><strong id="queueAdminTrials">0</strong></div><div class="stat"><span>مقفلة</span><strong id="queueAdminLocked">0</strong></div></div><div id="adminQueueScreensList" class="list"></div></div></section>
+      <section id="adminQueueScreens" class="page hidden">
+<div class="qadm-hero"><div><span class="qadm-eyebrow">MEDICA · QUEUE MANAGER</span><h2>إدارة شاشات الطوابير</h2><p>الاشتراكات، الفترة التجريبية، وروابط شاشات الانتظار — من مكان واحد.</p></div><div class="qadm-live">● إدارة الاشتراكات</div></div>
+<div class="qadm-stats"><div class="qadm-stat"><span>إجمالي العيادات</span><strong id="queueAdminTotal">0</strong><small>العيادات المسجلة</small></div><div class="qadm-stat"><span>اشتراك دائمي</span><strong id="queueAdminPermanent">0</strong><small>مفعلة بدون انتهاء</small></div><div class="qadm-stat"><span>تجربة مجانية</span><strong id="queueAdminTrials">0</strong><small>سارية لمدة 48 ساعة</small></div><div class="qadm-stat"><span>غير مفعلة / موقوفة</span><strong id="queueAdminLocked">0</strong><small>لا يمكن عرض الطابور</small></div></div>
+<div class="qadm-main"><div class="qadm-toolbar"><div><h3>العيادات</h3><p>حدد العيادة لإدارة صلاحية شاشتها</p></div><div class="qadm-controls"><select id="adminQueueFilter" aria-label="تصفية حالة الاشتراك"><option value="all">كل الحالات</option><option value="permanent">دائمي</option><option value="trial">تجريبي</option><option value="locked">غير مفعلة</option></select><input id="adminQueueSearch" class="search" placeholder="ابحث باسم العيادة..." /></div></div><div id="adminQueueScreensList" class="qadm-grid"></div></div>
+</section>
 <section id="adminCreate" class="page hidden">
         <div class="split">
           <div class="panel">
