@@ -11,7 +11,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,7 +22,14 @@ jobs:
       - name: Bundle Nabra Arabic TTS into a local website module
         run: |
           set -euo pipefail
-          npm install --no-save --ignore-scripts nabra-tts@0.1.0 esbuild@0.25.12
+          git clone --depth 1 https://github.com/Oddadmix/nabra-tts.git /tmp/nabra-tts
+          cd /tmp/nabra-tts
+          npm install --ignore-scripts
+          npm run build
+          cd "$GITHUB_WORKSPACE"
+          npm install --no-save --ignore-scripts esbuild@0.25.12
+          mkdir -p node_modules
+          ln -s /tmp/nabra-tts node_modules/nabra-tts
           ./node_modules/.bin/esbuild queue-audio-entry.mjs --bundle --platform=browser --format=esm --target=es2022 --minify --outfile=queue-nabra-bundle.js
           test -s queue-nabra-bundle.js
           if grep -q 'https://cdn.jsdelivr.net/npm/nabra-tts' queue-nabra-bundle.js; then exit 1; fi
