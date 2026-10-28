@@ -1,6 +1,12 @@
 (function(){
   'use strict';
 
+  var routeParts=location.pathname.split('/').filter(Boolean);
+  if(routeParts[0]==='queue'&&routeParts[1]){
+    location.replace('/queue.html?clinic='+encodeURIComponent(routeParts[1]));
+    return;
+  }
+
   var API='https://kpnlechlpdpoivrafehl.supabase.co/functions/v1/booking/';
   var params=new URLSearchParams(location.search);
   var pathSlug=location.pathname.split('/').filter(Boolean).pop()||'';
