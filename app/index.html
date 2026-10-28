@@ -473,17 +473,26 @@
   <div id="adminApp" class="app hidden">
     <aside class="sidebar">
       <div class="brand"><img class="medica-app-logo" src="./medica-icon.svg" alt="Medica"><div>Medica Admin</div></div>
-      <nav class="nav">
+      <div class="admin-nav-label">إدارة المنصة</div><nav class="nav">
         <button data-admin-page="adminDashboard" class="active">الرئيسية</button>
         <button data-admin-page="adminClinics">العيادات والحسابات</button><button data-admin-page="adminQueueScreens">شاشات الطوابير</button>
         <button data-admin-page="adminCreate">إنشاء عيادة</button>
       </nav>
       <div class="side-bottom"><div id="adminEmail" class="muted"></div><button id="adminLogout" class="btn outline w100" style="margin-top:10px">تسجيل خروج</button></div>
     </aside>
-    <main class="main">
+    <main class="main admin-main">
       <div class="topbar"><div><h2 id="adminPageTitle">الرئيسية</h2><div class="muted">لوحة مدير النظام</div></div><button id="adminRefresh" class="icon-btn refresh-btn" type="button" aria-label="إعادة تحميل"><svg class="refresh-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.54 6.14L3 15"/><path d="M3 21v-6h6"/><path d="M3 12a9 9 0 0 1 15.54-6.14L21 9"/><path d="M21 3v6h-6"/></svg></button></div>
 
       <section id="adminDashboard" class="page">
+        <div class="admin-welcome">
+          <div class="admin-welcome-copy"><span class="admin-eyebrow">MEDICA CONTROL CENTER</span><h1>نظرة شاملة على المنصة</h1><p>تابع حالة العيادات والحسابات، ووصل للإجراءات المهمة بسرعة من لوحة واحدة.</p></div>
+          <div class="admin-quick-actions">
+            <button class="btn primary" type="button" data-admin-goto="adminCreate">إضافة عيادة جديدة</button>
+            <button class="btn outline" type="button" data-admin-goto="adminClinics">إدارة العيادات</button>
+            <button class="btn outline" type="button" data-admin-goto="adminQueueScreens">إدارة الطوابير</button>
+          </div>
+        </div>
+        <div class="admin-section-heading"><div><span class="admin-eyebrow">مؤشرات التشغيل</span><h3>إحصائيات المنصة</h3></div><span class="admin-section-note">ملخص الحسابات المسجلة وحالتها</span></div>
         <div class="grid-cards">
           <div class="stat"><span>كل العيادات</span><strong id="adminClinicsCount">0</strong></div>
           <div class="stat"><span>العيادات الفعالة</span><strong id="adminActiveCount">0</strong></div>
@@ -510,6 +519,7 @@
       </section>
 
       <section id="adminClinics" class="page hidden">
+        <div class="admin-page-intro"><div><span class="admin-eyebrow">CLINIC DIRECTORY</span><h2>العيادات والحسابات</h2><p>إدارة العيادات المسجلة والبحث عن الحسابات من واجهة واضحة.</p></div><button class="btn primary" type="button" data-admin-goto="adminCreate">+ إنشاء عيادة</button></div>
         <div class="panel">
           <div class="panel-head"><h3>العيادات والحسابات</h3><input id="adminClinicSearch" class="search" placeholder="بحث باسم العيادة أو البريد" /></div>
           <div id="adminClinicsList" class="list"></div>
@@ -522,9 +532,10 @@
 <div class="qadm-main"><div class="qadm-toolbar"><div><h3>العيادات</h3><p>حدد العيادة لإدارة صلاحية شاشتها</p></div><div class="qadm-controls"><select id="adminQueueFilter" aria-label="تصفية حالة الاشتراك"><option value="all">كل الحالات</option><option value="permanent">دائمي</option><option value="trial">تجريبي</option><option value="locked">غير مفعلة</option></select><input id="adminQueueSearch" class="search" placeholder="ابحث باسم العيادة..." /></div></div><div id="adminQueueScreensList" class="qadm-grid"></div></div>
 </section>
 <section id="adminCreate" class="page hidden">
-        <div class="split">
-          <div class="panel">
-            <h3>إنشاء عيادة وحساب الطبيب</h3>
+        <div class="admin-page-intro"><div><span class="admin-eyebrow">NEW CLINIC</span><h2>تهيئة عيادة جديدة</h2><p>أدخل بيانات العيادة والطبيب، ثم سلّم بيانات الدخول بعد الإنشاء.</p></div></div>
+        <div class="split admin-create-layout">
+          <div class="panel admin-create-panel">
+            <div class="admin-form-head"><span class="admin-form-step">01</span><div><h3>بيانات العيادة والطبيب</h3><p>تأكد من البيانات قبل إنشاء الحساب.</p></div></div>
             <form id="createClinicForm" class="form-grid">
               <label class="field"><span>اسم العيادة</span><input id="createClinicName" required /></label>
               <label class="field"><span>نوع الحساب</span><select id="createAccountMode"><option value="permanent">دائم</option><option value="annual">سنوي — سنة واحدة</option><option value="trial">تجريبي</option></select></label>
@@ -545,8 +556,8 @@
             </form>
             <p id="createClinicMsg" class="muted"></p>
           </div>
-          <div class="panel">
-            <h3>بيانات التسليم</h3>
+          <div class="panel admin-credentials-panel">
+            <div class="admin-form-head"><span class="admin-form-step">02</span><div><h3>بيانات التسليم</h3><p>معلومات الدخول المتاحة بعد الإنشاء</p></div></div>
             <p class="muted">بعد الإنشاء تظهر بيانات الدخول هنا حتى تسلمها للطبيب والسكرتير</p>
             <div id="createdCredentials" class="empty">لم يتم إنشاء عيادة بعد</div>
           </div>
