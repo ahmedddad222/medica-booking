@@ -26,8 +26,6 @@
 
   function render(data){
     state.data=data;
-    state.queueVoice=data.queue_voice==='male'?'male':'female';
-    if($('voiceChoice'))fillArabicVoices();
     setBrand(data);
     var current=data.current;
     var waiting=Array.isArray(data.waiting)?data.waiting:[];
@@ -72,81 +70,62 @@
     }
   }
 
-  function availableArabicVoices(){
-    if(!window.speechSynthesis)return [];
-    return window.speechSynthesis.getVoices().filter(function(v){return /^ar[-_]/i.test(v.lang||'') || /arabic|العربي/i.test(v.name||'')});
+  // Medica Voice V2: audio files only; no browser text-to-speech and no English fallback.
+  var voice={enabled:false,playing:null,generation:0};
+  function voiceStatus(message,error){
+    var label=$('voiceStatus');
+    if(label){label.textContent=message;label.style.color=error?'#fda4af':'#a7f3d0'}
   }
-  function voiceScore(v){
-    var n=(v.name||'').toLowerCase(),lang=(v.lang||'').toLowerCase();
-    return (/neural|natural|premium|online|enhanced/i.test(n)?100:0)+(/microsoft|google/i.test(n)?15:0)+(/ar-(sa|eg|ae)/i.test(lang)?5:0);
+  function stopVoice(){
+    voice.generation++;
+    if(voice.playing){try{voice.playing.pause();voice.playing.src=''}catch{}voice.playing=null}
   }
-  function fillArabicVoices(){
-    var el=$('voiceChoice');if(!el)return;
-    var voices=availableArabicVoices().sort(function(a,b){return voiceScore(b)-voiceScore(a)});
-    var preferred=localStorage.getItem('medica_queue_voice')||el.value||'';
-    el.textContent='';
-    var auto=document.createElement('option');auto.value='';auto.textContent='أفضل صوت عربي متوفر';el.appendChild(auto);
-    voices.forEach(function(v){var option=document.createElement('option');option.value=v.voiceURI;option.textContent=v.name+' ('+v.lang+')';el.appendChild(option)});
-    if(voices.some(function(v){return v.voiceURI===preferred}))el.value=preferred;
+  async function playVoice(test,call){
+    if(!voice.enabled)return;
+    stopVoice();
+    var generation=voice.generation;
+    var params=test?'?speech=1&test=1':'?speech=1&seq='+encodeURIComponent(call.call_seq);
+    voiceStatus('جاري تحضير النداء العربي...');
+    try{
+      var ctrl=new AbortController(),timeout=setTimeout(function(){ctrl.abort()},11000);
+      var response;
+      try{response=await fetch(endpoint()+params,{cache:'no-store',signal:ctrl.signal})}finally{clearTimeout(timeout)}
+      if(!response.ok){
+        var detail='';try{detail=(await response.json()).error||''}catch{}
+        throw Error('HTTP '+response.status+(detail?' — '+detail:''));
+      }
+      var type=response.headers.get('content-type')||'';
+      if(!type.startsWith('audio/'))throw Error('الخادم لم يرجع ملف صوت');
+      var blob=await response.blob();
+      if(blob.size<200)throw Error('الملف الصوتي فارغ');
+      if(generation!==voice.generation)return;
+      var blobUrl=URL.createObjectURL(blob),audio=new Audio(blobUrl);
+      voice.playing=audio;
+      audio.onended=function(){URL.revokeObjectURL(blobUrl);if(voice.playing===audio)voice.playing=null;voiceStatus('النداء الصوتي جاهز')};
+      audio.onerror=function(){URL.revokeObjectURL(blobUrl);voiceStatus('تعذر تشغيل الملف الصوتي',true)};
+      try{await audio.play()}catch(error){URL.revokeObjectURL(blobUrl);throw error}
+      voiceStatus('النداء العربي يعمل');
+    }catch(error){
+      if(generation!==voice.generation)return;
+      voiceStatus('الصوت الخارجي غير متاح: '+String(error.message||error),true);
+      console.warn('Medica Voice V2:',error);
+    }
   }
-  function pickArabicVoice(){
-    var voices=availableArabicVoices().sort(function(a,b){return voiceScore(b)-voiceScore(a)});
-    var selected=$('voiceChoice')?.value||'';
-    var gender=state.queueVoice==='male' ? /bassel|hamed|male|ذكر|رجل/i : /rana|salma|hoda|female|أنثى|امرأة/i;
-    return voices.find(function(v){return v.voiceURI===selected})||voices.find(function(v){return gender.test(v.name||'') && /neural|natural|premium|online|enhanced/i.test(v.name||'')})||voices.find(function(v){return gender.test(v.name||'')})||voices[0]||null;
-  }
-
-  function speakText(text){
-    if(!window.speechSynthesis||!window.SpeechSynthesisUtterance)return;
-    window.speechSynthesis.cancel();
-    var u=new SpeechSynthesisUtterance(text);
-    u.lang='ar-SA';
-
-    u.rate=.96;
-    u.pitch=1;
-    u.volume=1;
-    var voice=pickArabicVoice();
-    if(voice){u.voice=voice;u.lang=voice.lang||'ar-SA';}
-    window.speechSynthesis.speak(u);
-  }
-
-  async function announce(current){
-    var name=String(current.patient_name||'المريض').trim();
-    var number=current.queue_number?String(current.queue_number):'';
-    var text='يرجى من '+name+(number?'، رقم الدور '+number:'')+'، التفضل بالدخول إلى غرفة الطبيب';
+  function announce(call){
     var card=$('currentCard');
     card.classList.remove('call-flash');
     void card.offsetWidth;
     card.classList.add('call-flash');
-    if(window.medicaQueueAudio){try{window.medicaQueueAudio.pause();window.medicaQueueAudio.src=''}catch{}}
-    if(current.call_seq>0&&state.soundReady){
-      try{
-        var audio=new Audio(endpoint()+'?speech=1&seq='+encodeURIComponent(current.call_seq));
-        window.medicaQueueAudio=audio;
-        audio.preload='auto';
-        await new Promise(function(resolve,reject){audio.addEventListener('canplay',resolve,{once:true});audio.addEventListener('error',reject,{once:true});setTimeout(function(){reject(new Error('audio timeout'))},8500)});
-        if(window.medicaQueueAudio!==audio)return;
-        await audio.play();
-        return;
-      }catch(e){console.warn('Medica external Arabic TTS failed:',e);$('connectionState').textContent='الصوت الخارجي غير متاح';return;}
-    }
-    if(!state.soundReady)speakText(text);
+    if(voice.enabled)playVoice(false,call);
   }
-
   function enableSound(){
+    voice.enabled=true;
     state.soundReady=true;
-    var btn=$('soundGate');
-    btn.classList.add('enabled');
-    btn.querySelector('strong').textContent='النداء الصوتي مفعّل';
-    btn.querySelector('small').textContent='اضغط هنا لاختبار الصوت مرة أخرى';
     localStorage.setItem('medica_queue_sound','on');
-    $('connectionState').textContent='فحص الصوت الخارجي';
-    setTimeout(function(){
-      if(state.data&&state.data.current&&state.data.current.call_seq>0){
-        announce(state.data.current);
-        state.lastCallKey=String(state.data.current.queue_number||0)+':'+String(state.data.current.call_seq||0);
-      }
-    },900);
+    $('soundGate').classList.add('enabled');
+    $('soundGate').querySelector('strong').textContent='النداء الصوتي مفعّل';
+    $('soundGate').querySelector('small').textContent='اضغط هنا لاختبار الصوت';
+    playVoice(true);
   }
 
   async function refresh(){
@@ -203,32 +182,9 @@
   if(localStorage.getItem('medica_queue_sound')==='on'){
     $('soundGate').querySelector('small').textContent='اضغط مرة واحدة لتشغيل الصوت في هذه الجلسة';
   }
-  fillArabicVoices();
-  $('voiceChoice').addEventListener('change',function(){localStorage.setItem('medica_queue_voice',this.value);speakText('تم اختيار صوت النداء العربي')});
-  $('testArabicVoice').addEventListener('click',async function(){
-    var btn=this,oldLabel=btn.textContent;
-    state.soundReady=true;
-    btn.disabled=true;btn.textContent='جاري تحميل الصوت العربي...';
-    try{
-      var response=await fetch(endpoint()+'?speech=1&test=1',{cache:'no-store'});
-      if(!response.ok){var detail='';try{detail=(await response.json()).error||''}catch{}throw Error('HTTP '+response.status+(detail?' - '+detail:''));}
-      var type=response.headers.get('content-type')||'';
-      if(!type.includes('audio'))throw Error('Invalid audio response');
-      var blob=await response.blob();
-      if(blob.size<200)throw Error('Empty audio');
-      var fileUrl=URL.createObjectURL(blob);
-      var audio=new Audio(fileUrl);
-      await audio.play();
-      btn.textContent='✓ الصوت الخارجي يشتغل';
-      audio.onended=function(){URL.revokeObjectURL(fileUrl);btn.textContent=oldLabel};
-    }catch(error){
-      btn.textContent='⚠ الصوت الخارجي غير متاح';
-      alert('تعذر جلب الصوت العربي الخارجي: '+error.message+'. الخدمة المجانية قد لا تعمل من الخادم، ولم يتم تشغيل الصوت القديم حتى لا يختلط عليك الاختبار.');
-    }finally{btn.disabled=false}
+  $('testArabicVoice').addEventListener('click',function(){
+    if(!voice.enabled)enableSound();else playVoice(true);
   });
-
-  if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=fillArabicVoices;
-
   updateClock();
   setInterval(updateClock,1000);
   refresh();
