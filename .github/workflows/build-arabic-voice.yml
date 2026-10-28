@@ -32,8 +32,11 @@ jobs:
           ln -s /tmp/nabra-tts node_modules/nabra-tts
           ./node_modules/.bin/esbuild queue-audio-entry.mjs --bundle --platform=browser --format=esm --target=es2022 --external:module --minify --outfile=queue-nabra-bundle.js
           mkdir -p queue-onnx
-          cp /tmp/nabra-tts/node_modules/onnxruntime-web/dist/ort-wasm*.mjs queue-onnx/
-          cp /tmp/nabra-tts/node_modules/onnxruntime-web/dist/ort-wasm*.wasm queue-onnx/
+          echo "Checking ONNX runtime available files:"
+          ls -lh /tmp/nabra-tts/node_modules/onnxruntime-web/dist/ort-wasm* | head -30
+          cp -v /tmp/nabra-tts/node_modules/onnxruntime-web/dist/ort-wasm*.mjs queue-onnx/
+          cp -v /tmp/nabra-tts/node_modules/onnxruntime-web/dist/ort-wasm*.wasm queue-onnx/
+          ls -lh queue-onnx/
           test -s queue-onnx/ort-wasm-simd-threaded.jsep.mjs
           test -s queue-onnx/ort-wasm-simd-threaded.jsep.wasm
           test -s queue-nabra-bundle.js
@@ -45,7 +48,9 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add queue-nabra-bundle.js queue-onnx/
+          git add -f queue-nabra-bundle.js queue-onnx/*.mjs queue-onnx/*.wasm
+          echo 'Staged local ONNX assets:'
+          git diff --cached --stat
           if ! git diff --cached --quiet; then
             git commit -m "Build self-hosted Arabic queue voice module"
             git push
