@@ -1,0 +1,52 @@
+/* Medica Admin 2026 — scoped, responsive visual system. No role or API logic changed. */
+#adminApp{--admin-ink:#173746;--admin-muted:#657f8b;--admin-border:#dfebf0;--admin-teal:#0d8c80}
+#adminApp .admin-nav-label{font-size:10px;font-weight:850;letter-spacing:.09em;color:#8da8ae;margin:6px 14px 10px;padding:0 2px}
+#adminApp .admin-main{min-width:0}
+#adminApp .topbar{border-bottom:1px solid #dfe9ee}
+#adminApp .topbar h2{font-weight:850;letter-spacing:-.45px}
+#adminApp .page{min-width:0;padding-bottom:24px}
+#adminApp .admin-welcome,#adminApp .admin-page-intro{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:24px;border:1px solid #dceae9;border-radius:25px;background:linear-gradient(116deg,#ffffff 12%,#eaf8f5 100%);padding:30px clamp(20px,2.7vw,38px);margin:0 0 25px;box-shadow:0 13px 38px rgba(26,72,80,.05)}
+#adminApp .admin-welcome:before,#adminApp .admin-page-intro:before{content:"";position:absolute;left:-70px;top:-95px;border-radius:100%;height:255px;width:255px;border:42px solid rgba(18,143,128,.06);pointer-events:none}
+#adminApp .admin-welcome-copy,#adminApp .admin-page-intro>div{position:relative;z-index:1;min-width:0}
+#adminApp .admin-eyebrow{display:block;color:#108b7f;font-size:10px;font-weight:900;letter-spacing:.12em;margin-bottom:9px}
+#adminApp .admin-welcome h1{font-size:clamp(24px,2.15vw,34px);margin:0 0 9px;color:#173b46;line-height:1.3}
+#adminApp .admin-page-intro h2{font-size:clamp(21px,1.8vw,29px);color:#163a44;margin:0 0 9px}
+#adminApp .admin-welcome p,#adminApp .admin-page-intro p{margin:0;color:#66828a;font-size:13px;line-height:1.9;max-width:580px}
+#adminApp .admin-quick-actions{position:relative;z-index:1;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:9px;max-width:450px}
+#adminApp .admin-quick-actions .btn{white-space:nowrap;min-height:43px;box-shadow:none}
+#adminApp .admin-section-heading{display:flex;justify-content:space-between;align-items:end;gap:15px;margin:0 0 14px}
+#adminApp .admin-section-heading h3{margin:0;font-size:18px;color:#193d4a}
+#adminApp .admin-section-note{font-size:12px;color:#78909c}
+#adminApp .grid-cards{gap:15px;margin-bottom:23px}
+#adminApp .stat{min-height:145px;padding:24px 22px;border:1px solid #e0eaf0;border-radius:19px;box-shadow:0 8px 27px rgba(29,72,92,.045);transition:transform .16s,box-shadow .16s}
+#adminApp .stat:hover{transform:translateY(-2px);box-shadow:0 15px 32px rgba(29,72,92,.08)}
+#adminApp .stat span{display:block;line-height:1.8;font-size:12.5px;max-width:180px}
+#adminApp .stat strong{margin-top:12px;font-size:clamp(29px,2.4vw,38px);font-weight:850}
+#adminApp .panel{border:1px solid #dfeaf0;border-radius:22px;padding:clamp(18px,2vw,28px);box-shadow:0 8px 28px rgba(30,71,83,.042)}
+#adminApp .panel-head h3{font-size:18px}
+#adminApp .admin-maintenance-panel{margin-bottom:21px}
+#adminApp #adminClinics .panel-head{align-items:center;gap:18px}
+#adminApp #adminClinicSearch{width:min(420px,100%);min-width:220px;border-radius:13px;padding:13px 16px}
+#adminApp #adminClinicsList .item,#adminApp #adminRecentClinics .item{padding:18px 20px;border-radius:15px;border-color:#e3edf1;gap:18px}
+#adminApp .admin-create-layout{grid-template-columns:minmax(0,1.5fr) minmax(290px,.7fr);align-items:start}
+#adminApp .admin-credentials-panel{position:sticky;top:110px}
+#adminApp .admin-form-head{display:flex;align-items:center;gap:13px;padding-bottom:17px;margin-bottom:20px;border-bottom:1px solid #e7eef1}
+#adminApp .admin-form-head h3{font-size:18px;margin:0 0 5px}
+#adminApp .admin-form-head p{margin:0;color:#81949e;font-size:12px}
+#adminApp .admin-form-step{flex-shrink:0;width:43px;height:43px;border-radius:13px;background:#e6f6f1;color:#0d8178;font-weight:900;display:grid;place-items:center}
+#adminApp #createClinicForm{gap:9px 18px}
+#adminApp #createClinicForm .field{margin:4px 0}
+#adminApp #createClinicForm .field span{font-weight:750}
+#adminApp #createClinicForm .sep{border-top:1px dashed #dce8eb;margin:12px 0}
+#adminApp .qadm-hero{border-radius:24px;padding:30px;background:linear-gradient(118deg,#103840,#0e615e);box-shadow:0 13px 34px rgba(18,85,80,.12)}
+#adminApp .qadm-stats{gap:15px}
+#adminApp .qadm-stat{border-radius:19px;padding:22px}
+#adminApp .qadm-main{border-radius:22px;padding:25px}
+#adminApp .qadm-card{border-radius:17px;transition:box-shadow .15s,transform .15s}
+#adminApp .qadm-card:hover{box-shadow:0 13px 25px rgba(25,70,80,.075);transform:translateY(-1px)}
+#adminApp .qadm-controls select,#adminApp .qadm-controls input{min-height:44px}
+#adminApp .btn:focus-visible,#adminApp .nav button:focus-visible{outline:3px solid #73c8bc;outline-offset:2px}
+@media(max-width:1320px){#adminApp .admin-welcome{align-items:flex-start;flex-direction:column}#adminApp .admin-quick-actions{justify-content:flex-start;max-width:none}}
+@media(max-width:1100px){#adminApp .admin-create-layout{grid-template-columns:1fr}#adminApp .admin-credentials-panel{position:static}}
+@media(max-width:900px){#adminApp .admin-welcome,#adminApp .admin-page-intro{padding:22px;align-items:flex-start;flex-direction:column}#adminApp .admin-section-heading{align-items:flex-start;flex-direction:column}#adminApp .admin-welcome h1{font-size:26px}#adminApp .qadm-main{padding:15px}}
+@media(max-width:540px){#adminApp .admin-quick-actions{width:100%}#adminApp .admin-quick-actions .btn{flex:1 1 100%}#adminApp #adminClinicSearch{min-width:0;width:100%}#adminApp .admin-welcome,#adminApp .admin-page-intro{margin-bottom:16px;border-radius:18px;padding:19px}#adminApp .stat{min-height:118px;padding:15px}#adminApp .panel{padding:15px;border-radius:17px}#adminApp .admin-form-head{align-items:flex-start}}
