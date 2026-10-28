@@ -7,7 +7,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>طابور المرضى | Medica</title>
   <link rel="icon" href="/medica-icon.png">
-  <link rel="stylesheet" href="/queue.css?v=1">
+  <link rel="stylesheet" href="/queue.css?v=4">
 </head>
 <body>
   <div id="queueApp" class="queue-app">
@@ -17,20 +17,20 @@
           <img id="clinicLogo" src="/medica-icon.png" alt="شعار العيادة">
         </div>
         <div class="queue-brand-copy">
-          <span class="queue-kicker">Medica Queue</span>
+          <span class="queue-kicker">MEDICA • نظام تنظيم الدور</span>
           <h1 id="clinicName">العيادة</h1>
           <p id="doctorName"></p>
         </div>
       </div>
       <div class="queue-header-meta">
-        <div class="queue-live"><i></i><span id="connectionState">مباشر</span></div>
+        <div class="queue-live"><i></i><span id="connectionState">متصل</span></div>
         <div class="queue-clock"><strong id="clockTime">--:--</strong><span id="clockDate">--</span></div>
       </div>
     </header>
 
     <main class="queue-main">
       <section class="current-zone">
-        <div class="section-label">داخل الآن</div>
+        <div class="section-label">● جاري استقبال المريض</div>
         <article id="currentCard" class="current-card empty-current">
           <div class="current-number" id="currentNumber">—</div>
           <div class="current-copy">
@@ -42,7 +42,7 @@
 
         <article id="nextCard" class="next-card">
           <div>
-            <span class="next-label">التالي</span>
+            <span class="next-label">الدور التالي</span>
             <strong id="nextName">—</strong>
           </div>
           <div class="next-number" id="nextNumber">—</div>
@@ -56,7 +56,7 @@
 
       <section class="waiting-zone">
         <div class="waiting-head">
-          <div><span class="section-label">المنتظرون</span><h2>ترتيب الأدوار</h2></div>
+          <div><span class="section-label">قائمة الانتظار المباشرة</span><h2>المرضى المنتظرون</h2></div>
           <span class="privacy-note">تظهر الأسماء فقط بدون أي بيانات طبية</span>
         </div>
         <div id="waitingList" class="waiting-list">
@@ -66,7 +66,7 @@
     </main>
 
     <footer class="queue-footer">
-      <span>يرجى متابعة الشاشة والاستماع إلى النداء</span>
+      <span class="queue-footer-message">يرجى متابعة الشاشة والاستماع إلى النداء الصوتي عند وصول دوركم</span>
       <span style="font-size:12px">الصوت المختار: <strong id="voiceChoice">صوت نسائي عربي</strong></span><span>Medica</span>
     </footer>
 
@@ -81,6 +81,6 @@
       <span id="fatalText">تحقق من رابط العيادة واتصال الإنترنت.</span>
     </div>
   </div>
-  <script src="/queue.js?v=5" defer></script>
+  <script src="/queue.js?v=6" defer></script>
 </body>
 </html>
