@@ -31,6 +31,11 @@ jobs:
           mkdir -p node_modules
           ln -s /tmp/nabra-tts node_modules/nabra-tts
           ./node_modules/.bin/esbuild queue-audio-entry.mjs --bundle --platform=browser --format=esm --target=es2022 --external:module --minify --outfile=queue-nabra-bundle.js
+          mkdir -p queue-onnx
+          cp /tmp/nabra-tts/node_modules/onnxruntime-web/dist/ort-wasm*.mjs queue-onnx/
+          cp /tmp/nabra-tts/node_modules/onnxruntime-web/dist/ort-wasm*.wasm queue-onnx/
+          test -s queue-onnx/ort-wasm-simd-threaded.jsep.mjs
+          test -s queue-onnx/ort-wasm-simd-threaded.jsep.wasm
           test -s queue-nabra-bundle.js
           node --check queue-nabra-bundle.js
           echo 'Browser bundle generated and syntax checked'
@@ -40,7 +45,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add queue-nabra-bundle.js
+          git add queue-nabra-bundle.js queue-onnx/
           if ! git diff --cached --quiet; then
             git commit -m "Build self-hosted Arabic queue voice module"
             git push
