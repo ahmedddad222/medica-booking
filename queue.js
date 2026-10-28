@@ -70,61 +70,66 @@
     }
   }
 
-  // Medica Voice V2: audio files only; no browser text-to-speech and no English fallback.
-  var voice={enabled:false,playing:null,generation:0};
+  // Medica Voice V3: open-source local Arabic neural synthesis (no speechSynthesis, no external patient-name API).
+  var voice={enabled:false,playing:null,generation:0,engine:null,loading:null};
   function voiceStatus(message,error){
-    var label=$('voiceStatus');
-    if(label){label.textContent=message;label.style.color=error?'#fda4af':'#a7f3d0'}
+    var el=$('voiceStatus');
+    if(el){el.textContent=message;el.style.color=error?'#fda4af':'#a7f3d0'}
   }
   function stopVoice(){
     voice.generation++;
     if(voice.playing){try{voice.playing.pause();voice.playing.src=''}catch{}voice.playing=null}
   }
+  async function getVoiceEngine(){
+    if(voice.engine)return voice.engine;
+    if(!voice.loading){
+      voice.loading=(async function(){
+        voiceStatus('يتم تنزيل نموذج الصوت العربي لأول مرة...');
+        var lib=await import('https://esm.sh/nabra-tts');
+        if(!lib.NabraTTS)throw new Error('مكتبة الصوت غير متاحة');
+        var engine=await lib.NabraTTS.load();
+        voice.engine=engine;
+        return engine;
+      })().catch(function(error){voice.loading=null;throw error});
+    }
+    return voice.loading;
+  }
   async function playVoice(test,call){
     if(!voice.enabled)return;
     stopVoice();
     var generation=voice.generation;
-    var params=test?'?speech=1&test=1':'?speech=1&seq='+encodeURIComponent(call.call_seq);
-    voiceStatus('جاري تحضير النداء العربي...');
+    var sentence=test?'يُرجى من المريض أحمد محمد، رقم الدور خمسة، التفضّل بالدخول إلى غرفة الطبيب.':
+      'يُرجى من '+String(call.patient_name||'المريض').slice(0,80)+'، رقم الدور '+String(call.queue_number||'')+'، التفضّل بالدخول إلى غرفة الطبيب.';
+    voiceStatus('جاري تجهيز النداء العربي...');
     try{
-      var ctrl=new AbortController(),timeout=setTimeout(function(){ctrl.abort()},11000);
-      var response;
-      try{response=await fetch(endpoint()+params,{cache:'no-store',signal:ctrl.signal})}finally{clearTimeout(timeout)}
-      if(!response.ok){
-        var detail='';try{detail=(await response.json()).error||''}catch{}
-        throw Error('HTTP '+response.status+(detail?' — '+detail:''));
-      }
-      var type=response.headers.get('content-type')||'';
-      if(!type.startsWith('audio/'))throw Error('الخادم لم يرجع ملف صوت');
-      var blob=await response.blob();
-      if(blob.size<200)throw Error('الملف الصوتي فارغ');
+      var engine=await getVoiceEngine();
+      var result=await engine.generate(sentence);
       if(generation!==voice.generation)return;
-      var blobUrl=URL.createObjectURL(blob),audio=new Audio(blobUrl);
+      var audioBlob=engine.toWav(result.audio);
+      var objectUrl=URL.createObjectURL(audioBlob);
+      var audio=new Audio(objectUrl);
       voice.playing=audio;
-      audio.onended=function(){URL.revokeObjectURL(blobUrl);if(voice.playing===audio)voice.playing=null;voiceStatus('النداء الصوتي جاهز')};
-      audio.onerror=function(){URL.revokeObjectURL(blobUrl);voiceStatus('تعذر تشغيل الملف الصوتي',true)};
-      try{await audio.play()}catch(error){URL.revokeObjectURL(blobUrl);throw error}
-      voiceStatus('النداء العربي يعمل');
+      audio.onended=function(){URL.revokeObjectURL(objectUrl);if(voice.playing===audio)voice.playing=null;voiceStatus('الصوت العربي جاهز')};
+      audio.onerror=function(){URL.revokeObjectURL(objectUrl);voiceStatus('تعذر تشغيل الصوت',true)};
+      try{await audio.play()}catch(error){URL.revokeObjectURL(objectUrl);throw error}
+      voiceStatus('الصوت العربي يعمل');
     }catch(error){
       if(generation!==voice.generation)return;
-      voiceStatus('الصوت الخارجي غير متاح: '+String(error.message||error),true);
-      console.warn('Medica Voice V2:',error);
+      voiceStatus('تعذر تشغيل الصوت العربي: '+String(error.message||error),true);
+      console.warn('Medica local Arabic voice:',error);
     }
   }
   function announce(call){
     var card=$('currentCard');
-    card.classList.remove('call-flash');
-    void card.offsetWidth;
-    card.classList.add('call-flash');
+    card.classList.remove('call-flash');void card.offsetWidth;card.classList.add('call-flash');
     if(voice.enabled)playVoice(false,call);
   }
   function enableSound(){
-    voice.enabled=true;
-    state.soundReady=true;
+    voice.enabled=true;state.soundReady=true;
     localStorage.setItem('medica_queue_sound','on');
     $('soundGate').classList.add('enabled');
-    $('soundGate').querySelector('strong').textContent='النداء الصوتي مفعّل';
-    $('soundGate').querySelector('small').textContent='اضغط هنا لاختبار الصوت';
+    $('soundGate').querySelector('strong').textContent='النداء العربي مفعّل';
+    $('soundGate').querySelector('small').textContent='اضغط لتجربة الصوت';
     playVoice(true);
   }
 
