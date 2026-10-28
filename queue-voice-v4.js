@@ -84,7 +84,8 @@
       var tests=[
         ['نموذج الصوت','https://huggingface.co/oddadmix/Nabra-7M-Distill-ONNX/resolve/main/onnx/model_fp16.onnx'],
         ['بيانات الصوت','https://huggingface.co/oddadmix/Nabra-7M-Distill-ONNX/resolve/main/voices/af_msa.bin'],
-        ['ملف WebAssembly','https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/ort-wasm-simd-threaded.jsep.wasm']
+        ['ملف WebAssembly','/queue-onnx/ort-wasm-simd-threaded.jsep.wasm'],
+        ['ملف تشغيل ONNX','/queue-onnx/ort-wasm-simd-threaded.jsep.mjs']
       ];
       for(var j=0;j<tests.length;j++){
         var target=tests[j];
@@ -98,7 +99,7 @@
         }
       }
       voice.engine=await module.NabraTTS.load({
-        dtype:'fp16',device:'wasm',worker:false,
+        dtype:'fp16',device:'wasm',worker:false,wasmPaths:'/queue-onnx/',
         onProgress:function(p){if(p.total>0)voiceStatus('تنزيل النموذج العربي: '+Math.round(100*p.loaded/p.total)+'٪')}
       });
       return voice.engine;
