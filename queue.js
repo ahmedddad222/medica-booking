@@ -128,7 +128,7 @@
         if(window.medicaQueueAudio!==audio)return;
         await audio.play();
         return;
-      }catch(e){/* External provider unavailable: use local voice when possible. */}
+      }catch(e){console.warn('Medica external Arabic TTS failed:',e);$('connectionState').textContent='الصوت الخارجي غير متاح';}
     }
     speakText(text);
   }
@@ -205,7 +205,27 @@
   }
   fillArabicVoices();
   $('voiceChoice').addEventListener('change',function(){localStorage.setItem('medica_queue_voice',this.value);speakText('تم اختيار صوت النداء العربي')});
-  $('testArabicVoice').addEventListener('click',function(){enableSound();speakText('يرجى من المريض أحمد محمد، رقم الدور خمسة، التفضل بالدخول إلى غرفة الطبيب')});
+  $('testArabicVoice').addEventListener('click',async function(){
+    var btn=this,oldLabel=btn.textContent;
+    state.soundReady=true;
+    btn.disabled=true;btn.textContent='جاري تحميل الصوت العربي...';
+    try{
+      var response=await fetch(endpoint()+'?speech=1&test=1',{cache:'no-store'});
+      if(!response.ok)throw Error('HTTP '+response.status);
+      var type=response.headers.get('content-type')||'';
+      if(!type.includes('audio'))throw Error('Invalid audio response');
+      var blob=await response.blob();
+      if(blob.size<200)throw Error('Empty audio');
+      var fileUrl=URL.createObjectURL(blob);
+      var audio=new Audio(fileUrl);
+      await audio.play();
+      btn.textContent='✓ الصوت الخارجي يشتغل';
+      audio.onended=function(){URL.revokeObjectURL(fileUrl);btn.textContent=oldLabel};
+    }catch(error){
+      btn.textContent='⚠ الصوت الخارجي غير متاح';
+      alert('تعذر جلب الصوت العربي الخارجي: '+error.message+'. الخدمة المجانية قد لا تعمل من الخادم، ولم يتم تشغيل الصوت القديم حتى لا يختلط عليك الاختبار.');
+    }finally{btn.disabled=false}
+  });
 
   if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=fillArabicVoices;
 
