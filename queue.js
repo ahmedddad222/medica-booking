@@ -27,7 +27,7 @@
   function render(data){
     state.data=data;
     state.queueVoice=data.queue_voice==='male'?'male':'female';
-    if($('voiceChoice'))$('voiceChoice').textContent=state.queueVoice==='male'?'صوت رجالي عربي':'صوت نسائي عربي';
+    if($('voiceChoice'))fillArabicVoices();
     setBrand(data);
     var current=data.current;
     var waiting=Array.isArray(data.waiting)?data.waiting:[];
@@ -83,7 +83,7 @@
   function fillArabicVoices(){
     var el=$('voiceChoice');if(!el)return;
     var voices=availableArabicVoices().sort(function(a,b){return voiceScore(b)-voiceScore(a)});
-    var preferred=el.value||localStorage.getItem('medica_queue_voice')||'';
+    var preferred=localStorage.getItem('medica_queue_voice')||el.value||'';
     el.textContent='';
     var auto=document.createElement('option');auto.value='';auto.textContent='أفضل صوت عربي متوفر';el.appendChild(auto);
     voices.forEach(function(v){var option=document.createElement('option');option.value=v.voiceURI;option.textContent=v.name+' ('+v.lang+')';el.appendChild(option)});
@@ -93,7 +93,7 @@
     var voices=availableArabicVoices().sort(function(a,b){return voiceScore(b)-voiceScore(a)});
     var selected=$('voiceChoice')?.value||'';
     var gender=state.queueVoice==='male' ? /bassel|hamed|male|ذكر|رجل/i : /rana|salma|hoda|female|أنثى|امرأة/i;
-    return voices.find(function(v){return gender.test(v.name||'') && /neural|natural|premium|online|enhanced/i.test(v.name||'')})||voices.find(function(v){return gender.test(v.name||'')})||voices.find(function(v){return v.voiceURI===selected})||voices[0]||null;
+    return voices.find(function(v){return v.voiceURI===selected})||voices.find(function(v){return gender.test(v.name||'') && /neural|natural|premium|online|enhanced/i.test(v.name||'')})||voices.find(function(v){return gender.test(v.name||'')})||voices[0]||null;
   }
 
   function speakText(text){
@@ -191,6 +191,8 @@
     $('soundGate').querySelector('small').textContent='اضغط مرة واحدة لتشغيل الصوت في هذه الجلسة';
   }
   fillArabicVoices();
+  $('voiceChoice').addEventListener('change',function(){localStorage.setItem('medica_queue_voice',this.value);speakText('تم اختيار صوت النداء العربي')});
+  $('testArabicVoice').addEventListener('click',function(){enableSound();speakText('يرجى من المريض أحمد محمد، رقم الدور خمسة، التفضل بالدخول إلى غرفة الطبيب')});
 
   if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=fillArabicVoices;
 
