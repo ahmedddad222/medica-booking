@@ -100,7 +100,6 @@
       try{
         var audio=new Audio();
         audio.preload='auto';
-        audio.crossOrigin='anonymous';
         voice.playing=audio;
         var ok=await new Promise(function(resolve,reject){
           var timer=setTimeout(function(){reject(Error('انتهت مهلة تحميل الصوت'))},6500);
