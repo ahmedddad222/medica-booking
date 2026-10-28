@@ -109,7 +109,7 @@
   async function playVoice(test,call){
     if(!voice.enabled)return;
     stopVoice();var id=voice.serial;
-    var text=test?'يُرْجَى مِنْ أَحْمَد مُحَمَّد الدُّخُولُ إِلَى الطَّبِيبِ.':'يُرْجَى مِنْ '+String(call.patient_name||'المريض').trim().slice(0,70)+' الدُّخُولُ إِلَى الطَّبِيبِ.';
+    var text=test?'يُرجى من أحمد محمد الدخول إلى الطبيب.':'يُرجى من '+String(call.patient_name||'المريض').trim().slice(0,70)+' الدخول إلى الطبيب.';
     try{
       var engine=await localEngine();
       voiceStatus('جاري توليد النداء العربي...');
