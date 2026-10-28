@@ -146,6 +146,10 @@
     return;
   }
 
+  if(location.pathname==='/queue.html'){
+    try{history.replaceState(null,'','/queue/'+encodeURIComponent(slug))}catch{}
+  }
+
   $('soundGate').addEventListener('click',enableSound);
   if(localStorage.getItem('medica_queue_sound')==='on'){
     $('soundGate').querySelector('small').textContent='اضغط مرة واحدة لتشغيل الصوت في هذه الجلسة';
