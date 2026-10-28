@@ -92,7 +92,7 @@
   function pickArabicVoice(){
     var voices=availableArabicVoices().sort(function(a,b){return voiceScore(b)-voiceScore(a)});
     var selected=$('voiceChoice')?.value||'';
-    var gender=state.queueVoice==='male' ? /bassel|h аmed|hamed|male|ذكر|رجل/i : /rana|salma|hoda|female|أنثى|امرأة/i;
+    var gender=state.queueVoice==='male' ? /bassel|hamed|male|ذكر|رجل/i : /rana|salma|hoda|female|أنثى|امرأة/i;
     return voices.find(function(v){return gender.test(v.name||'') && /neural|natural|premium|online|enhanced/i.test(v.name||'')})||voices.find(function(v){return gender.test(v.name||'')})||voices.find(function(v){return v.voiceURI===selected})||voices[0]||null;
   }
 
