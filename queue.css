@@ -40,3 +40,44 @@ linear-gradient(135deg,#f8fbfb 0%,#edf4f5 100%)}
 .call-flash{animation:callFlash 1.25s ease 2}@keyframes callFlash{0%,100%{transform:scale(1)}35%{transform:scale(1.018);box-shadow:0 0 0 10px rgba(14,147,132,.13),0 26px 70px rgba(11,91,84,.22)}}
 @media(max-width:960px){.queue-main{grid-template-columns:1fr}.current-card{min-height:240px}.waiting-zone{min-height:420px}.queue-header{padding:18px 20px}.queue-main{padding:20px}.queue-footer{padding:12px 20px}}
 @media(max-width:620px){.queue-header{align-items:flex-start}.queue-logo-wrap{width:54px;height:54px}.queue-header-meta{display:block}.queue-live{margin-bottom:8px}.queue-clock strong{font-size:18px}.current-card{padding:22px;gap:18px;border-radius:24px}.current-number{width:88px;height:88px;border-radius:22px;font-size:34px}.current-copy strong{font-size:28px}.waiting-row{grid-template-columns:58px minmax(0,1fr);gap:10px}.waiting-tag{display:none}.waiting-no{height:44px}.waiting-name{font-size:17px}.privacy-note{display:none}.sound-gate{left:12px;right:12px;bottom:12px}}
+
+
+/* Medica premium television queue dashboard */
+:root{--ink:#e9f7f6;--muted:#b8cccd;--line:rgba(196,235,231,.13);--bg:#071c27;--surface:#0b2a34;--soft:#164e55}
+html,body{background:#071b24;color:#eaf7f5}
+.queue-app{background:radial-gradient(ellipse at 12% 5%,rgba(12,163,145,.18),transparent 36%),radial-gradient(ellipse at 90% 75%,rgba(25,104,146,.18),transparent 35%),linear-gradient(125deg,#071822,#0a2530 55%,#071820);color:#f4fffd}
+.queue-header{background:rgba(8,28,36,.92);border-bottom:1px solid rgba(171,240,226,.12);padding:20px clamp(20px,3vw,52px)}
+.queue-logo-wrap{width:72px;height:72px;border-radius:19px;background:#fff}
+.queue-brand h1{color:#fff;font-weight:900}
+.queue-brand p{color:#b4d0d0}
+.queue-kicker{color:#5ce0c7;letter-spacing:.12em}
+.queue-live{background:rgba(32,190,146,.12);border:1px solid rgba(79,215,167,.29);color:#7af4bc}
+.queue-clock strong{color:#fff;font-size:clamp(25px,2.8vw,42px);font-variant-numeric:tabular-nums}
+.queue-clock span{color:#b6ced1}
+.queue-main{padding:clamp(16px,2.5vw,36px);gap:clamp(15px,2vw,28px);grid-template-columns:minmax(340px,1.1fr) minmax(400px,1.2fr)}
+.current-zone,.waiting-zone{border:1px solid rgba(172,239,223,.14);background:rgba(13,43,53,.76);border-radius:24px;padding:clamp(18px,2.1vw,30px);box-shadow:0 22px 65px rgba(0,0,0,.16)}
+.section-label{font-size:13px;color:#79e9d1;letter-spacing:.02em}
+.current-card{background:linear-gradient(145deg,#148e80,#0b5b65);border:1px solid rgba(174,255,230,.34);box-shadow:0 20px 48px rgba(1,13,21,.24);border-radius:22px;margin-top:14px;min-height:285px}
+.current-card .current-number{color:#fff}
+.current-card .current-copy,.current-card .current-copy strong{color:#fff}
+.current-card.empty-current{background:linear-gradient(140deg,#183e47,#14404b)}
+.next-card{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.13);border-radius:18px;margin-top:18px}
+.next-label{color:#a7dbd5}
+.next-card strong,.next-number{color:#fff}
+.queue-summary>div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.11);border-radius:15px}
+.queue-summary span{color:#adccce}.queue-summary strong{color:#fff}
+.waiting-zone h2{font-size:clamp(23px,2vw,31px);color:#fff}
+.waiting-head{border-color:rgba(255,255,255,.1)}
+.privacy-note{color:#bad5d4}
+.waiting-list{gap:10px}
+.waiting-row{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.11);border-radius:15px}
+.waiting-row.next{background:rgba(46,182,156,.16);border-color:rgba(66,228,181,.4)}
+.waiting-no{background:rgba(255,255,255,.09);color:#a5f3df}
+.waiting-name{color:#fff;font-weight:800}
+.waiting-meta{color:#b8cdd2}
+.waiting-tag{color:#a9d8d3;background:rgba(255,255,255,.08)}
+.waiting-empty{color:#bacfd0}
+.queue-footer{background:#06171e;border-top:1px solid rgba(255,255,255,.12);color:#bbd6d4;padding:16px 35px;font-size:13px}
+.sound-gate{background:#e9fff8;color:#10433f;border:1px solid #5cbea9;box-shadow:0 12px 38px rgba(0,0,0,.26)}
+.fatal-state{background:rgba(4,18,25,.96)}
+@media(max-width:900px){.queue-main{grid-template-columns:1fr}.current-card{min-height:230px}}
