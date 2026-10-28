@@ -110,14 +110,27 @@
     window.speechSynthesis.speak(u);
   }
 
-  function announce(current){
+  async function announce(current){
     var name=String(current.patient_name||'المريض').trim();
     var number=current.queue_number?String(current.queue_number):'';
-    speakText('يرجى من '+name+(number?'، رقم الدور '+number:'')+'، التفضل بالدخول إلى غرفة الطبيب');
+    var text='يرجى من '+name+(number?'، رقم الدور '+number:'')+'، التفضل بالدخول إلى غرفة الطبيب';
     var card=$('currentCard');
     card.classList.remove('call-flash');
     void card.offsetWidth;
     card.classList.add('call-flash');
+    if(window.medicaQueueAudio){try{window.medicaQueueAudio.pause();window.medicaQueueAudio.src=''}catch{}}
+    if(current.call_seq>0&&state.soundReady){
+      try{
+        var audio=new Audio(endpoint()+'?speech=1&seq='+encodeURIComponent(current.call_seq));
+        window.medicaQueueAudio=audio;
+        audio.preload='auto';
+        await new Promise(function(resolve,reject){audio.addEventListener('canplay',resolve,{once:true});audio.addEventListener('error',reject,{once:true});setTimeout(function(){reject(new Error('audio timeout'))},8500)});
+        if(window.medicaQueueAudio!==audio)return;
+        await audio.play();
+        return;
+      }catch(e){/* External provider unavailable: use local voice when possible. */}
+    }
+    speakText(text);
   }
 
   function enableSound(){
