@@ -27,7 +27,7 @@
   function render(data){
     state.data=data;
     state.queueVoice=data.queue_voice==='male'?'male':'female';
-    if($('voiceChoice'))$('voiceChoice').textContent=state.queueVoice==='male'?'Bassel — رجالي عراقي':'Rana — نسائي عراقي';
+    if($('voiceChoice'))$('voiceChoice').textContent=state.queueVoice==='male'?'صوت رجالي عربي':'صوت نسائي عربي';
     setBrand(data);
     var current=data.current;
     var waiting=Array.isArray(data.waiting)?data.waiting:[];
@@ -78,7 +78,7 @@
   }
   function voiceScore(v){
     var n=(v.name||'').toLowerCase(),lang=(v.lang||'').toLowerCase();
-    return (/neural|natural|premium|online/i.test(n)?100:0)+(lang==='ar-iq'?40:0)+(/microsoft|google/i.test(n)?12:0);
+    return (/neural|natural|premium|online|enhanced/i.test(n)?100:0)+(/microsoft|google/i.test(n)?15:0)+(/ar-(sa|eg|ae)/i.test(lang)?5:0);
   }
   function fillArabicVoices(){
     var el=$('voiceChoice');if(!el)return;
@@ -92,20 +92,21 @@
   function pickArabicVoice(){
     var voices=availableArabicVoices().sort(function(a,b){return voiceScore(b)-voiceScore(a)});
     var selected=$('voiceChoice')?.value||'';
-    var gender=state.queueVoice==='male' ? /bassel|male|ذكر|رجل/i : /rana|female|أنثى|امرأة/i;
-    return voices.find(function(v){return gender.test(v.name||'')})||voices.find(function(v){return v.voiceURI===selected})||voices[0]||null;
+    var gender=state.queueVoice==='male' ? /bassel|h аmed|hamed|male|ذكر|رجل/i : /rana|salma|hoda|female|أنثى|امرأة/i;
+    return voices.find(function(v){return gender.test(v.name||'') && /neural|natural|premium|online|enhanced/i.test(v.name||'')})||voices.find(function(v){return gender.test(v.name||'')})||voices.find(function(v){return v.voiceURI===selected})||voices[0]||null;
   }
 
   function speakText(text){
     if(!window.speechSynthesis||!window.SpeechSynthesisUtterance)return;
     window.speechSynthesis.cancel();
     var u=new SpeechSynthesisUtterance(text);
-    u.lang='ar-IQ';
+    u.lang='ar-SA';
+
     u.rate=.96;
     u.pitch=1;
     u.volume=1;
     var voice=pickArabicVoice();
-    if(voice)u.voice=voice;
+    if(voice){u.voice=voice;u.lang=voice.lang||'ar-SA';}
     window.speechSynthesis.speak(u);
   }
 
