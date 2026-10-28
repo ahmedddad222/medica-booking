@@ -128,9 +128,9 @@
         if(window.medicaQueueAudio!==audio)return;
         await audio.play();
         return;
-      }catch(e){console.warn('Medica external Arabic TTS failed:',e);$('connectionState').textContent='الصوت الخارجي غير متاح';}
+      }catch(e){console.warn('Medica external Arabic TTS failed:',e);$('connectionState').textContent='الصوت الخارجي غير متاح';return;}
     }
-    speakText(text);
+    if(!state.soundReady)speakText(text);
   }
 
   function enableSound(){
@@ -140,7 +140,7 @@
     btn.querySelector('strong').textContent='النداء الصوتي مفعّل';
     btn.querySelector('small').textContent='اضغط هنا لاختبار الصوت مرة أخرى';
     localStorage.setItem('medica_queue_sound','on');
-    speakText('تم تفعيل النداء الصوتي');
+    $('connectionState').textContent='فحص الصوت الخارجي';
     setTimeout(function(){
       if(state.data&&state.data.current&&state.data.current.call_seq>0){
         announce(state.data.current);
@@ -211,7 +211,7 @@
     btn.disabled=true;btn.textContent='جاري تحميل الصوت العربي...';
     try{
       var response=await fetch(endpoint()+'?speech=1&test=1',{cache:'no-store'});
-      if(!response.ok)throw Error('HTTP '+response.status);
+      if(!response.ok){var detail='';try{detail=(await response.json()).error||''}catch{}throw Error('HTTP '+response.status+(detail?' - '+detail:''));}
       var type=response.headers.get('content-type')||'';
       if(!type.includes('audio'))throw Error('Invalid audio response');
       var blob=await response.blob();
