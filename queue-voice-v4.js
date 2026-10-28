@@ -78,7 +78,7 @@
     if(voice.engine)return voice.engine;
     if(!voice.loading)voice.loading=(async function(){
       voiceStatus('جاري تحميل محرك الصوت العربي...');
-      var module=await import('/queue-nabra-bundle.js?v=6');
+      var module=await import('/queue-nabra-bundle.js?v=7');
       if(!module.NabraTTS)throw Error('حزمة الصوت ناقصة');
       voice.engine=await module.NabraTTS.load({
         dtype:'fp16',device:'wasm',worker:false,
