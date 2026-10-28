@@ -85,9 +85,9 @@
     if(!voice.loading){
       voice.loading=(async function(){
         voiceStatus('يتم تنزيل نموذج الصوت العربي لأول مرة...');
-        var lib=await import('https://esm.sh/nabra-tts');
+        var lib=await import('https://cdn.jsdelivr.net/npm/nabra-tts@0/+esm');
         if(!lib.NabraTTS)throw new Error('مكتبة الصوت غير متاحة');
-        var engine=await lib.NabraTTS.load();
+        var engine=await lib.NabraTTS.load({dtype:'fp16',device:'wasm',worker:false});
         voice.engine=engine;
         return engine;
       })().catch(function(error){voice.loading=null;throw error});
