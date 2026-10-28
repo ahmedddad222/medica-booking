@@ -67,7 +67,7 @@
 
     <footer class="queue-footer">
       <span class="queue-footer-message">يرجى متابعة الشاشة والاستماع إلى النداء الصوتي عند وصول دوركم</span>
-      <span class="queue-voice-tools"><label for="voiceChoice">الصوت العربي:</label><select id="voiceChoice" aria-label="اختيار صوت النداء"><option value="">أفضل صوت عربي متوفر</option></select><button id="testArabicVoice" type="button">اختبار الصوت 🔊</button></span><span>Medica</span>
+      <span class="queue-voice-tools"><strong id="voiceStatus" role="status" aria-live="polite">النداء العربي عبر ملف صوتي — اضغط اختبار الصوت</strong><button id="testArabicVoice" type="button">اختبار الصوت 🔊</button></span><span>Medica</span>
     </footer>
 
     <button id="soundGate" class="sound-gate" type="button">
@@ -81,6 +81,6 @@
       <span id="fatalText">تحقق من رابط العيادة واتصال الإنترنت.</span>
     </div>
   </div>
-  <script src="/queue.js?v=10" defer></script>
+  <script src="/queue.js?v=11" defer></script>
 </body>
 </html>
