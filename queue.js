@@ -120,7 +120,21 @@
     try{
       var r=await fetch(endpoint(),{cache:'no-store',headers:{'accept':'application/json'}});
       var j=await r.json();
-      if(!r.ok)throw new Error(j.error||'تعذر تحميل الطابور');
+      if(!r.ok){
+        if(r.status===403 && j.code==='FEATURE_LOCKED'){
+          state.data=null;
+          $('currentName').textContent='الشاشة غير مفعّلة';
+          $('currentNumber').textContent='—';
+          $('waitingList').innerHTML='';
+          $('waitingCount').textContent='0';
+          $('nextName').textContent='—';
+          $('nextNumber').textContent='—';
+          $('fatalText').textContent='انتهت التجربة المجانية أو لم يتم تفعيل اشتراك شاشة الطوابير. يرجى مراجعة إدارة Medica.';
+          $('fatalState').classList.remove('hidden');
+        }
+        throw new Error(j.error||'تعذر تحميل الطابور');
+      }
+      $('fatalState').classList.add('hidden');
       $('connectionState').textContent='مباشر';
       $('connectionState').parentElement.classList.remove('offline');
       render(j);
