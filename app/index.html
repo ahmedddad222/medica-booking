@@ -362,6 +362,13 @@
   .ultrasound-patient-history{display:grid;gap:9px}.ultrasound-history-row{padding:11px;border:1px solid var(--border);border-radius:13px;background:#fff}.ultrasound-history-row-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.ultrasound-history-row small{display:block;color:var(--muted);margin-top:4px}
   @media(max-width:780px){.ultrasound-hero{align-items:flex-start;flex-direction:column}.ultrasound-hero .btn{width:100%}.ultrasound-card{grid-template-columns:1fr}.ultrasound-form-grid{grid-template-columns:1fr}.ultrasound-measure-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ultrasound-filters{width:100%}.ultrasound-filters .search{width:100%}}
 
+
+  .admin-maintenance-panel{border:1px solid var(--line);transition:border-color .18s,box-shadow .18s}
+  .admin-maintenance-panel.maintenance-active{border-color:#efb4b8;box-shadow:0 0 0 3px rgba(198,60,69,.06)}
+  .admin-maintenance-panel .field{margin-top:14px}
+  .admin-maintenance-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .admin-maintenance-actions .muted{margin:0;flex:1;min-width:220px}
+  @media(max-width:700px){.admin-maintenance-actions .btn{width:100%}.admin-maintenance-actions .muted{min-width:100%}}
 </style>
   <script type="module" crossorigin src="./assets/index-security-20261021.js?v=20261021-security2?v=27"></script>
 
@@ -471,6 +478,21 @@
           <div class="stat"><span>حسابات الأطباء والسكرتارية</span><strong id="adminUsersCount">0</strong></div>
           <div class="stat"><span>حسابات تجريبية</span><strong id="adminTrialCount">0</strong></div>
           <div class="stat"><span>عيادات موقوفة</span><strong id="adminPausedCount">0</strong></div>
+        </div>
+        <div id="adminMaintenancePanel" class="panel admin-maintenance-panel">
+          <div class="panel-head">
+            <div><h3>صيانة المنصة</h3><div class="muted">إيقاف تطبيق Medica مؤقتاً لدى الأطباء والسكرتارية أثناء أعمال الصيانة.</div></div>
+            <span id="adminMaintenanceBadge" class="badge ok">المنصة تعمل</span>
+          </div>
+          <label class="field">
+            <span>الرسالة التي تظهر للمستخدمين أثناء الصيانة</span>
+            <textarea id="adminMaintenanceMessage" rows="2" maxlength="240">المنصة تحت الصيانة حالياً. سنعود للعمل قريباً.</textarea>
+          </label>
+          <div class="toolbar admin-maintenance-actions">
+            <button id="adminMaintenanceToggle" class="btn danger" type="button">تفعيل وضع الصيانة</button>
+            <span class="muted">روابط الحجز الإلكتروني للمرضى ستبقى تعمل بشكل طبيعي.</span>
+          </div>
+          <div id="adminMaintenanceUpdated" class="muted"></div>
         </div>
         <div class="panel"><div class="panel-head"><h3>أحدث العيادات</h3><button class="btn light small" data-admin-goto="adminCreate">+ عيادة جديدة</button></div><div id="adminRecentClinics" class="list"></div></div>
       </section>
@@ -1071,7 +1093,7 @@
   <script src="./presence.js?v=25" defer></script>
   <script src="./admin-mobile.js?v=25" defer></script>\n  <script src="./admin-delete.js?v=25" defer></script>
   <script src="./admin-subscription.js?v=27" defer></script>
-  <script src="./pwa.js?v=31" defer></script>
+  <script src="./maintenance.js?v=1" defer></script>\n  <script src="./pwa.js?v=33" defer></script>
 <script src="/i18n.js?v=20261015-4"></script>
 </body>
 </html>
