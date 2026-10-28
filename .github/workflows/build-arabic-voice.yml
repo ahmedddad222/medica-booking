@@ -30,8 +30,10 @@ jobs:
           npm install --no-save --ignore-scripts esbuild@0.25.12
           mkdir -p node_modules
           ln -s /tmp/nabra-tts node_modules/nabra-tts
-          ./node_modules/.bin/esbuild queue-audio-entry.mjs --bundle --platform=browser --format=esm --target=es2022 --minify --outfile=queue-nabra-bundle.js
+          ./node_modules/.bin/esbuild queue-audio-entry.mjs --bundle --platform=browser --format=esm --target=es2022 --external:module --minify --outfile=queue-nabra-bundle.js
           test -s queue-nabra-bundle.js
+          node --check queue-nabra-bundle.js
+          echo 'Browser bundle generated and syntax checked'
           if grep -q 'https://cdn.jsdelivr.net/npm/nabra-tts' queue-nabra-bundle.js; then exit 1; fi
       - name: Commit bundled module
         run: |
