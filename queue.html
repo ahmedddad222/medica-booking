@@ -8,7 +8,7 @@
   <title>طابور المرضى | Medica</title>
   <link rel="icon" href="/medica-icon.png">
   <link rel="stylesheet" href="/queue.css?v=4">
-</head>
+<style>.queue-voice-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px}.queue-voice-tools select,.queue-voice-tools button{font:inherit;background:#153f49;border:1px solid #5ba59d;color:#fff;border-radius:9px;padding:7px 10px;max-width:230px}.queue-voice-tools button{cursor:pointer;background:#14786d;font-weight:700}</style></head>
 <body>
   <div id="queueApp" class="queue-app">
     <header class="queue-header">
@@ -67,7 +67,7 @@
 
     <footer class="queue-footer">
       <span class="queue-footer-message">يرجى متابعة الشاشة والاستماع إلى النداء الصوتي عند وصول دوركم</span>
-      <span style="font-size:12px">الصوت المختار: <strong id="voiceChoice">صوت نسائي عربي</strong></span><span>Medica</span>
+      <span class="queue-voice-tools"><label for="voiceChoice">الصوت العربي:</label><select id="voiceChoice" aria-label="اختيار صوت النداء"><option value="">أفضل صوت عربي متوفر</option></select><button id="testArabicVoice" type="button">اختبار الصوت 🔊</button></span><span>Medica</span>
     </footer>
 
     <button id="soundGate" class="sound-gate" type="button">
@@ -81,6 +81,6 @@
       <span id="fatalText">تحقق من رابط العيادة واتصال الإنترنت.</span>
     </div>
   </div>
-  <script src="/queue.js?v=6" defer></script>
+  <script src="/queue.js?v=7" defer></script>
 </body>
 </html>
