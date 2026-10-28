@@ -71,9 +71,9 @@
   }
 
   // Medica Voice V6: bundled Nabra AI Arabic voice, served from this domain.
-  var voice={enabled:false,playing:null,serial:0,engine:null,loading:null};
+  var voice={enabled:false,playing:null,serial:0,engine:null,loading:null,audioContext:null};
   function voiceStatus(message,error){var label=$('voiceStatus');if(label){label.textContent=message;label.style.color=error?'#fda4af':'#a7f3d0'}}
-  function stopVoice(){voice.serial++;if(voice.playing){try{voice.playing.pause();voice.playing.src=''}catch{}voice.playing=null}}
+  function stopVoice(){voice.serial++;if(voice.playing){try{voice.playing.stop()}catch{}try{voice.playing.disconnect()}catch{}voice.playing=null}}
   async function localEngine(){
     if(voice.engine)return voice.engine;
     if(!voice.loading)voice.loading=(async function(){
@@ -115,16 +115,24 @@
       voiceStatus('جاري توليد النداء العربي...');
       var result=await engine.generate(text);
       if(id!==voice.serial)return;
-      var url=URL.createObjectURL(engine.toWav(result.audio)),audio=new Audio(url);
-      voice.playing=audio;
-      audio.onended=function(){URL.revokeObjectURL(url);voiceStatus('الصوت جاهز')};
-      audio.onerror=function(){URL.revokeObjectURL(url);voiceStatus('تعذر تشغيل ملف الصوت',true)};
-      try{await audio.play()}catch(e){URL.revokeObjectURL(url);throw e}
+      // Play generated raw PCM directly using Web Audio; avoids CSP-blocked blob: media URLs.
+      if(!(result.audio instanceof Float32Array)||result.audio.length===0)throw Error('محرك الصوت لم ينتج بيانات صوتية');
+      var ctx=voice.audioContext||(voice.audioContext=new (window.AudioContext||window.webkitAudioContext)());
+      if(ctx.state==='suspended')await ctx.resume();
+      var sampleRate=Number(result.sampleRate)||24000;
+      var buffer=ctx.createBuffer(1,result.audio.length,sampleRate);
+      buffer.copyToChannel(result.audio);
+      var source=ctx.createBufferSource();
+      source.buffer=buffer;
+      source.connect(ctx.destination);
+      voice.playing=source;
+      source.onended=function(){if(voice.playing===source)voice.playing=null;voiceStatus('الصوت جاهز')};
+      source.start();
       voiceStatus('الصوت العربي يعمل');
     }catch(e){if(id===voice.serial)voiceStatus('الصوت العربي غير جاهز: '+String(e.message||e),true);console.error('Medica local Arabic TTS',e)}
   }
   function announce(call){var card=$('currentCard');card.classList.remove('call-flash');void card.offsetWidth;card.classList.add('call-flash');if(voice.enabled)playVoice(false,call)}
-  function enableSound(){voice.enabled=true;state.soundReady=true;localStorage.setItem('medica_queue_sound','on');$('soundGate').classList.add('enabled');$('soundGate').querySelector('strong').textContent='النداء العربي مفعّل';$('soundGate').querySelector('small').textContent='اضغط لاختبار الصوت';playVoice(true)}
+  function enableSound(){voice.enabled=true;state.soundReady=true;try{voice.audioContext=voice.audioContext||new (window.AudioContext||window.webkitAudioContext)();voice.audioContext.resume()}catch(e){voiceStatus('المتصفح لا يدعم Web Audio',true);return}localStorage.setItem('medica_queue_sound','on');$('soundGate').classList.add('enabled');$('soundGate').querySelector('strong').textContent='النداء العربي مفعّل';$('soundGate').querySelector('small').textContent='اضغط لاختبار الصوت';playVoice(true)}
 
   async function refresh(){
     if(state.busy||!slug)return;
