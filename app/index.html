@@ -472,7 +472,7 @@
       <div class="brand"><img class="medica-app-logo" src="./medica-icon.svg" alt="Medica"><div>Medica Admin</div></div>
       <nav class="nav">
         <button data-admin-page="adminDashboard" class="active">الرئيسية</button>
-        <button data-admin-page="adminClinics">العيادات والحسابات</button>
+        <button data-admin-page="adminClinics">العيادات والحسابات</button><button data-admin-page="adminQueueScreens">شاشات الطوابير</button>
         <button data-admin-page="adminCreate">إنشاء عيادة</button>
       </nav>
       <div class="side-bottom"><div id="adminEmail" class="muted"></div><button id="adminLogout" class="btn outline w100" style="margin-top:10px">تسجيل خروج</button></div>
@@ -513,7 +513,8 @@
         </div>
       </section>
 
-      <section id="adminCreate" class="page hidden">
+      <section id="adminQueueScreens" class="page hidden"><div class="panel"><div class="panel-head"><div><h3>إدارة شاشات الطوابير</h3><p class="muted">منح تجربة 48 ساعة، تفعيل دائمي، وإيقاف فوري لكل عيادة</p></div><input id="adminQueueSearch" class="search" placeholder="البحث عن عيادة"></div><div class="grid-cards" style="margin:15px 0"><div class="stat"><span>دائمي</span><strong id="queueAdminPermanent">0</strong></div><div class="stat"><span>تجربة سارية</span><strong id="queueAdminTrials">0</strong></div><div class="stat"><span>مقفلة</span><strong id="queueAdminLocked">0</strong></div></div><div id="adminQueueScreensList" class="list"></div></div></section>
+<section id="adminCreate" class="page hidden">
         <div class="split">
           <div class="panel">
             <h3>إنشاء عيادة وحساب الطبيب</h3>
