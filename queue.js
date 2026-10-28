@@ -26,6 +26,8 @@
 
   function render(data){
     state.data=data;
+    state.queueVoice=data.queue_voice==='male'?'male':'female';
+    if($('voiceChoice'))$('voiceChoice').textContent=state.queueVoice==='male'?'Bassel — رجالي عراقي':'Rana — نسائي عراقي';
     setBrand(data);
     var current=data.current;
     var waiting=Array.isArray(data.waiting)?data.waiting:[];
@@ -90,7 +92,8 @@
   function pickArabicVoice(){
     var voices=availableArabicVoices().sort(function(a,b){return voiceScore(b)-voiceScore(a)});
     var selected=$('voiceChoice')?.value||'';
-    return voices.find(function(v){return v.voiceURI===selected})||voices[0]||null;
+    var gender=state.queueVoice==='male' ? /bassel|male|ذكر|رجل/i : /rana|female|أنثى|امرأة/i;
+    return voices.find(function(v){return gender.test(v.name||'')})||voices.find(function(v){return v.voiceURI===selected})||voices[0]||null;
   }
 
   function speakText(text){
@@ -187,7 +190,7 @@
     $('soundGate').querySelector('small').textContent='اضغط مرة واحدة لتشغيل الصوت في هذه الجلسة';
   }
   fillArabicVoices();
-  if($('voiceChoice'))$('voiceChoice').addEventListener('change',function(){localStorage.setItem('medica_queue_voice',this.value);if(state.soundReady)speakText('تم اختيار صوت النداء')});
+
   if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=fillArabicVoices;
 
   updateClock();
