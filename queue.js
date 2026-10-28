@@ -70,9 +70,27 @@
     }
   }
 
+  function availableArabicVoices(){
+    if(!window.speechSynthesis)return [];
+    return window.speechSynthesis.getVoices().filter(function(v){return /^ar[-_]/i.test(v.lang||'') || /arabic|العربي/i.test(v.name||'')});
+  }
+  function voiceScore(v){
+    var n=(v.name||'').toLowerCase(),lang=(v.lang||'').toLowerCase();
+    return (/neural|natural|premium|online/i.test(n)?100:0)+(lang==='ar-iq'?40:0)+(/microsoft|google/i.test(n)?12:0);
+  }
+  function fillArabicVoices(){
+    var el=$('voiceChoice');if(!el)return;
+    var voices=availableArabicVoices().sort(function(a,b){return voiceScore(b)-voiceScore(a)});
+    var preferred=el.value||localStorage.getItem('medica_queue_voice')||'';
+    el.textContent='';
+    var auto=document.createElement('option');auto.value='';auto.textContent='أفضل صوت عربي متوفر';el.appendChild(auto);
+    voices.forEach(function(v){var option=document.createElement('option');option.value=v.voiceURI;option.textContent=v.name+' ('+v.lang+')';el.appendChild(option)});
+    if(voices.some(function(v){return v.voiceURI===preferred}))el.value=preferred;
+  }
   function pickArabicVoice(){
-    var voices=window.speechSynthesis?window.speechSynthesis.getVoices():[];
-    return voices.find(function(v){return /^ar(-|_)/i.test(v.lang||'')})||voices.find(function(v){return /arab/i.test(v.name||'')})||null;
+    var voices=availableArabicVoices().sort(function(a,b){return voiceScore(b)-voiceScore(a)});
+    var selected=$('voiceChoice')?.value||'';
+    return voices.find(function(v){return v.voiceURI===selected})||voices[0]||null;
   }
 
   function speakText(text){
@@ -80,7 +98,7 @@
     window.speechSynthesis.cancel();
     var u=new SpeechSynthesisUtterance(text);
     u.lang='ar-IQ';
-    u.rate=.88;
+    u.rate=.96;
     u.pitch=1;
     u.volume=1;
     var voice=pickArabicVoice();
@@ -168,7 +186,9 @@
   if(localStorage.getItem('medica_queue_sound')==='on'){
     $('soundGate').querySelector('small').textContent='اضغط مرة واحدة لتشغيل الصوت في هذه الجلسة';
   }
-  if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=function(){pickArabicVoice()};
+  fillArabicVoices();
+  if($('voiceChoice'))$('voiceChoice').addEventListener('change',function(){localStorage.setItem('medica_queue_voice',this.value);if(state.soundReady)speakText('تم اختيار صوت النداء')});
+  if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=fillArabicVoices;
 
   updateClock();
   setInterval(updateClock,1000);
