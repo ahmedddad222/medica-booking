@@ -121,7 +121,7 @@
       if(ctx.state==='suspended')await ctx.resume();
       var sampleRate=Number(result.sampleRate)||24000;
       var buffer=ctx.createBuffer(1,result.audio.length,sampleRate);
-      buffer.copyToChannel(result.audio);
+      buffer.copyToChannel(result.audio, 0);
       var source=ctx.createBufferSource();
       source.buffer=buffer;
       source.connect(ctx.destination);
