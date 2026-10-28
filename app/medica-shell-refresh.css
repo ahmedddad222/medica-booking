@@ -1,0 +1,57 @@
+/* Medica UI refresh — shared admin & clinic layout; visual only */
+@media(min-width:901px){
+#adminApp.app,#staffApp.app{--sidebar:252px;grid-template-columns:252px minmax(0,1fr);background:#f4f8fa;min-width:0}
+#adminApp .sidebar,#staffApp .sidebar{width:252px;min-width:0;height:100vh;position:sticky;top:0;z-index:15;background:#fff!important;border-left:1px solid #e3ecef;box-shadow:-7px 0 26px rgba(24,58,70,.035);padding:23px 13px 18px;display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain}
+#adminApp .main,#staffApp .main{width:100%;max-width:none;min-width:0;padding:0 clamp(18px,2.6vw,38px) 38px}
+}
+#adminApp,#staffApp{--bg:#f4f8fa;--surface:#fff;--line:#e1eaf0;--heading:#183242;--text:#243d49;--muted:#647d8b;--shadow-sm:0 4px 18px rgba(26,64,80,.035);color:#243d49}
+#adminApp .sidebar .brand,#staffApp .sidebar .brand{color:#153a43!important;display:flex;align-items:center;gap:12px;padding:5px 9px 21px;margin:0 0 14px;border-bottom:1px solid #e8eff2;font-size:20px;min-width:0}
+#adminApp .sidebar .brand img,#staffApp .sidebar .brand img{height:44px;width:44px;max-width:44px;object-fit:contain;border-radius:13px;flex:none}
+#adminApp .sidebar .brand>div,#staffApp .sidebar .brand>div{color:#173941!important;min-width:0}
+#staffApp .sidebar .clinic-brand-copy{display:flex;flex-direction:column;gap:3px}
+#staffApp .sidebar .clinic-brand-copy strong{color:#183941!important;font-size:16px}
+#staffApp .sidebar .clinic-brand-copy small{color:#708b94!important;font-size:11px}
+#staffApp .sidebar .nav-section-label{color:#8ca0ab!important;font-size:11px;font-weight:800;margin:8px 12px 10px;letter-spacing:.1px}
+#adminApp .sidebar .nav,#staffApp .sidebar .nav{display:grid;gap:5px;margin-top:2px;padding:0;align-content:start}
+#adminApp .sidebar .nav button,#staffApp .sidebar .nav button{min-height:47px;width:100%;border:1px solid transparent;border-radius:12px;background:transparent!important;color:#496774!important;text-align:right;padding:12px 13px;box-shadow:none!important;font-size:13px;font-weight:750;transition:background .16s,border-color .16s,color .16s}
+#staffApp .sidebar .nav button span{color:inherit!important}
+#adminApp .sidebar .nav button:hover,#staffApp .sidebar .nav button:hover{background:#f2f9f8!important;color:#0b766d!important;border-color:#e0eeeb}
+#adminApp .sidebar .nav button.active,#staffApp .sidebar .nav button.active{background:#e8f7f3!important;color:#0d746b!important;border-color:#cce9e1!important;box-shadow:none!important}
+#adminApp .sidebar .nav button::before,#staffApp .sidebar .nav button::before{content:"";display:inline-block;vertical-align:middle;width:7px;height:7px;border-radius:3px;border:1.5px solid #7a989c;background:transparent;transform:rotate(45deg);margin-left:12px;opacity:1}
+#adminApp .sidebar .nav button.active::before,#staffApp .sidebar .nav button.active::before{background:#148d81;border-color:#148d81;box-shadow:0 0 0 4px #d5f0e9}
+#adminApp .sidebar .nav button::after,#staffApp .sidebar .nav button::after{display:none!important}
+#adminApp .sidebar .side-bottom,#staffApp .sidebar .side-bottom{margin-top:auto;padding:18px 7px 0;border-top:1px solid #e6eff0;min-width:0}
+#adminApp .sidebar .side-bottom .muted,#staffApp .sidebar .side-bottom .muted,#staffApp .sidebar .side-profile strong,#staffApp .sidebar .side-profile small{color:#5d7b84!important;overflow-wrap:anywhere}
+#adminApp .sidebar .side-bottom button,#staffApp .sidebar .side-bottom button{color:#215a61!important;border:1px solid #d9e9e8!important;background:#f3f9f8!important;border-radius:12px;box-shadow:none!important;font-size:13px}
+#adminApp .topbar,#staffApp .topbar{background:rgba(244,248,250,.96)!important;min-height:84px;padding:14px 2px;margin-bottom:23px;border-bottom:1px solid #e3edf0;box-shadow:none}
+#adminApp .topbar h2,#staffApp .topbar h2{font-size:clamp(21px,2vw,28px);color:#183a46;font-weight:850}
+#adminApp .topbar .muted,#staffApp .topbar .muted{color:#728891}
+#adminApp .grid-cards,#staffApp .grid-cards{grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px;margin-bottom:20px}
+#adminApp .stat,#staffApp .stat{border-radius:19px;border:1px solid #e2ebef;background:#fff;min-height:128px;padding:20px 22px;box-shadow:0 5px 20px rgba(20,62,77,.045)}
+#adminApp .stat::after,#staffApp .stat::after{width:75px;height:75px;left:-20px;bottom:-23px;opacity:.42}
+#adminApp .stat strong,#staffApp .stat strong{font-size:32px;color:#133949}
+#adminApp .stat span,#staffApp .stat span{font-size:13px;color:#627e8c;line-height:1.5}
+#adminApp .panel,#staffApp .panel{background:#fff;border:1px solid #e2ebef;border-radius:20px;box-shadow:0 5px 20px rgba(20,62,77,.035);padding:clamp(16px,1.6vw,25px);min-width:0}
+#adminApp .panel h3,#staffApp .panel h3{color:#183947;font-weight:850}
+#adminApp .panel-head,#staffApp .panel-head{align-items:flex-start;gap:12px;flex-wrap:wrap}
+#adminApp .btn,#staffApp .btn{border-radius:11px}
+#adminApp .field input,#adminApp .field select,#adminApp .field textarea,#staffApp .field input,#staffApp .field select,#staffApp .field textarea{border-color:#dce7eb;border-radius:12px;background:#fff;max-width:100%}
+#adminApp .item,#staffApp .item{border-color:#e3ecef;border-radius:14px;box-shadow:none}
+#adminApp .qadm-hero{background:linear-gradient(125deg,#e9f8f4,#f5fbfa);color:#173f45;border:1px solid #d1eae2;box-shadow:none}
+#adminApp .qadm-hero h2{color:#183e46}
+#adminApp .qadm-hero p{color:#5b7c82}
+#adminApp .qadm-eyebrow{color:#138276}
+#adminApp .qadm-live{color:#126e64;background:#fff;border-color:#cfe9df}
+#adminApp .qadm-main,#adminApp .qadm-card,#adminApp .qadm-stat{box-shadow:0 4px 18px rgba(22,66,78,.035)}
+@media(max-width:900px){
+ #adminApp.app,#staffApp.app{min-width:0}
+ #adminApp .sidebar,#staffApp .sidebar{background:#fff!important}
+ #adminApp .main,#staffApp .main{min-width:0;padding-inline:15px}
+ #adminApp .grid-cards,#staffApp .grid-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:520px){
+ #adminApp .grid-cards,#staffApp .grid-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #adminApp .stat,#staffApp .stat{padding:14px;min-height:106px}
+ #adminApp .stat strong,#staffApp .stat strong{font-size:25px}
+ #adminApp .topbar,#staffApp .topbar{margin-bottom:14px}
+}
