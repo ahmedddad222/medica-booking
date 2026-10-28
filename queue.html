@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0e9384">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>طابور المرضى | Medica</title>
+  <link rel="icon" href="/medica-icon.png">
+  <link rel="stylesheet" href="/queue.css?v=1">
+</head>
+<body>
+  <div id="queueApp" class="queue-app">
+    <header class="queue-header">
+      <div class="queue-brand">
+        <div class="queue-logo-wrap">
+          <img id="clinicLogo" src="/medica-icon.png" alt="شعار العيادة">
+        </div>
+        <div class="queue-brand-copy">
+          <span class="queue-kicker">Medica Queue</span>
+          <h1 id="clinicName">العيادة</h1>
+          <p id="doctorName"></p>
+        </div>
+      </div>
+      <div class="queue-header-meta">
+        <div class="queue-live"><i></i><span id="connectionState">مباشر</span></div>
+        <div class="queue-clock"><strong id="clockTime">--:--</strong><span id="clockDate">--</span></div>
+      </div>
+    </header>
+
+    <main class="queue-main">
+      <section class="current-zone">
+        <div class="section-label">داخل الآن</div>
+        <article id="currentCard" class="current-card empty-current">
+          <div class="current-number" id="currentNumber">—</div>
+          <div class="current-copy">
+            <span>المريض الحالي</span>
+            <strong id="currentName">لا يوجد مريض داخل الآن</strong>
+            <small id="currentHint">سيظهر اسم المريض هنا عند النداء</small>
+          </div>
+        </article>
+
+        <article id="nextCard" class="next-card">
+          <div>
+            <span class="next-label">التالي</span>
+            <strong id="nextName">—</strong>
+          </div>
+          <div class="next-number" id="nextNumber">—</div>
+        </article>
+
+        <div class="queue-summary">
+          <div><span>بالانتظار</span><strong id="waitingCount">0</strong></div>
+          <div><span>الدور الحالي</span><strong id="currentSummary">—</strong></div>
+        </div>
+      </section>
+
+      <section class="waiting-zone">
+        <div class="waiting-head">
+          <div><span class="section-label">المنتظرون</span><h2>ترتيب الأدوار</h2></div>
+          <span class="privacy-note">تظهر الأسماء فقط بدون أي بيانات طبية</span>
+        </div>
+        <div id="waitingList" class="waiting-list">
+          <div class="waiting-empty">لا يوجد مرضى بالانتظار حالياً</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="queue-footer">
+      <span>يرجى متابعة الشاشة والاستماع إلى النداء</span>
+      <span>Medica</span>
+    </footer>
+
+    <button id="soundGate" class="sound-gate" type="button">
+      <span class="sound-icon">🔊</span>
+      <strong>تفعيل النداء الصوتي</strong>
+      <small>اضغط مرة واحدة عند فتح الشاشة على التلفزيون</small>
+    </button>
+
+    <div id="fatalState" class="fatal-state hidden">
+      <strong>تعذر فتح شاشة الطابور</strong>
+      <span id="fatalText">تحقق من رابط العيادة واتصال الإنترنت.</span>
+    </div>
+  </div>
+  <script src="/queue.js?v=1" defer></script>
+</body>
+</html>
