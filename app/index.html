@@ -370,7 +370,7 @@
   .admin-maintenance-actions .muted{margin:0;flex:1;min-width:220px}
   @media(max-width:700px){.admin-maintenance-actions .btn{width:100%}.admin-maintenance-actions .muted{min-width:100%}}
 </style>
-  <script type="module" crossorigin src="./assets/index-security-20261021.js?v=20261108-clinic-realtime1"></script>
+  <script type="module" crossorigin src="./assets/index-security-20261021.js?v=20261108-clinic-realtime2"></script>
 
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./medica-icon.svg" />
@@ -1007,20 +1007,20 @@
       </form>
     </aside>
 
-    <nav class="mobile-nav" id="staffMobileNav"><button data-staff-page="dashboard" class="active">الرئيسية</button><button data-staff-page="medicalTools">الوصفات</button><button data-staff-page="ultrasound" class="sonar-only">السونار</button><button data-staff-page="queue" class="secretary-only">الانتظار</button><button data-staff-page="appointments" class="secretary-only">حجوزات العيادة</button><button data-staff-page="onlineBookings" class="secretary-only">أونلاين</button><button data-staff-page="patients" class="secretary-only">المرضى</button><button data-staff-page="accounts" class="secretary-only">المالية</button><button data-staff-page="settings" class="secretary-only">الإعدادات</button></nav>
+    <nav class="mobile-nav" id="staffMobileNav"><button data-staff-page="dashboard" class="active">الرئيسية</button><button data-staff-page="medicalTools">الوصفات</button><button data-staff-page="ultrasound" class="sonar-only">السونار</button><button data-staff-page="queue" class="secretary-only">الانتظار</button><button data-staff-page="appointments" class="secretary-only">حجوزات العيادة</button><button data-staff-page="onlineBookings">أونلاين</button><button data-staff-page="patients" class="secretary-only">المرضى</button><button data-staff-page="accounts" class="secretary-only">المالية</button><button data-staff-page="settings">الإعدادات</button></nav>
   </div>
 
 
   <div id="reportTemplateModal" class="dialog-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="reportTemplateModalTitle">
     <div class="report-template-card">
       <div class="report-template-head">
-        <div><span class="eyebrow">تصميم المطبوعات</span><h2 id="reportTemplateModalTitle">اختر التصميم</h2><p class="muted">اختر التصميم من اليمين وشاهد المعاينة الحقيقية قبل التطبيق.</p></div>
+        <div><span class="eyebrow">تصميم المطبوعات</span><h2 id="reportTemplateModalTitle">اختر التصميم</h2><p class="muted">اختر التصميم من القائمة، واعرض معاينة فعلية قبل تطبيقه.</p></div>
         <button id="closeReportTemplatePicker" class="icon-btn" type="button" aria-label="إغلاق">×</button>
       </div>
       <div class="report-template-body">
         <div id="reportTemplateGrid" class="report-template-list"></div>
         <div class="report-template-preview-wrap">
-          <div class="report-template-preview-meta"><div><strong id="reportTemplatePreviewName">طبي نظيف</strong><p id="reportTemplatePreviewDesc">واضح ومتوازن للعيادات العامة</p></div><span class="count-pill">معاينة فعلية</span></div>
+          <div class="report-template-preview-meta"><div><strong id="reportTemplatePreviewName">طبي نظيف</strong><p id="reportTemplatePreviewDesc">واضح ومتوازن للعيادات العامة</p></div><span class="count-pill">معاينة فعلية</span><a id="openReportTemplatePreview" class="btn outline small" href="/app/print.html?preview=1&template=clinical_clean" target="_blank" rel="noopener noreferrer">فتح المعاينة ↗</a></div>
           <iframe id="reportTemplatePreviewFrame" class="report-template-preview-frame" title="معاينة تصميم الطباعة" src="about:blank"></iframe>
         </div>
       </div>
