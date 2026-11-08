@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#0f766e" />
   <title>Medica</title>
   <link rel="stylesheet" href="./print-portal.css" />
+  <link rel="stylesheet" href="./report-template-preview.css?v=1" />
   <style>
   :root{
     --bg:#f4f7fb;--surface:#ffffff;--surface-2:#f8fafc;--line:#e6ebf2;--line-strong:#d8e0ea;
@@ -370,7 +371,7 @@
   .admin-maintenance-actions .muted{margin:0;flex:1;min-width:220px}
   @media(max-width:700px){.admin-maintenance-actions .btn{width:100%}.admin-maintenance-actions .muted{min-width:100%}}
 </style>
-  <script type="module" crossorigin src="./assets/index-security-20261021.js?v=20261108-clinic-realtime2"></script>
+  <script type="module" crossorigin src="./assets/index-security-20261021.js?v=20261108-clinic-realtime3"></script>
 
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./medica-icon.svg" />
@@ -1021,7 +1022,7 @@
         <div id="reportTemplateGrid" class="report-template-list"></div>
         <div class="report-template-preview-wrap">
           <div class="report-template-preview-meta"><div><strong id="reportTemplatePreviewName">طبي نظيف</strong><p id="reportTemplatePreviewDesc">واضح ومتوازن للعيادات العامة</p></div><span class="count-pill">معاينة فعلية</span><a id="openReportTemplatePreview" class="btn outline small" href="/app/print.html?preview=1&template=clinical_clean" target="_blank" rel="noopener noreferrer">فتح المعاينة ↗</a></div>
-          <iframe id="reportTemplatePreviewFrame" class="report-template-preview-frame" title="معاينة تصميم الطباعة" src="about:blank"></iframe>
+          <div id="reportTemplatePreviewFrame" class="report-template-preview-frame" role="region" aria-label="معاينة التصميم المختار"></div>
         </div>
       </div>
       <div class="report-template-actions">
@@ -1040,7 +1041,7 @@
       <form id="prescriptionForm">
         <input id="prescriptionId" type="hidden" />
         <div class="prescription-form-grid">
-          <label class="field"><span>المريض</span><select id="prescriptionPatient" required></select></label>
+          <label class="field"><span>المريض</span><select id="prescriptionPatient" required></select></label><div id="prescriptionPatientInfo" class="prescription-patient-info" aria-live="polite"><span>اختر المريض لعرض عمره وجنسه من ملفه</span></div>
           <label class="field"><span>تاريخ الوصفة</span><input id="prescriptionDate" type="date" required /></label>
           <label class="field full"><span>التشخيص <small>اختياري</small></span><input id="prescriptionDiagnosis" placeholder="تشخيص مختصر" /></label>
         </div>
