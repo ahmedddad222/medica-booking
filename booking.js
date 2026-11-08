@@ -19,6 +19,23 @@
 
   var weekdays=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
   var $=function(id){return document.getElementById(id)};
+  function ensurePatientDemographics(){
+    var form=$('bookingForm'),grid=form&&form.querySelector('.form-grid');
+    if(!grid)return;
+    var note=$('note'),noteField=note&&note.closest('.field');
+    if(!$('age')){
+      var ageField=document.createElement('div');
+      ageField.className='field';
+      ageField.innerHTML='<label for="age">العمر (بالسنوات)</label><input id="age" type="number" min="0" max="120" step="1" inputmode="numeric" placeholder="مثال: 35" required><div id="ageError" class="field-error"></div>';
+      grid.insertBefore(ageField,noteField||null);
+    }
+    if(!$('gender')){
+      var genderField=document.createElement('div');
+      genderField.className='field';
+      genderField.innerHTML='<label for="gender">الجنس</label><select id="gender" required><option value="">اختر الجنس</option><option value="male">ذكر</option><option value="female">أنثى</option></select><div id="genderError" class="field-error"></div>';
+      grid.insertBefore(genderField,noteField||null);
+    }
+  }
   var pad=function(n){return String(n).padStart(2,'0')};
   var dateKey=function(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
   var parseDate=function(v){return new Date(v+'T12:00:00')};
@@ -351,17 +368,29 @@
     return ok
   }
 
+  function validateAge(show){
+    var raw=$('age').value.trim(),age=Number(raw),ok=raw!==''&&Number.isInteger(age)&&age>=0&&age<=120;
+    $('ageError').textContent=show&&!ok?'أدخل العمر بالسنوات من 0 إلى 120':'';
+    return ok
+  }
+
+  function validateGender(show){
+    var value=$('gender').value,ok=value==='male'||value==='female';
+    $('genderError').textContent=show&&!ok?'اختر الجنس':'';
+    return ok
+  }
+
   function updateSubmit(){
-    $('submitBtn').disabled=!(state.selectedDate&&state.selectedTime&&validateName(false)&&validatePhone(false))
+    $('submitBtn').disabled=!(state.selectedDate&&state.selectedTime&&validateName(false)&&validatePhone(false)&&validateAge(false)&&validateGender(false))
   }
 
   async function submitBooking(e){
     e.preventDefault();
     setNotice('');
-    var nameOk=validateName(true),phoneOk=validatePhone(true);
+    var nameOk=validateName(true),phoneOk=validatePhone(true),ageOk=validateAge(true),genderOk=validateGender(true);
     if(!state.selectedDate)return setNotice('اختَر يوم الحجز أولاً','bad');
     if(!state.selectedTime)return setNotice('اختَر وقتاً من الأوقات المتاحة','bad');
-    if(!nameOk||!phoneOk)return;
+    if(!nameOk||!phoneOk||!ageOk||!genderOk)return;
 
     var btn=$('submitBtn'),chosenDate=state.selectedDate,chosenTime=state.selectedTime;
     btn.disabled=true;
@@ -373,6 +402,8 @@
         time:chosenTime,
         name:$('name').value.trim(),
         phone:$('phone').value.trim(),
+        age:Number($('age').value),
+        gender:$('gender').value,
         note:$('note').value.trim(),
         website:$('website').value
       };
@@ -422,10 +453,15 @@
     }
   }
 
+  ensurePatientDemographics();
   $('name').addEventListener('input',updateSubmit);
   $('phone').addEventListener('input',updateSubmit);
+  $('age').addEventListener('input',updateSubmit);
+  $('gender').addEventListener('change',updateSubmit);
   $('name').addEventListener('blur',function(){validateName(true)});
   $('phone').addEventListener('blur',function(){validatePhone(true)});
+  $('age').addEventListener('blur',function(){validateAge(true)});
+  $('gender').addEventListener('blur',function(){validateGender(true)});
   $('closeTimePickerBtn').addEventListener('click',closeTimePicker);
   $('timePickerBackdrop').addEventListener('click',function(e){if(e.target===this)closeTimePicker()});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('timePickerBackdrop').hidden)closeTimePicker()});
