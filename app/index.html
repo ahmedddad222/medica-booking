@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#0f766e" />
   <title>Medica</title>
   <link rel="stylesheet" href="./print-portal.css" />
+  <link rel="stylesheet" href="./report-template-preview.css?v=1" />
   <style>
   :root{
     --bg:#f4f7fb;--surface:#ffffff;--surface-2:#f8fafc;--line:#e6ebf2;--line-strong:#d8e0ea;
@@ -370,7 +371,7 @@
   .admin-maintenance-actions .muted{margin:0;flex:1;min-width:220px}
   @media(max-width:700px){.admin-maintenance-actions .btn{width:100%}.admin-maintenance-actions .muted{min-width:100%}}
 </style>
-  <script type="module" crossorigin src="./assets/index-security-20261021.js?v=20261028-queue2"></script>
+  <script type="module" crossorigin src="./assets/index-security-20261021.js?v=20261108-clinic-realtime4"></script>
 
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./medica-icon.svg" />
@@ -388,6 +389,10 @@
   .queue-card .queue-time strong{display:block;font-size:16px}.queue-card .queue-time small{display:block;font-size:9px;color:var(--muted);margin-top:2px}
   @media(max-width:780px){.queue-screen-card{align-items:stretch;flex-direction:column}.queue-screen-actions{width:100%}.queue-screen-actions .btn{flex:1}}
 </style>
+<style id="medica-admin-queue-dashboard">
+#adminQueueScreens{direction:rtl}.qadm-hero{background:linear-gradient(125deg,#0b2530,#114d4b);color:#fff;border-radius:22px;padding:26px 28px;display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:18px;box-shadow:0 16px 42px #143e3924}.qadm-hero h2{font-size:26px;margin:7px 0}.qadm-hero p{color:#c5dcda;margin:0;font-size:13px}.qadm-eyebrow{font-size:10px;letter-spacing:1.5px;color:#81dcc9;font-weight:800}.qadm-live{background:#ffffff15;border:1px solid #ffffff25;padding:9px 14px;border-radius:999px;font-weight:700;font-size:12px;white-space:nowrap}.qadm-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:18px}.qadm-stat{background:#fff;border:1px solid #e3edec;border-radius:17px;padding:19px;display:flex;flex-direction:column;gap:8px;box-shadow:0 4px 14px #0a33330a}.qadm-stat span{font-size:12px;color:#64748b;font-weight:700}.qadm-stat strong{font-size:30px;color:#123b3b;line-height:1.1}.qadm-stat small{color:#8ca0a6;font-size:11px}.qadm-main{background:#fff;border:1px solid #e3edec;border-radius:19px;padding:21px}.qadm-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:19px;flex-wrap:wrap}.qadm-toolbar h3{margin:0 0 4px;font-size:18px}.qadm-toolbar p{margin:0;font-size:12px;color:#819398}.qadm-controls{display:flex;gap:9px;flex-wrap:wrap}.qadm-controls select,.qadm-controls input{min-height:42px;border-radius:11px;border:1px solid #dbe7e5;background:#fff;padding:8px 12px;color:#20383a;max-width:235px}.qadm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.qadm-card{border:1px solid #e0ebea;border-radius:17px;padding:19px;background:#fff;min-width:0;box-shadow:0 3px 14px #1a444008}.qadm-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.qadm-card h4{margin:0;font-size:16px;color:#153539}.qadm-pill{padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800}.qadm-pill.permanent{background:#e4f7ec;color:#15734a}.qadm-pill.trial{background:#e6f2ff;color:#285b9e}.qadm-pill.locked{background:#f3f4f6;color:#687788}.qadm-pill.off{background:#fcebea;color:#ab3d42}.qadm-note{color:#788d95;font-size:12px;margin:10px 0 15px;min-height:20px}.qadm-link{display:flex;align-items:center;gap:8px;background:#f5f9f9;border:1px solid #e3eeee;border-radius:11px;padding:10px;margin-bottom:13px}.qadm-link code{direction:ltr;display:block;font-size:11px;color:#265a5b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.qadm-actions{display:flex;gap:7px;flex-wrap:wrap}.qadm-actions .btn{font-size:11px;min-height:38px;padding:8px 12px}.qadm-empty{grid-column:1/-1;padding:25px;text-align:center;color:#829399}@media(max-width:1120px){.qadm-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.qadm-grid{grid-template-columns:1fr}}@media(max-width:560px){.qadm-hero{padding:20px;align-items:flex-start;flex-direction:column}.qadm-stats{gap:8px}.qadm-stat{padding:14px}.qadm-main{padding:13px}.qadm-controls{width:100%}.qadm-controls select,.qadm-controls input{flex:1;min-width:0}.qadm-card{padding:14px}}
+</style>  <link rel="stylesheet" href="./medica-shell-refresh.css?v=3" media="(min-width: 901px)" />
+  <link rel="stylesheet" href="./medica-admin-modern.css?v=2" media="(min-width: 901px)" />
 </head>
 <body>
   <section id="authView" class="center-shell login-shell">
@@ -470,17 +475,26 @@
   <div id="adminApp" class="app hidden">
     <aside class="sidebar">
       <div class="brand"><img class="medica-app-logo" src="./medica-icon.svg" alt="Medica"><div>Medica Admin</div></div>
-      <nav class="nav">
+      <div class="admin-nav-label">إدارة المنصة</div><nav class="nav">
         <button data-admin-page="adminDashboard" class="active">الرئيسية</button>
-        <button data-admin-page="adminClinics">العيادات والحسابات</button>
+        <button data-admin-page="adminClinics">العيادات والحسابات</button><button data-admin-page="adminQueueScreens">شاشات الطوابير</button>
         <button data-admin-page="adminCreate">إنشاء عيادة</button>
       </nav>
       <div class="side-bottom"><div id="adminEmail" class="muted"></div><button id="adminLogout" class="btn outline w100" style="margin-top:10px">تسجيل خروج</button></div>
     </aside>
-    <main class="main">
+    <main class="main admin-main">
       <div class="topbar"><div><h2 id="adminPageTitle">الرئيسية</h2><div class="muted">لوحة مدير النظام</div></div><button id="adminRefresh" class="icon-btn refresh-btn" type="button" aria-label="إعادة تحميل"><svg class="refresh-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.54 6.14L3 15"/><path d="M3 21v-6h6"/><path d="M3 12a9 9 0 0 1 15.54-6.14L21 9"/><path d="M21 3v6h-6"/></svg></button></div>
 
       <section id="adminDashboard" class="page">
+        <div class="admin-welcome">
+          <div class="admin-welcome-copy"><span class="admin-eyebrow">MEDICA CONTROL CENTER</span><h1>نظرة شاملة على المنصة</h1><p>تابع حالة العيادات والحسابات، ووصل للإجراءات المهمة بسرعة من لوحة واحدة.</p></div>
+          <div class="admin-quick-actions">
+            <button class="btn primary" type="button" data-admin-goto="adminCreate">إضافة عيادة جديدة</button>
+            <button class="btn outline" type="button" data-admin-goto="adminClinics">إدارة العيادات</button>
+            <button class="btn outline" type="button" data-admin-goto="adminQueueScreens">إدارة الطوابير</button>
+          </div>
+        </div>
+        <div class="admin-section-heading"><div><span class="admin-eyebrow">مؤشرات التشغيل</span><h3>إحصائيات المنصة</h3></div><span class="admin-section-note">ملخص الحسابات المسجلة وحالتها</span></div>
         <div class="grid-cards">
           <div class="stat"><span>كل العيادات</span><strong id="adminClinicsCount">0</strong></div>
           <div class="stat"><span>العيادات الفعالة</span><strong id="adminActiveCount">0</strong></div>
@@ -507,16 +521,23 @@
       </section>
 
       <section id="adminClinics" class="page hidden">
+        <div class="admin-page-intro"><div><span class="admin-eyebrow">CLINIC DIRECTORY</span><h2>العيادات والحسابات</h2><p>إدارة العيادات المسجلة والبحث عن الحسابات من واجهة واضحة.</p></div><button class="btn primary" type="button" data-admin-goto="adminCreate">+ إنشاء عيادة</button></div>
         <div class="panel">
           <div class="panel-head"><h3>العيادات والحسابات</h3><input id="adminClinicSearch" class="search" placeholder="بحث باسم العيادة أو البريد" /></div>
           <div id="adminClinicsList" class="list"></div>
         </div>
       </section>
 
-      <section id="adminCreate" class="page hidden">
-        <div class="split">
-          <div class="panel">
-            <h3>إنشاء عيادة وحساب الطبيب</h3>
+      <section id="adminQueueScreens" class="page hidden">
+<div class="qadm-hero"><div><span class="qadm-eyebrow">MEDICA · QUEUE MANAGER</span><h2>إدارة شاشات الطوابير</h2><p>الاشتراكات، الفترة التجريبية، وروابط شاشات الانتظار — من مكان واحد.</p></div><div class="qadm-live">● إدارة الاشتراكات</div></div>
+<div class="qadm-stats"><div class="qadm-stat"><span>إجمالي العيادات</span><strong id="queueAdminTotal">0</strong><small>العيادات المسجلة</small></div><div class="qadm-stat"><span>اشتراك دائمي</span><strong id="queueAdminPermanent">0</strong><small>مفعلة بدون انتهاء</small></div><div class="qadm-stat"><span>تجربة مجانية</span><strong id="queueAdminTrials">0</strong><small>سارية لمدة 48 ساعة</small></div><div class="qadm-stat"><span>غير مفعلة / موقوفة</span><strong id="queueAdminLocked">0</strong><small>لا يمكن عرض الطابور</small></div></div>
+<div class="qadm-main"><div class="qadm-toolbar"><div><h3>العيادات</h3><p>حدد العيادة لإدارة صلاحية شاشتها</p></div><div class="qadm-controls"><select id="adminQueueFilter" aria-label="تصفية حالة الاشتراك"><option value="all">كل الحالات</option><option value="permanent">دائمي</option><option value="trial">تجريبي</option><option value="locked">غير مفعلة</option></select><input id="adminQueueSearch" class="search" placeholder="ابحث باسم العيادة..." /></div></div><div id="adminQueueScreensList" class="qadm-grid"></div></div>
+</section>
+<section id="adminCreate" class="page hidden">
+        <div class="admin-page-intro"><div><span class="admin-eyebrow">NEW CLINIC</span><h2>تهيئة عيادة جديدة</h2><p>أدخل بيانات العيادة والطبيب، ثم سلّم بيانات الدخول بعد الإنشاء.</p></div></div>
+        <div class="split admin-create-layout">
+          <div class="panel admin-create-panel">
+            <div class="admin-form-head"><span class="admin-form-step">01</span><div><h3>بيانات العيادة والطبيب</h3><p>تأكد من البيانات قبل إنشاء الحساب.</p></div></div>
             <form id="createClinicForm" class="form-grid">
               <label class="field"><span>اسم العيادة</span><input id="createClinicName" required /></label>
               <label class="field"><span>نوع الحساب</span><select id="createAccountMode"><option value="permanent">دائم</option><option value="annual">سنوي — سنة واحدة</option><option value="trial">تجريبي</option></select></label>
@@ -537,8 +558,8 @@
             </form>
             <p id="createClinicMsg" class="muted"></p>
           </div>
-          <div class="panel">
-            <h3>بيانات التسليم</h3>
+          <div class="panel admin-credentials-panel">
+            <div class="admin-form-head"><span class="admin-form-step">02</span><div><h3>بيانات التسليم</h3><p>معلومات الدخول المتاحة بعد الإنشاء</p></div></div>
             <p class="muted">بعد الإنشاء تظهر بيانات الدخول هنا حتى تسلمها للطبيب والسكرتير</p>
             <div id="createdCredentials" class="empty">لم يتم إنشاء عيادة بعد</div>
           </div>
@@ -563,10 +584,10 @@
         <button data-staff-page="ultrasound" class="sonar-only doctor-only"><span>فحوصات السونار</span></button>
         <button data-staff-page="queue" class="secretary-only"><span>الانتظار</span></button>
         <button data-staff-page="appointments" class="secretary-only"><span>حجوزات العيادة</span></button>
-        <button data-staff-page="onlineBookings" class="secretary-only"><span>الحجوزات الأونلاين</span></button>
+        <button data-staff-page="onlineBookings"><span>الحجوزات الأونلاين</span></button>
         <button data-staff-page="patients" class="secretary-only"><span>المرضى</span></button>
         <button data-staff-page="accounts" class="secretary-only"><span>المالية</span></button>
-        <button data-staff-page="settings" class="secretary-only"><span>الإعدادات</span></button>
+        <button data-staff-page="settings"><span>الإعدادات</span></button>
       </nav>
       <div class="side-bottom">
         <div class="side-profile"><div><strong id="staffIdentity"></strong><small id="staffRoleSide"></small></div></div>
@@ -613,7 +634,7 @@
         </div>
 
         <div class="medical-tools-grid">
-          <div class="panel prescription-panel doctor-only">
+          <div class="panel prescription-panel">
             <div class="panel-head">
               <div class="prescription-panel-headcopy"><span class="eyebrow">الوصفات</span><h3>الوصفات الطبية</h3><p class="muted">إنشاء الوصفة، تعديلها وطباعتها من مكان واحد.</p></div>
               <div class="toolbar"><span id="prescriptionCountLabel" class="count-pill"></span><button id="newPrescriptionBtn" class="btn primary small" type="button">وصفة جديدة</button></div>
@@ -701,7 +722,7 @@
         <div class="panel appointment-list-panel"><div class="panel-head"><div><span class="eyebrow">الجدول</span><h3>الحجوزات</h3></div><div class="toolbar"><span id="appointmentCountLabel" class="count-pill"></span><button id="printAppointmentsBtn" class="btn outline small" type="button">طباعة</button></div></div><div id="appointmentsList" class="appointment-list"></div></div>
       </section>
 
-      <section id="onlineBookings" class="page hidden secretary-only workspace-page online-booking-page">
+      <section id="onlineBookings" class="page hidden workspace-page online-booking-page">
         <div class="ob-page-head premium-card">
           <div class="ob-head-main">
             <span class="ob-head-icon" aria-hidden="true">
@@ -957,10 +978,10 @@
         <div class="split report-grid"><div class="panel"><div class="panel-head"><h3>توزيع المصاريف</h3></div><div id="expenseBreakdown" class="report-breakdown"></div></div><div class="panel"><div class="panel-head"><h3>حالات الحجوزات</h3></div><div id="appointmentBreakdown" class="report-breakdown"></div></div></div>
       </section>
 
-      <section id="settings" class="page hidden secretary-only workspace-page">
+      <section id="settings" class="page hidden workspace-page">
         <div class="settings-grid premium-settings">
           <div class="panel"><div class="panel-head"><div><span class="eyebrow">الحساب</span><h3>بياناتي</h3></div></div><form id="profileForm" class="form-grid"><label class="field"><span>الاسم</span><input id="profileName" required /></label><label class="field"><span>الهاتف</span><input id="profilePhone" /></label><div class="full"><button class="btn primary" type="submit">حفظ البيانات</button></div></form><div class="sep"></div><h3>كلمة المرور</h3><form id="passwordForm" class="form-grid"><label class="field"><span>كلمة المرور الجديدة</span><input id="newPassword" type="password" minlength="12" required /></label><label class="field"><span>تأكيد كلمة المرور</span><input id="confirmPassword" type="password" minlength="12" required /></label><div class="full"><button class="btn outline" type="submit">تغيير كلمة المرور</button></div></form></div>
-          <div class="panel secretary-only" id="clinicSettingsPanel"><div class="panel-head"><div><span class="eyebrow">الهوية</span><h3>بيانات العيادة</h3></div></div><div class="brand-preview"><img id="clinicLogoPreview" class="hidden" alt="شعار العيادة"><div><strong id="clinicBrandPreviewName">اسم العيادة</strong><div id="clinicBrandPreviewTagline" class="muted"></div></div></div><form id="clinicForm" class="form-grid"><label class="field"><span>اسم العيادة</span><input id="clinicNameInput" required /></label><label class="field"><span>الاختصاص</span><input id="clinicSpecialtyInput" /></label><label class="field"><span>اسم الطبيب</span><input id="doctorNameInput" /></label><label class="field"><span>الهاتف</span><input id="clinicPhoneInput" /></label><label class="field"><span>سعر الكشف الافتراضي</span><input id="defaultFeeInput" type="number" min="0" /></label><div class="field full brand-color-field"><span>لون الهوية</span><div class="brand-color-shell"><div class="brand-color-top"><div><strong>ألوان العيادة</strong><small>معاينة مباشرة ويصل التغيير للسكرتير بعد الحفظ</small></div><div class="brand-custom-color"><input id="brandColorInput" type="color" value="#0e9384" aria-label="اختيار لون الهوية" /><input id="brandColorHex" type="text" value="#0E9384" maxlength="7" spellcheck="false" aria-label="رمز لون الهوية" /></div></div><div id="brandPresetGrid" class="brand-preset-grid" aria-label="ألوان مقترحة"><button class="brand-swatch" type="button" data-brand-preset="#0E9384" style="--preset:#0E9384;background-color:#0E9384!important" aria-label="فيروزي طبي"></button><button class="brand-swatch" type="button" data-brand-preset="#0F766E" style="--preset:#0F766E;background-color:#0F766E!important" aria-label="أخضر داكن"></button><button class="brand-swatch" type="button" data-brand-preset="#2563EB" style="--preset:#2563EB;background-color:#2563EB!important" aria-label="أزرق"></button><button class="brand-swatch" type="button" data-brand-preset="#1D4ED8" style="--preset:#1D4ED8;background-color:#1D4ED8!important" aria-label="أزرق داكن"></button><button class="brand-swatch" type="button" data-brand-preset="#4F46E5" style="--preset:#4F46E5;background-color:#4F46E5!important" aria-label="نيلي"></button><button class="brand-swatch" type="button" data-brand-preset="#7C3AED" style="--preset:#7C3AED;background-color:#7C3AED!important" aria-label="بنفسجي"></button><button class="brand-swatch" type="button" data-brand-preset="#BE123C" style="--preset:#BE123C;background-color:#BE123C!important" aria-label="وردي داكن"></button><button class="brand-swatch" type="button" data-brand-preset="#B45309" style="--preset:#B45309;background-color:#B45309!important" aria-label="عنبر"></button></div><div class="brand-color-preview" aria-label="معاينة الهوية"><div class="brand-preview-nav"><i></i><i></i><i></i></div><div class="brand-preview-body"><span class="eyebrow">معاينة الهوية</span><strong>واجهة واضحة ومتناسقة</strong><div class="brand-preview-actions"><span class="preview-primary">زر رئيسي</span><span class="preview-soft">حالة نشطة</span></div></div></div></div></div><label class="field full"><span>وصف قصير</span><input id="clinicTaglineInput" /></label><label class="field full"><span>العنوان</span><input id="clinicAddressInput" /></label><label class="field full"><span>شعار العيادة</span><input id="clinicLogoFile" type="file" accept="image/png,image/jpeg,image/webp" /></label><div class="full"><button id="clinicSaveBtn" class="btn primary" type="submit">حفظ بيانات العيادة</button></div></form>
+          <div class="panel" id="clinicSettingsPanel"><div class="panel-head"><div><span class="eyebrow">الهوية</span><h3>بيانات العيادة</h3></div></div><div class="brand-preview"><img id="clinicLogoPreview" class="hidden" alt="شعار العيادة"><div><strong id="clinicBrandPreviewName">اسم العيادة</strong><div id="clinicBrandPreviewTagline" class="muted"></div></div></div><form id="clinicForm" class="form-grid"><label class="field"><span>اسم العيادة</span><input id="clinicNameInput" required /></label><label class="field"><span>الاختصاص</span><input id="clinicSpecialtyInput" /></label><label class="field"><span>اسم الطبيب</span><input id="doctorNameInput" /></label><label class="field"><span>الهاتف</span><input id="clinicPhoneInput" /></label><label class="field"><span>سعر الكشف الافتراضي</span><input id="defaultFeeInput" type="number" min="0" /></label><div class="field full brand-color-field"><span>لون الهوية</span><div class="brand-color-shell"><div class="brand-color-top"><div><strong>ألوان العيادة</strong><small>معاينة مباشرة ويصل التغيير للسكرتير بعد الحفظ</small></div><div class="brand-custom-color"><input id="brandColorInput" type="color" value="#0e9384" aria-label="اختيار لون الهوية" /><input id="brandColorHex" type="text" value="#0E9384" maxlength="7" spellcheck="false" aria-label="رمز لون الهوية" /></div></div><div id="brandPresetGrid" class="brand-preset-grid" aria-label="ألوان مقترحة"><button class="brand-swatch" type="button" data-brand-preset="#0E9384" style="--preset:#0E9384;background-color:#0E9384!important" aria-label="فيروزي طبي"></button><button class="brand-swatch" type="button" data-brand-preset="#0F766E" style="--preset:#0F766E;background-color:#0F766E!important" aria-label="أخضر داكن"></button><button class="brand-swatch" type="button" data-brand-preset="#2563EB" style="--preset:#2563EB;background-color:#2563EB!important" aria-label="أزرق"></button><button class="brand-swatch" type="button" data-brand-preset="#1D4ED8" style="--preset:#1D4ED8;background-color:#1D4ED8!important" aria-label="أزرق داكن"></button><button class="brand-swatch" type="button" data-brand-preset="#4F46E5" style="--preset:#4F46E5;background-color:#4F46E5!important" aria-label="نيلي"></button><button class="brand-swatch" type="button" data-brand-preset="#7C3AED" style="--preset:#7C3AED;background-color:#7C3AED!important" aria-label="بنفسجي"></button><button class="brand-swatch" type="button" data-brand-preset="#BE123C" style="--preset:#BE123C;background-color:#BE123C!important" aria-label="وردي داكن"></button><button class="brand-swatch" type="button" data-brand-preset="#B45309" style="--preset:#B45309;background-color:#B45309!important" aria-label="عنبر"></button></div><div class="brand-color-preview" aria-label="معاينة الهوية"><div class="brand-preview-nav"><i></i><i></i><i></i></div><div class="brand-preview-body"><span class="eyebrow">معاينة الهوية</span><strong>واجهة واضحة ومتناسقة</strong><div class="brand-preview-actions"><span class="preview-primary">زر رئيسي</span><span class="preview-soft">حالة نشطة</span></div></div></div></div></div><label class="field full"><span>وصف قصير</span><input id="clinicTaglineInput" /></label><label class="field full"><span>العنوان</span><input id="clinicAddressInput" /></label><label class="field full"><span>شعار العيادة</span><input id="clinicLogoFile" type="file" accept="image/png,image/jpeg,image/webp" /></label><div class="full"><button id="clinicSaveBtn" class="btn primary" type="submit">حفظ بيانات العيادة</button></div></form>
             <div class="sep"></div>
             <div class="doctor-booking-link">
               <div><span class="eyebrow">الحجز الإلكتروني</span><h3>رابط الحجز للمرضى</h3><p class="muted">هذا الرابط خاص بعيادتك ويمكن مشاركته مع المرضى</p></div>
@@ -987,21 +1008,21 @@
       </form>
     </aside>
 
-    <nav class="mobile-nav" id="staffMobileNav"><button data-staff-page="dashboard" class="active">الرئيسية</button><button data-staff-page="medicalTools">الوصفات</button><button data-staff-page="ultrasound" class="sonar-only">السونار</button><button data-staff-page="queue" class="secretary-only">الانتظار</button><button data-staff-page="appointments" class="secretary-only">حجوزات العيادة</button><button data-staff-page="onlineBookings" class="secretary-only">أونلاين</button><button data-staff-page="patients" class="secretary-only">المرضى</button><button data-staff-page="accounts" class="secretary-only">المالية</button><button data-staff-page="settings" class="secretary-only">الإعدادات</button></nav>
+    <nav class="mobile-nav" id="staffMobileNav"><button data-staff-page="dashboard" class="active">الرئيسية</button><button data-staff-page="medicalTools">الوصفات</button><button data-staff-page="ultrasound" class="sonar-only">السونار</button><button data-staff-page="queue" class="secretary-only">الانتظار</button><button data-staff-page="appointments" class="secretary-only">حجوزات العيادة</button><button data-staff-page="onlineBookings">أونلاين</button><button data-staff-page="patients" class="secretary-only">المرضى</button><button data-staff-page="accounts" class="secretary-only">المالية</button><button data-staff-page="settings">الإعدادات</button></nav>
   </div>
 
 
   <div id="reportTemplateModal" class="dialog-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="reportTemplateModalTitle">
     <div class="report-template-card">
       <div class="report-template-head">
-        <div><span class="eyebrow">تصميم المطبوعات</span><h2 id="reportTemplateModalTitle">اختر التصميم</h2><p class="muted">اختر التصميم من اليمين وشاهد المعاينة الحقيقية قبل التطبيق.</p></div>
+        <div><span class="eyebrow">تصميم المطبوعات</span><h2 id="reportTemplateModalTitle">اختر التصميم</h2><p class="muted">اختر التصميم من القائمة، واعرض معاينة فعلية قبل تطبيقه.</p></div>
         <button id="closeReportTemplatePicker" class="icon-btn" type="button" aria-label="إغلاق">×</button>
       </div>
       <div class="report-template-body">
         <div id="reportTemplateGrid" class="report-template-list"></div>
         <div class="report-template-preview-wrap">
-          <div class="report-template-preview-meta"><div><strong id="reportTemplatePreviewName">طبي نظيف</strong><p id="reportTemplatePreviewDesc">واضح ومتوازن للعيادات العامة</p></div><span class="count-pill">معاينة فعلية</span></div>
-          <iframe id="reportTemplatePreviewFrame" class="report-template-preview-frame" title="معاينة تصميم الطباعة" src="about:blank"></iframe>
+          <div class="report-template-preview-meta"><div><strong id="reportTemplatePreviewName">طبي نظيف</strong><p id="reportTemplatePreviewDesc">واضح ومتوازن للعيادات العامة</p></div><span class="count-pill">معاينة فعلية</span><a id="openReportTemplatePreview" class="btn outline small" href="/app/print.html?preview=1&template=clinical_clean" target="_blank" rel="noopener noreferrer">فتح المعاينة ↗</a></div>
+          <div id="reportTemplatePreviewFrame" class="report-template-preview-frame" role="region" aria-label="معاينة التصميم المختار"></div>
         </div>
       </div>
       <div class="report-template-actions">
@@ -1020,7 +1041,7 @@
       <form id="prescriptionForm">
         <input id="prescriptionId" type="hidden" />
         <div class="prescription-form-grid">
-          <label class="field"><span>المريض</span><select id="prescriptionPatient" required></select></label>
+          <label class="field"><span>المريض</span><select id="prescriptionPatient" required></select></label><div id="prescriptionPatientInfo" class="prescription-patient-info" aria-live="polite"><span>اختر المريض لعرض عمره وجنسه من ملفه</span></div>
           <label class="field"><span>تاريخ الوصفة</span><input id="prescriptionDate" type="date" required /></label>
           <label class="field full"><span>التشخيص <small>اختياري</small></span><input id="prescriptionDiagnosis" placeholder="تشخيص مختصر" /></label>
         </div>
@@ -1085,7 +1106,7 @@
     <div class="patient-record-card">
       <div class="patient-record-head">
         <div><span class="eyebrow">سجل المريض</span><h2 id="recordPatientName">المريض</h2><div id="recordPatientContact" class="muted"></div></div>
-        <div class="toolbar"><button id="newPrescriptionForPatientBtn" class="btn primary small doctor-only" type="button">وصفة جديدة</button><button id="printPatientRecordBtn" class="btn outline small" type="button">طباعة الملف</button><button id="closePatientRecord" class="icon-btn" type="button" aria-label="إغلاق">×</button></div>
+        <div class="toolbar"><button id="newPrescriptionForPatientBtn" class="btn primary small" type="button">وصفة جديدة</button><button id="printPatientRecordBtn" class="btn outline small" type="button">طباعة الملف</button><button id="closePatientRecord" class="icon-btn" type="button" aria-label="إغلاق">×</button></div>
       </div>
       <div id="patientRecordStats" class="patient-record-stats"></div>
       <div class="patient-record-grid">
