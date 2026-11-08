@@ -19,6 +19,23 @@
 
   var weekdays=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
   var $=function(id){return document.getElementById(id)};
+  function ensurePatientDemographics(){
+    var form=$('bookingForm'),grid=form&&form.querySelector('.form-grid');
+    if(!grid)return;
+    var note=$('note'),noteField=note&&note.closest('.field');
+    if(!$('age')){
+      var ageField=document.createElement('div');
+      ageField.className='field';
+      ageField.innerHTML='<label for="age">العمر (بالسنوات)</label><input id="age" type="number" min="0" max="120" step="1" inputmode="numeric" placeholder="مثال: 35" required><div id="ageError" class="field-error"></div>';
+      grid.insertBefore(ageField,noteField||null);
+    }
+    if(!$('gender')){
+      var genderField=document.createElement('div');
+      genderField.className='field';
+      genderField.innerHTML='<label for="gender">الجنس</label><select id="gender" required><option value="">اختر الجنس</option><option value="male">ذكر</option><option value="female">أنثى</option></select><div id="genderError" class="field-error"></div>';
+      grid.insertBefore(genderField,noteField||null);
+    }
+  }
   var pad=function(n){return String(n).padStart(2,'0')};
   var dateKey=function(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
   var parseDate=function(v){return new Date(v+'T12:00:00')};
@@ -436,6 +453,7 @@
     }
   }
 
+  ensurePatientDemographics();
   $('name').addEventListener('input',updateSubmit);
   $('phone').addEventListener('input',updateSubmit);
   $('age').addEventListener('input',updateSubmit);
