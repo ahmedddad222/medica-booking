@@ -351,17 +351,29 @@
     return ok
   }
 
+  function validateAge(show){
+    var raw=$('age').value.trim(),age=Number(raw),ok=raw!==''&&Number.isInteger(age)&&age>=0&&age<=120;
+    $('ageError').textContent=show&&!ok?'أدخل العمر بالسنوات من 0 إلى 120':'';
+    return ok
+  }
+
+  function validateGender(show){
+    var value=$('gender').value,ok=value==='male'||value==='female';
+    $('genderError').textContent=show&&!ok?'اختر الجنس':'';
+    return ok
+  }
+
   function updateSubmit(){
-    $('submitBtn').disabled=!(state.selectedDate&&state.selectedTime&&validateName(false)&&validatePhone(false))
+    $('submitBtn').disabled=!(state.selectedDate&&state.selectedTime&&validateName(false)&&validatePhone(false)&&validateAge(false)&&validateGender(false))
   }
 
   async function submitBooking(e){
     e.preventDefault();
     setNotice('');
-    var nameOk=validateName(true),phoneOk=validatePhone(true);
+    var nameOk=validateName(true),phoneOk=validatePhone(true),ageOk=validateAge(true),genderOk=validateGender(true);
     if(!state.selectedDate)return setNotice('اختَر يوم الحجز أولاً','bad');
     if(!state.selectedTime)return setNotice('اختَر وقتاً من الأوقات المتاحة','bad');
-    if(!nameOk||!phoneOk)return;
+    if(!nameOk||!phoneOk||!ageOk||!genderOk)return;
 
     var btn=$('submitBtn'),chosenDate=state.selectedDate,chosenTime=state.selectedTime;
     btn.disabled=true;
@@ -373,6 +385,8 @@
         time:chosenTime,
         name:$('name').value.trim(),
         phone:$('phone').value.trim(),
+        age:Number($('age').value),
+        gender:$('gender').value,
         note:$('note').value.trim(),
         website:$('website').value
       };
@@ -424,8 +438,12 @@
 
   $('name').addEventListener('input',updateSubmit);
   $('phone').addEventListener('input',updateSubmit);
+  $('age').addEventListener('input',updateSubmit);
+  $('gender').addEventListener('change',updateSubmit);
   $('name').addEventListener('blur',function(){validateName(true)});
   $('phone').addEventListener('blur',function(){validatePhone(true)});
+  $('age').addEventListener('blur',function(){validateAge(true)});
+  $('gender').addEventListener('blur',function(){validateGender(true)});
   $('closeTimePickerBtn').addEventListener('click',closeTimePicker);
   $('timePickerBackdrop').addEventListener('click',function(e){if(e.target===this)closeTimePicker()});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('timePickerBackdrop').hidden)closeTimePicker()});
